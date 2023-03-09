@@ -1,0 +1,1151 @@
+#INCLUDE "FINR710.CH"
+#Include "PROTHEUS.CH"
+/*/
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+±±ÚÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄ¿±±
+±±³Fun‡„o	 ³ FinR710	³ Autor ³ Wagner Xavier         ³ Data ³ 05.10.92 ³±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄ´±±
+±±³Descri‡„o ³ Bordero de Pagamento.									  ³±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´±±
+±±³Sintaxe e ³ FinR710(void)											  ³±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´±±
+±±³Parametros³ 															  ³±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´±±
+±±³ Uso		 ³ Generico 												  ³±±
+±±ÀÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ±±
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+ßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßß
+/*/
+USER Function U_FinR710()
+	//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+	//³ Define Variaveis 														  ³
+	//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+	LOCAL wnrel
+	LOCAL cDesc1 := STR0001  //"Este programa tem a fun‡„o de emitir os borderos de pagamen-"
+	LOCAL cDesc2 := STR0002  //"tos."
+	LOCAL cDesc3 :=""  
+	LOCAL Tamanho:="P"    
+	LOCAL cString:="SEA"
+
+	PRIVATE titulo := STR0003 //"Emiss„o de Borderos de Pagamentos"
+	PRIVATE cabec1 := ""
+	PRIVATE cabec2 := ""
+	PRIVATE aReturn := { OemToAnsi(STR0004), 1,OemToAnsi(STR0005), 1, 2, 1, "",1 }  //"Zebrado"###"Administracao"
+	PRIVATE nomeprog:="UFINR710"
+	PRIVATE aLinha  := { },nLastKey := 0
+	PRIVATE cPerg	 :="FIN710"
+	PRIVATE m_pag	
+    private cNumbora:= ' '
+	//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+	//³ Verifica as perguntas selecionadas 								  ³
+	//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+	pergunte("FIN710",.F.)
+
+	//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+	//³ Vari veis utilizadas para parametros								 ³
+	//³ mv_par01				// Do Bordero									 ³
+	//³ mv_par02				// At‚ o Bordero								 ³
+	//³ mv_par03				// Data para d‚bito							 ³
+	//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+
+	//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+	//³ Inicia a data para debito com a data base do sistema			  ³
+	//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+	dbSelectArea("SX1")
+	If dbSeek ("FIN710"+"03")  // Busca a pergunta para mv_par03
+		Reclock("SX1",.F.)
+		Replace X1_CNT01 With "'"+dtoc(dDataBase)+"'"
+		MsUnlock()
+	Endif
+
+	//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+	//³ Envia controle para a funcao SETPRINT 							  ³
+	//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+	wnrel := "UFINR710"            //Nome Default do relatorio em Disco
+//	wnrel:=SetPrint(cString,NomeProg,"",@titulo,"", "", "",.F.,.F.,.F.,Tamanho,,.F.)
+	wnrel := SetPrint(cString,wnrel,cPerg,@titulo,cDesc1,cDesc2,cDesc3,.F.,,.T.,Tamanho,,.f.)
+
+	If nLastKey == 27
+		Return
+	Endif
+
+	SetDefault(aReturn,cString,/**/ ,/**/,"M",2)
+
+
+	If nLastKey == 27
+		Return
+	Endif
+
+	RptStatus({|lEnd| Fa710Imp(@lEnd,wnRel,cString,Tamanho)},titulo)
+
+Return
+/*/
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+±±ÚÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄ¿±±
+±±³Fun‡„o	 ³ fa710Imp ³ Autor ³ Wagner Xavier 		  ³ Data ³ 05.10.92 ³±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄ´±±
+±±³Descri‡„o ³ Bordero de Pagamento.												  ³±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´±±
+±±³Sintaxe e ³ fa710imp 																  ³±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´±±
+±±³ Uso		 ³ Generico 																  ³±±
+±±ÀÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ±±
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+ßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßß
+/*/
+Static Function FA710Imp( lEnd,wnRel,cString, Tamanho )
+
+	LOCAL CbCont,CbTxt
+	LOCAL lCheque		:= .f.
+	LOCAL lBaixa		:= .f.
+	LOCAL lNew			:= .F.
+	LOCAL cNumBor
+	LOCAL lAbatimento   := .F.
+	LOCAL nAbat 		:= 0
+	Local lFirst        := .T.
+	Local cChave
+	Local aTits         := {} // 01/08/2017 -	
+	
+	Private cAprovador	:= ""
+	Private nJuros      := 0
+	Private dBaixa      := CriaVar("E2_BAIXA")
+	Private nTipo
+	Private tamanho     := 80 
+	Private cModelo
+	Private cNumConta	:= CriaVar("EA_NUMCON")
+	Private nTotValor	:= 0
+	Private nValor		:= 0
+	Private nColunaTotal
+	//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+	//³ Vari veis utilizadas para Impress„o do Cabe‡alho e Rodap‚	  ³
+	//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+	cbtxt 	:= SPACE(10)
+	cbcont	:= 0
+	li 		:= 80
+	m_pag 	:= 1
+
+	dbSelectArea("SEA")
+	dbSetOrder( 1 )
+	dbSeek(cFilial+mv_par01,.T.)
+
+	nTipo := aReturn[4]
+	nContador := 0
+
+	SetRegua(SEA->(RecCount()))
+	lNew := .T.
+
+	While SEA->(!Eof()) .And. EA_FILIAL == cFilial  .And. EA_NUMBOR <= mv_par02
+
+		cNumBor := SEA->EA_NUMBOR
+	    cNumbora      := cNumBor
+
+		IF lEnd
+			@Prow()+1,001 PSAY OemToAnsi(STR0006)   //"CANCELADO PELO OPERADOR"
+			Exit
+		EndIF
+
+		IncRegua()
+
+		IF Empty(EA_NUMBOR)
+			dbSkip( )  
+			Loop
+		End
+
+		IF SEA->EA_CART != "P"
+			dbSkip( )
+			Loop
+		End
+
+		lCheque := .f.
+		lBaixa  := .f.
+		cModelo := SEA->EA_MODELO
+		dbSelectArea( "SE2" )
+		cLoja := Iif ( Empty(SEA->EA_LOJA) , "" , SEA->EA_LOJA )
+
+		// Borderos gerados em versao anterior
+		IF Empty(SEA->EA_FILORIG) .AND. !Empty(xFilial("SE2"))
+			cChave := xFilial("SE2")+SEA->EA_PREFIXO+SEA->EA_NUM+SEA->EA_PARCELA+SEA->EA_TIPO+SEA->EA_FORNECE+cLoja
+		Else //Borderos gerados a partir da versao 7.10
+			cChave := SEA->EA_FILORIG+SEA->EA_PREFIXO+SEA->EA_NUM+SEA->EA_PARCELA+SEA->EA_TIPO+SEA->EA_FORNECE+cLoja
+		Endif
+		SE2->( dbsetorder(1) )
+		SE2->(MsSeek( cChave ))
+
+
+
+		
+		*------------------------------------------------------------------------------------------------
+		* Motivo: Adicionar o aprovador do título 
+		*----------------------------------------------------------------------------------------------
+		* Por Luiz Otavio em  11/05/2021 
+		*-----------------------------------------------------------------------------------------------
+
+		cAprovador := fbuscaAprv()
+
+		*----------------------------------fim alteração-------------------------------------------------------------
+
+
+
+
+
+		dbSelectArea( "SE5" )
+		dbSetOrder( 2 )
+		dbSeek( cFilial+"VL"+SE2->E2_PREFIXO+SE2->E2_NUM+SE2->E2_PARCELA+SE2->E2_TIPO+DtoS(SE2->E2_BAIXA)+SE2->E2_FORNECE+SE2->E2_LOJA )
+
+		While !Eof() .and. ;
+		E5_FILIAL	== cFilial		   .and. ;
+		E5_TIPODOC	== "VL"            .and. ;
+		E5_PREFIXO	== SE2->E2_PREFIXO .and. ;
+		E5_NUMERO	== SE2->E2_NUM 	   .and. ;
+		E5_PARCELA	== SE2->E2_PARCELA .and. ;
+		E5_TIPO		== SE2->E2_TIPO	   .and. ;
+		E5_DATA		== SE2->E2_BAIXA   .and. ;
+		E5_CLIFOR	== SE2->E2_FORNECE .and. ;
+		E5_LOJA		== cLoja
+			//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+			//³ S¢ considera baixas que nao possuem estorno   ³
+			//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+			If !TemBxCanc(E5_PREFIXO+E5_NUMERO+E5_PARCELA+E5_TIPO+E5_CLIFOR+E5_LOJA+E5_SEQ)
+				If SubStr( E5_DOCUMEN,1,6 ) == cNumBor .And. E5_MOTBX != "PCC"
+					lBaixa := .t.
+					Exit
+				End
+			EndIf
+			dbSkip( )
+		End
+		If !lBaixa
+			If (dbSeek( cFilial+"BA"+SE2->E2_PREFIXO+SE2->E2_NUM+SE2->E2_PARCELA+SE2->E2_TIPO+DtoS(SE2->E2_BAIXA)+SE2->E2_FORNECE+SE2->E2_LOJA))
+				While !Eof() .and. ;
+				E5_FILIAL	== cFilial			 .and. ;
+				E5_TIPODOC	== "BA"            .and. ;
+				E5_PREFIXO	== SE2->E2_PREFIXO .and. ;
+				E5_NUMERO	== SE2->E2_NUM 	 .and. ;
+				E5_PARCELA	== SE2->E2_PARCELA .and. ;
+				E5_TIPO		== SE2->E2_TIPO	 .and. ;
+				E5_DATA		== SE2->E2_BAIXA	 .and. ;
+				E5_CLIFOR	== SE2->E2_FORNECE .and. ;
+				E5_LOJA		== SE2->E2_LOJA
+
+					//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+					//³ S¢ considera baixas que nao possuem estorno   ³
+					//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+					If !TemBxCanc(E5_PREFIXO+E5_NUMERO+E5_PARCELA+E5_TIPO+E5_CLIFOR+E5_LOJA+E5_SEQ)
+						If SubStr( E5_DOCUMEN,1,6 ) == cNumBor .And. E5_MOTBX != "PCC"
+							lBaixa := .t.
+							Exit
+						Endif
+					EndIf
+					dbSkip( )
+				End
+			End
+		End
+		dbSelectArea( "SEF" )
+		If (!Empty(SE5->E5_NUMCHEQ) .And. dbSeek( cFilial+SE5->E5_BANCO+SE5->E5_AGENCIA+SE5->E5_CONTA+SE5->E5_NUMCHEQ))
+			lCheque := .t.
+		End
+
+		// Localiza o fornecedor do titulo que esta no bordero
+		dbSelectArea( "SA2" )
+		// Borderos gerados em versao anterior
+		IF Empty(SEA->EA_FILORIG) .AND. !Empty(xFilial("SA2"))
+			cChave := xFilial("SA2")+SE2->E2_FORNECE+SE2->E2_LOJA
+		Else //Borderos gerados a partir da versao 7.10
+			If !Empty(SEA->EA_FILORIG) .AND. !Empty(xFilial("SA2"))
+				cChave := SEA->EA_FILORIG+SE2->E2_FORNECE+SE2->E2_LOJA
+			Else
+				cChave := xFilial("SA2")+SE2->E2_FORNECE+SE2->E2_LOJA
+			Endif
+		Endif
+		MsSeek( cChave )
+
+		dbSelectArea( "SEA" )
+
+		IF li > 50 .Or. lNew
+			lFirst := .f.
+			m_pag := 1
+			fr710Cabec( SEA->EA_MODELO, nTipo, Tamanho, @lFirst)
+			m_pag++
+			lNew := .F.
+		End
+
+		lAbatimento := SEA->EA_TIPO $ MV_CPNEG .or. SEA->EA_TIPO $ MVABATIM
+		If lAbatimento
+			nAbat 	:= SE2->E2_SALDO
+		EndIf
+
+		If ! lAbatimento
+			li++
+			@li, 0 PSAY SEA->EA_PREFIXO  
+			@li, 3 PSAY SEA->EA_NUM +" "+SEA->EA_PARCELA
+			// ALTERADO PARA COLOCAR O CODIGO DO RDA
+			@li,15 PSAY Alltrim( SE2->E2_CODRDA )  
+
+		//	@li,17 PSAY SEA->EA_PARCELA   // comentato por Luiz Otavio Campos em 25/06/21	
+
+		EndIf
+		cNumConta := SEA->EA_NUMCON
+
+		//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+		//³ Efetua calculo dos juros do titulo posicionado ³
+		//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+		fa080Juros(1)
+
+		If SEA->EA_MODELO $ "CH/02"
+			dbSelectArea( "SEA" )
+			If ! lAbatimento
+				If lCheque
+					@li,23 PSAY SubStr(SEF->EF_BENEF,1, 30)  
+				Elseif lBaixa
+					@li,23 PSAY SubStr(SE5->E5_BENEF,1, 30)  
+				Else
+					@li,23 PSAY SubStr(SA2->A2_NOME,1, 30)  
+				End
+			EndIf
+
+			dbSelectArea( "SA6" )
+			If lBaixa
+				dbSeek( xFilial("SA6")+SE5->(E5_BANCO+E5_AGENCIA+E5_CONTA))
+			Else
+				dbSeek( xFilial("SA6")+SEA->(EA_PORTADO+EA_AGEDEP+EA_NUMCON))
+			End
+			dbSelectArea( "SEA" )
+			If ! lAbatimento
+				@li,55 PSAY Left(SA6->A6_NREDUZ,15)  
+				@li,71 PSAY SE2->E2_VENCREA  
+				If lCheque
+					@li,82 PSAY "CH. " + SEF->EF_NUM  
+				End
+			EndIf
+			If lBaixa
+				If ! lAbatimento
+					@li,102 PSAY SE5->E5_VALOR - nAbat	+ nJuros Picture "@E 999,999,999.99"  
+					nAbat := 0
+
+					@li,122 PSAY cAprovador //Adicionado por Luiz Otavio | Adicionar Aprovador
+
+				EndIf
+				nTotValor += SE5->E5_VALOR 	+ nJuros
+				nValor	  += SE5->E5_VALOR 	+ nJuros
+			Else
+				If ! lAbatimento
+					@li,102 PSAY SE2->E2_SALDO-SE2->E2_SDDECRE+SE2->E2_SDACRES-nAbat+nJuros   Picture "@E 999,999,999.99"  
+					nAbat := 0
+
+					@li,122 PSAY cAprovador //Adicionado por Luiz Otavio | Adicionar Aprovador
+
+					nTotValor += SE2->E2_SALDO-SE2->E2_SDDECRE+SE2->E2_SDACRES+nJuros
+					nValor += SE2->E2_SALDO-SE2->E2_SDDECRE+SE2->E2_SDACRES+nJuros
+				Else
+					nTotValor -= SE2->E2_SALDO	+ nJuros
+					nValor -= SE2->E2_SALDO	+ nJuros
+				End
+			End
+			nColunaTotal := 102
+
+			
+
+		Elseif SEA->EA_MODELO $ "CT/30"
+			If ! lAbatimento
+				@li,23 PSAY SubStr(SA2->A2_NOME,1, 30)  
+				@li,55 PSAY SE2->E2_VENCREA  
+				If lCheque
+					@li,78 PSAY SEF->EF_NUM  
+				End
+			EndIf
+			If lBaixa
+				If ! lAbatimento
+					@li,94 PSAY SE5->E5_VALOR - nAbat + nJuros   Picture "@E 999,999,999.99"
+					nAbat := 0
+
+					@li,115 PSAY cAprovador //Adicionado por Luiz Otavio | Adicionar Aprovador
+				EndIf
+				nTotValor += SE5->E5_VALOR + nJuros
+				nValor += SE5->E5_VALOR + nJuros
+			Else
+				If ! lAbatimento
+					@li,094 PSAY SE2->E2_SALDO-SE2->E2_SDDECRE+SE2->E2_SDACRES - nAbat + nJuros   Picture "@E 999,999,999.99"
+					nAbat := 0
+
+					@li,115 PSAY cAprovador //Adicionado por Luiz Otavio | Adicionar Aprovador
+
+				EndIf
+				if lAbatimento
+					nTotValor -= SE2->E2_SALDO	+ nJuros
+					nValor -= SE2->E2_SALDO	+ nJuros
+				Else
+					nTotValor += SE2->E2_SALDO-SE2->E2_SDDECRE+SE2->E2_SDACRES	+ nJuros
+					nValor += SE2->E2_SALDO-SE2->E2_SDDECRE+SE2->E2_SDACRES	+ nJuros
+				End
+			End
+			nColunaTotal := 94
+
+		Elseif SEA->EA_MODELO $ "CP/31"
+			If ! lAbatimento
+				@li,23 PSAY SubStr(SA2->A2_NOME,1, 30)
+			EndIf
+			dbSelectArea( "SA6" )
+			dbSeek( xFilial("SA6")+SEA->(EA_PORTADO+EA_AGEDEP+EA_NUMCON))
+			dbSelectArea( "SEA" )
+			If ! lAbatimento
+				@li,55 PSAY Left(SA6->A6_NREDUZ,15)  
+				@li,71 PSAY SE2->E2_VENCREA  
+				@li,83 PSAY SE2->E2_NUMBCO  
+			EndIf
+			If lBaixa
+				If ! lAbatimento
+					@li,99 PSAY SE5->E5_VALOR - nAbat + nJuros   Picture "@E 999,999,999.99"
+					nAbat := 0
+
+					@li,117 PSAY cAprovador //Adicionado por Luiz Otavio | Adicionar Aprovador
+
+				EndIf
+				nTotValor += SE5->E5_VALOR + nJuros
+				nValor  += SE5->E5_VALOR + nJuros
+			Else
+				If ! lAbatimento
+					@li,099 PSAY SE2->E2_SALDO-SE2->E2_SDDECRE+SE2->E2_SDACRES-nAbat+nJuros   Picture "@E 999,999,999.99"
+					nAbat := 0
+		
+					@li,117 PSAY cAprovador //Adicionado por Luiz Otavio | Adicionar Aprovador
+		
+				EndIf
+				If lAbatimento
+					nTotValor -= SE2->E2_SALDO	+ nJuros
+					nValor  -= SE2->E2_SALDO	+ nJuros
+				Else
+					nTotValor += SE2->E2_SALDO-SE2->E2_SDDECRE+SE2->E2_SDACRES+nJuros
+					nValor += SE2->E2_SALDO-SE2->E2_SDDECRE+SE2->E2_SDACRES+nJuros
+				End
+			End
+		
+			nColunaTotal := 100
+
+		Elseif SEA->EA_MODELO $ "CC/01/03/04/05/10/41/43/45/46/47/48"
+			dbSelectArea( "SA6" )
+			dbSeek( xFilial("SA6")+SEA->(EA_PORTADO+EA_AGEDEP+EA_NUMCON))
+			dbSelectArea( "SEA" )
+			If ! lAbatimento
+				//@li,22  PSAY Left(SA6->A6_NREDUZ,13)  
+
+				//*----------------------------------------------------------------------
+				// 06/04/2018 - Mateus Medeiros - Inicio 
+				//*----------------------------------------------------------------------
+				// Devido muitos títulos que estão em borderô serem oriundos de reembolso
+				// é necessário buscar a conta para pagamento da origem ( reembolso ) 
+				//*----------------------------------------------------------------------				
+				cAliasB44 := GetNextAlias() 
+				/*PCT.PCT_DVAGE,*/
+				BeginSql Alias cAliasB44
+					%noparser% // Não realiza o parser da query - tem o mesmo conceito que a função do changequery
+					SELECT PCT.PCT_BANCO,PCT.PCT_NUMAGE,PCT.PCT_NCONTA, PCT.PCT_DVCONT,ZZQ_XTPRGT
+					FROM  %table:B44% B44
+					INNER JOIN %table:ZZQ%  ZZQ ON
+					ZZQ_SEQUEN 		= B44_YCDPTC
+					AND ZZQ_FILIAL 	= %xFilial:ZZQ%
+					AND ZZQ_DATDIG <> ' '
+					INNER JOIN %table:PCT% PCT ON
+					PCT_CODIGO 		= ZZQ_DBANCA
+					AND PCT_CLIENT  = ZZQ_CODCLI
+					AND PCT_LOJA	= ZZQ_LOJCLI
+					AND PCT_FILIAL 	= %xFilial:PCT%
+					WHERE
+					B44_FILIAL 		= %xFilial:B44%
+					AND B44_PREFIX 	= %exp:SE2->E2_PREFIXO%
+					AND B44_NUM   	= %exp:SE2->E2_NUM%
+					AND B44_PARCEL 	= %exp:SE2->E2_PARCELA%
+					AND B44_TIPO  	= 'NCC'
+					AND B44.D_E_L_E_T_ = ' '
+					AND PCT.D_E_L_E_T_ = ' '
+					AND ZZQ.D_E_L_E_T_ = ' '
+				Endsql
+				
+				if (cAliasB44)->(!Eof())
+					@li,22  PSAY alltrim((cAliasB44)->PCT_BANCO) + " " + alltrim((cAliasB44)->PCT_NUMAGE) + " " + ALLTRIM((cAliasB44)->PCT_NCONTA) + "-" + ALLTRIM((cAliasB44)->PCT_DVCONT)  
+				else
+					@li,22  PSAY alltrim(SA2->A2_BANCO) + " " + alltrim(SA2->A2_AGENCIA) + " " + alltrim(SA2->A2_NUMCON) + "-" + alltrim(SA2->A2_YDAC)  
+				endif 
+				
+				if select(cAliasB44) > 0 
+					(cAliasB44)->(dbclosearea())
+				endif 
+				//*----------------------------------------------------------------------
+				// Fim - Mateus Medeiros - 06/04/2018
+				//*----------------------------------------------------------------------
+				@li,43  PSAY SubStr(SA2->A2_NOME, 1, 25 )  
+				@li,69  PSAY SA2->A2_CGC Picture IIF(Len(Alltrim(SA2->A2_CGC))>11,"@R 99999999/9999-99","@R 999999999-99")  
+				@li,88 PSAY SE2->E2_VENCREA  
+			EndIf
+			If lBaixa
+				If ! lAbatimento
+					@li,100 PSAY SE5->E5_VALOR - nAbat	+ nJuros Picture "@E 999,999,999.99"  
+					nAbat := 0
+
+					@li,118 PSAY cAprovador //Adicionado por Luiz Otavio | Adicionar Aprovador
+
+				EndIf
+				nTotValor += SE5->E5_VALOR	+ nJuros
+				nValor += SE5->E5_VALOR	+ nJuros
+			Else
+				If ! lAbatimento
+					@li,100 PSAY SE2->E2_SALDO-SE2->E2_SDDECRE+SE2->E2_SDACRES-nAbat+nJuros   Picture "@E 999,999,999.99"
+					nAbat := 0
+
+					@li,116 PSAY cAprovador //Adicionado por Luiz Otavio | Adicionar Aprovador
+
+				EndIf
+				If lAbatimento
+					nTotValor -= SE2->E2_SALDO + nJuros
+					nValor -= SE2->E2_SALDO + nJuros
+				Else
+					nTotValor += SE2->E2_SALDO-SE2->E2_SDDECRE+SE2->E2_SDACRES+nJuros
+					nValor += SE2->E2_SALDO-SE2->E2_SDDECRE+SE2->E2_SDACRES+nJuros
+				End
+			End
+
+			//	@li,135 PSAY SE2->E2_DATAAGE  
+			
+			nColunaTotal := 100
+		Else
+			If ! lAbatimento
+				@li,23 PSAY SubStr(SA2->A2_NOME,1, 30)  
+			EndIf
+			dbSelectArea( "SA6" )
+			dbSeek( xFilial("SA6")+SEA->(EA_PORTADO+EA_AGEDEP+EA_NUMCON))
+			dbSelectArea( "SEA" )
+			If ! lAbatimento
+				@li,55 PSAY Left(SA6->A6_NREDUZ,15)  
+				@li,71 PSAY SE2->E2_VENCREA  
+				@li,84 PSAY SE2->E2_NUMBCO  
+			EndIf
+
+			If lBaixa
+				If ! lAbatimento
+					@li,100 PSAY SE5->E5_VALOR - nAbat	+ nJuros Picture "@E 999,999,999.99"  
+					nAbat := 0
+
+					@li,120 PSAY cAprovador //Adicionado por Luiz Otavio | Adicionar Aprovador
+
+				EndIf
+				
+				nTotValor += SE5->E5_VALOR	+ nJuros
+				nValor 	  += SE5->E5_VALOR	+ nJuros
+			Else
+				If ! lAbatimento
+					@li,100 PSAY SE2->E2_SALDO-SE2->E2_SDDECRE+SE2->E2_SDACRES-nAbat+nJuros   Picture "@E 999,999,999.99"
+					nAbat := 0
+
+					@li,120 PSAY cAprovador //Adicionado por Luiz Otavio | Adicionar Aprovador
+				Endif
+
+				If lAbatimento
+					nTotValor -= SE2->E2_SALDO	+ nJuros
+					nValor    -= SE2->E2_SALDO	+ nJuros
+				Else
+					nTotValor += SE2->E2_SALDO-SE2->E2_SDDECRE+SE2->E2_SDACRES+nJuros
+					nValor    += SE2->E2_SALDO-SE2->E2_SDDECRE+SE2->E2_SDACRES+nJuros
+				End
+			End
+	
+			
+
+			nColunaTotal := 100
+
+		End
+				// Adicona dados dos títulos ao vetor. - 01/08/2017
+		// bordero - prefixo - numero do titulo - tipo - natureza - saldo
+		//nPosBor :=  ascan(aTits,{|x| alltrim(x[1]) == cNumBor } )
+
+		//			if nPosBor == 0
+		//				Aadd(aTits,{cNumBor})
+		AAdd(aTits,{cNumBor, SE2->E2_PREFIXO,SE2->E2_NUM,SE2->E2_TIPO,SE2->E2_NATUREZ,nValor } )
+		nValor := 0
+		//			elseif  nPosBor > 0
+		//				AAdd(aTits[nPosBor][2],{ SE2->E2_PREFIXO,SE2->E2_NUM,SE2->E2_TIPO,SE2->E2_NATUREZ,SE2->E2_VALOR } )
+		//			endif
+		// fim  01/08/2017
+
+
+		
+		dbSelectArea( "SEA" )
+		dbSkip( )
+
+		//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+		//³ Verifica se n„o h  mais registros v lidos a analisar.    ³
+		//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+		DO WHILE !Eof() .And. cFilial == EA_FILIAL .And. EA_NUMBOR <= mv_par02 ;
+		.and. (Empty(EA_NUMBOR) .or. SEA->EA_CART != "P")
+			dbSkip( )
+		ENDDO
+
+		If cNumBor != SEA->EA_NUMBOR
+			lNew := .T. 							// Novo bordero a ser impresso
+			If li != 80
+				li+=2
+
+				@li,	00 PSAY __PrtThinLine()  
+				li++
+				@li, 75 PSAY OemToAnsi(STR0007)    //"TOTAL GERAL ..... "
+				@li,nColunaTotal PSAY nTotValor  	Picture "@E 999,999,999.99"
+				cExtenso := Extenso( nTotValor, .F., 1 )
+				li+=2
+				@li,	1 PSAY Trim(SubStr(cExtenso,1,100))  
+				If Len(Trim(cExtenso)) > 100
+					li++
+					@li, 0 PSAY SubStr(cExtenso,101,Len(Trim(cExtenso))-100)  
+				End
+
+				li+=2
+				If cModelo $ "CH/02"
+					@li, 0 PSAY OemToAnsi(STR0008)   //"AUTORIZAMOS V.SAS. A EMITIR OS CHEQUES NOMINATIVOS AOS BENEFICIARIOS EM REFERENCIA,"
+					li++
+					@li, 0 PSAY OemToAnsi(STR0009) + DtoC( mv_par03 )    //"DEBITANDO EM NOSSA CONTA CORRENTE NO DIA "
+					li++
+					@li, 0 PSAY OemToAnsi(STR0010)   //"PELO VALOR ACIMA TOTALIZADO."
+				Elseif cModelo $ "CT/30"
+					@li, 0 PSAY OemToAnsi(STR0011)   //"AUTORIZAMOS V.SAS. A PAGAR OS TITULOS ACIMA RELACIONADOS EM NOSSA"
+					li++
+					@li, 0 PSAY OemToAnsi(STR0012)   + DtoC( mv_par03 ) + OemToAnsi(STR0013)    //"CONTA MOVIMENTO NO DIA "###", PELO VALOR ACIMA TOTALIZADO."
+				Elseif cModelo $ "CP/31"
+					@li, 0 PSAY OemToAnsi(STR0014)    //"AUTORIZAMOS V.SAS. A PAGAR OS TITULOS EM REFERENCIA, LEVANDO A DEBITO DE NOSSA"
+					li++
+					@li, 0 PSAY OemToAnsi(STR0015) + cNumConta + OemToAnsi(STR0016)+ DtoC( mv_par03 ) +OemToAnsi(STR0017)   //"CONTA CORRENTE NUM. "###" NO DIA "###" PELO VALOR ACIMA TOTALIZADO."
+				Elseif cModelo $ "CC/01/03/04/05/10/41/43/45/46/47/48"
+					@li, 0 PSAY OemToAnsi(STR0018)   //"AUTORIZAMOS V.SAS. A EMITIREM ORDEM DE PAGAMENTO, OU DOC PARA OS BANCOS/CONTAS ACIMA."
+					li++
+					@li, 0 PSAY OemToAnsi(STR0019)   + cNumConta    //"DOS TITULOS RESPECTIVOS DEBITANDO EM NOSSA C/CORRENTE NUM "
+					li++
+					@li, 0 PSAY OemToAnsi(STR0020) + dToC( mv_par03 ) +OemToAnsi(STR0021)    //"NO DIA "### " PELO VALOR ACIMA TOTALIZADO."
+				Else
+					@li, 0 PSAY OemToAnsi(STR0022)   //"AUTORIZAMOS V.SAS. A PAGAR OS TITULOS EM REFERENCIA, LEVANDO A DEBITO DE NOSSA"
+					li++
+					@li, 0 PSAY OemToAnsi(STR0023) + cNumConta + OemToAnsi(STR0016) + DtoC( mv_par03 ) +OemToAnsi(STR0017)   //"CONTA CORRENTE NUM. "###" NO DIA "###" PELO VALOR ACIMA TOTALIZADO."
+				End
+				li+=3
+				@li,60 PSAY "------------------------------------------"
+				li++
+				@li,60 PSAY SM0->M0_NOMECOM  
+				li++
+				@li, 0 PSAY " "
+				nTotValor := 0
+			End
+		EndIf
+
+		dbSelectArea("SEA")
+	End
+
+	// inicio 02/08/2017
+	// Resumo dos títulos por borderô
+	lFirst := .f.
+	m_pag++
+	li := 2
+	fr710Cabec( "Resumo", nTipo, Tamanho, @lFirst)
+
+	/*			@nLin,	00 PSAY " PREFIXO     "
+	@nLin,	20 PSAY OemtoAnsi(" TIPO TÍTULO ")
+	@nLin,	40 PSAY " QUANTIDADE  "
+	@nLin,	80 PSAY "  VALOR      "
+	nLin += 2
+	*/
+	lNew := .F.
+
+	ResuRel(aTits,li, Tamanho)
+	/// fim
+
+	Set Device To Screen
+	dbSelectArea("SE5")
+	dbSetOrder( 1 )
+	dbSelectArea("SE2")
+	dbSetOrder(1)
+	Set Filter To
+	If aReturn[5] = 1
+		Set Printer To
+		dbCommit( )
+		Ourspool(wnrel)
+	End
+	MS_FLUSH()  
+
+/*/
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+±±ÚÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄ¿±±
+±±³Fun‡„o	 ³fr710cabec³ Autor ³ Wagner Xavier 		  ³ Data ³ 24.05.93 ³±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄ´±±
+±±³Descri‡„o ³ Cabe‡alho do Bordero 												  ³±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´±±
+±±³Sintaxe e ³fr710cabec() 															  ³±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´±±
+±±³Parametros³ 																			  ³±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´±±
+±±³ Uso		 ³ Generico 																  ³±±
+±±ÀÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ±±
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+ßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßß
+/*/
+Static Function fr710cabec( cModelo, nTipo, Tamanho, lFirst)
+	Local cCabecalho
+	Local cTexto    
+
+	If cModelo $ "CH/02" // Tabela("58",cModelo)
+		cTexto := Tabela("58",@cModelo)
+		//cCabecalho := OemToAnsi(STR0025) //Comentado por Luiz Otavio * 11/05/21  
+		cCabecalho := "PRF+NUMERO PC B E N E F I C I A R I O                  BANCO           DT.VENC  HISTORICO               VALOR A PAGAR    APROVADOR"
+	Elseif cModelo $ "CT/30"
+		cTexto := Tabela("58",@cModelo)
+		//cCabecalho := OemToAnsi(STR0027) //Comenentado por L.Otavio 11/05/21
+		cCabecalho := "PRF+NUMERO PC B E N E F I C I A R I O                   DT.VENC BCO AGENCIA NUM CHEQUE         VALOR A PAGAR   APROVADOR"
+	Elseif cModelo $ "CP/31"
+		cTexto := Tabela("58",@cModelo)
+		
+		//cCabecalho := OemToAnsi(STR0029) //COMENTADO POR LUIZ OTAVIO 11/05/21
+		cCabecalho := "PRF+NUMERO PC B E N E F I C I A R I O                  BANCO           DT.VENC  NUM.CHEQUE        VALOR A PAGAR   APROVADOR"
+	ElseIf cModelo $ "CC/01/03/04/05/10/41/43/45/46/47/48"
+		cTexto := Tabela("58",@cModelo)
+		//	cCabecalho := OemToAnsi(STR0031)  //"PRF NUMERO       PC B A N C O       BCO AGENC NUMERO CONTA  BENEFICIARIO              CNPJ/CPF        DT.VENC       VALOR A PAGAR"
+		cCabecalho := "PRF+NUMERO RDA     BCO AGENC NUMERO CONTA  B E N E F I C I A R I O       CNPJ/CPF        DT.VENC      VALOR A PAGAR  APROVADOR       "  // Adicionado por Luiz Otávio -  Inluir Dt de Pgto em 06/12/2021
+	Elseif cModelo == "Resumo" // Resumo Borderô
+		cTexto 		:= ""
+		cCabecalho 	:= "PREFIXO           TIPO                QUANTIDADE            VALOR A PAGAR"
+	Else
+		cTexto := Tabela("58",@cModelo)
+		//cCabecalho := OemToAnsi(STR0033) //Comentato por Luiz Otavio Campos
+ 		cCabecalho := "PRF+NUMERO        PC   B E N E F I C I A R I O            BANCO           DT.VENC  NUM.CHEQUE        VALOR  A PAGAR   APROVADOR"
+	End
+
+
+if cModelo == "Resumo"
+    If mv_par01 == mv_par02
+
+       dbSelectArea( "SA6" )
+	   dbSeek( cFilial+SEA->EA_PORTADO+SEA->EA_AGEDEP+SEA->EA_NUMCON )
+	   aCabec := {Sm0->M0_nome,;
+	   PadC(OemToAnsi(STR0034),97),;
+	   OemToAnsi(STR0035)+DtoC(dDataBase),;
+	   PadC(cTexto,97),;
+	   OemToAnsi(STR0036)+cNumBora,;
+	   Pad(OemToAnsi(STR0037) + SA6->A6_NOME,130),;
+	   Pad(OemToAnsi(STR0038) + SA6->A6_AGENCIA+STR0040+SA6->A6_NUMCON,130),; //" - C/C "
+	   Pad(SA6->A6_END + " "  + SA6->A6_MUN + " " + SA6->A6_EST,130)}
+    Else
+	   dbSelectArea( "SA6" )
+	   dbSeek( cFilial+SEA->EA_PORTADO+SEA->EA_AGEDEP+SEA->EA_NUMCON )
+	   aCabec := {Sm0->M0_nome,;
+	   PadC(OemToAnsi(STR0034),97),;
+	   OemToAnsi(STR0035)+DtoC(dDataBase),;
+	   PadC(cTexto,97),;
+	   'Borderô De ' + mv_par01 + ' Ate ' + mv_par02 ,;
+	   Pad(OemToAnsi(STR0037) + SA6->A6_NOME,130),;
+	   Pad(OemToAnsi(STR0038) + SA6->A6_AGENCIA+STR0040+SA6->A6_NUMCON,130),; //" - C/C "
+	   Pad(SA6->A6_END + " "  + SA6->A6_MUN + " " + SA6->A6_EST,130)}
+    EndIf 
+	Cabec1 := cCabecalho 
+	li := UCabec710(Titulo,Cabec1,NomeProg,tamanho,Iif(aReturn[4]==1,GetMv("MV_COMP"),;
+	GetMv("MV_NORM")), aCabec, @lFirst)
+else
+
+    dbSelectArea( "SA6" )
+	dbSeek( cFilial+SEA->EA_PORTADO+SEA->EA_AGEDEP+SEA->EA_NUMCON )
+	aCabec := {Sm0->M0_nome,;
+	PadC(OemToAnsi(STR0034),97),;
+	OemToAnsi(STR0035)+DtoC(dDataBase),;
+	PadC(cTexto,97),;
+	OemToAnsi(STR0036)+cNumBora,;
+	Pad(OemToAnsi(STR0037) + SA6->A6_NOME,130),;
+	Pad(OemToAnsi(STR0038) + SA6->A6_AGENCIA+STR0040+SA6->A6_NUMCON,130),; //" - C/C "
+	Pad(SA6->A6_END + " "  + SA6->A6_MUN + " " + SA6->A6_EST,130)}
+
+	Cabec1 := cCabecalho 
+	li := UCabec710(Titulo,Cabec1,NomeProg,tamanho,Iif(aReturn[4]==1,GetMv("MV_COMP"),;
+	GetMv("MV_NORM")), aCabec, @lFirst)
+EndIf 
+
+
+	//OemToAnsi(STR0036)+SEA->EA_NUMBOR,;
+Return
+
+
+/*/
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+±±ÚÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄ¿±±
+±±³Fun‡„o	 ³Cabec170  ³ Autor ³ Mauricio Pequim Jr.	  ³ Data ³ 14.07.01 ³±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄ´±±
+±±³Descri‡„o ³ Validacao da data de d‚bito para o bordero					  ³±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´±±
+±±³Sintaxe e ³Cabec170()	 															  ³±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´±±
+±±³ Uso		 ³ Generico 																  ³±±
+±±ÀÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ±±
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+ßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßß
+/*/
+STATIC FUNCTION Ucabec710(cTitulo,cCabec1,cNomPrg,nTamanho,nChar,aCustomText,lFirst)
+	
+	Local nLargura	:= Nil
+	Local nLin		:=0 	
+	Local aDriver 	:= ReadDriver()				
+	Local lWin 		:= .F.
+	Local nRow 		:= Nil
+	Local nCol		:= Nil
+	
+	Default aCustomText := Nil // Parâmetro que se passado suprime o texto padrao desta função por outro customizado
+
+	#DEFINE INIFIELD    Chr(27)+Chr(02)+Chr(01)
+	#DEFINE FIMFIELD    Chr(27)+Chr(02)+Chr(02)
+	#DEFINE INIPARAM    Chr(27)+Chr(04)+Chr(01)
+	#DEFINE FIMPARAM    Chr(27)+Chr(04)+Chr(02)
+
+	lPerg := If(GetMv("MV_IMPSX1") == "S" ,.T.,.F.)
+
+	cNomPrg := Alltrim(cNomPrg)
+
+	Private cSuf:=""
+
+	DEFAULT lFirst := .t.
+
+	If TYPE("__DRIVER") == "C"
+		If "DEFAULT"$__DRIVER
+			lWin := .t.
+		EndIf
+	EndIf
+
+	nLargura:=132
+
+	IF aReturn[5] == 1   // imprime em disco
+		lWin := .f.    // Se eh disco , nao eh windows
+	Endif
+
+	If lFirst
+		nRow := PRow()
+		nCol := PCol()
+		SetPrc(0,0)
+		If aReturn[5] <> 2 // Se nao for via Windows manda os caracteres para setar a impressora
+			If nChar == NIL .and. !lWin .and. __cInternet == Nil
+				@ 0,0 PSAY &(If(aReturn[4]=1,aDriver[3],aDriver[4]))
+			ElseIf !lWin .and. __cInternet == Nil
+				If nChar == 15
+					@ 0,0 PSAY &(If(aReturn[4]=1,aDriver[3],aDriver[4]))
+				Else
+					@ 0,0 PSAY &(aDriver[4])
+				EndIf
+			EndIf
+		EndIF
+		If GetMV("MV_CANSALT",,.T.) // Saltar uma página na impressão
+			If GetMv("MV_SALTPAG",,"S") != "N"
+				Setprc(nRow,nCol)
+			EndIf
+		Endif
+	Endif
+	// Impressão da lista de parametros quando solicitada
+	//Cabecalho.
+	FinCgcCabec(Titulo, Cabec1, cabec2, nomeprog, nChar, mv_par03, aCustomText)
+
+	@ 05,00 PSAY __PrtLeft(aCustomText[1])	 // Empresa
+	@ 05,00 PSAY __PrtCenter(aCustomText[2]) // Titulo do relatorio
+	@ 05,00 PSAY __PrtRight(aCustomText[3])	 // Data EmissÆo
+	@ 06,00 PSAY __PrtCenter(aCustomText[4]) // Descri‡Æo do tipo de bordero
+	@ 06,00 PSAY __PrtRight(aCustomText[5])	 // Nro do bordero
+	@ 09,00 PSAY __PrtLeft(aCustomText[6])	 // Ao Banco
+	@ 10,00 PSAY __PrtLeft(aCustomText[7])	 // Agencia - Conta Corrente
+	@ 11,00 PSAY __PrtLeft(aCustomText[8])	 // Endereco Banco
+
+	If LEN(Trim(cCabec1)) != 0
+		@ 12,00  PSAY __PrtThinLine()
+		@ 13,00  PSAY cCabec1  
+		@ 14,00  PSAY __PrtThinLine()
+	EndIf
+	nLin :=15
+	m_pag++
+	lFirst := .f.
+	If Subs(__cLogSiga,4,1) == "S"
+		__LogPages()
+	EndIf
+
+Return nLin
+
+/*/
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+±±ÚÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄ¿±±
+±±³ Fun‡…o    ³		     ³ Autor ³ Adilson H Yamaguchi  ³ Data ³ 13/12/01 ³±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄ´±±
+±±³ Descri‡…o ³Monta Cabecalho do relatorio                                ³±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´±±
+±±³ Sintaxe   ³ConCGCCabec(Titulo, Cabec1, Cabec2, NomeProg, nTam,         ³±±
+±±³			  |			   dDataRef, aCustomText, lFirst)                  ³±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´±±
+±±³ Retorno   ³ Nenhum                                                     ³±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´±±
+±±³ Uso       ³ SIGAFIN                                                    ³±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´±±
+±±³Parametros ³ExpC1 = Conteudo da cabec1               				         ³±±
+±±³           ³ExpC2 = Conteudo da cabec2               				         ³±±
+±±³           ³ExpC3 = Titulo                           				         ³±±
+±±³           ³ExpC4 = Nome da Rotina                   				         ³±±
+±±³           ³ExpN1 = Tamanho                          				         ³±±
+±±³           ³ExpD1 = Data de Referencia              				         ³±±
+±±³           ³ExpL1 = Tamanho                          				         ³±±
+±±ÀÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ±±
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+ßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßß
+/*/
+Static Function FinCgcCabec(Titulo, Cabec1, cabec2, nomeprog, nTam, dDataRef, aCustomText, lFirst)
+
+	Local aCabec
+	Private Tamanho := "M"
+	nTam 	 := 15
+	dDataRef := If(dDataRef = Nil, mv_par01, dDataBase)
+
+	aCabec :=	{"","__LOGOEMP__"}
+
+	Cabec(Titulo,"","","",tamanho,	nTam, aCabec)
+
+Return .T.
+
+/*
+Autor: Mateus
+Descrição: Resumo do Borderô de Pagamento
+Data: 03/08/2017
+*/
+Static Function ResuRel(aResumo,nLin, Tamanho)
+
+	Local aTits := aClone(aResumo)
+	Local nX 	:= 0
+	Local cNumBor := ""
+	Local aQtdtit := {}
+
+
+	ASORT(aTits, , , { | x,y | x[1]+x[2]+x[3]+x[4] < y[1]+y[2]+y[3]+y[4] } )
+
+	// 	AAdd(aTits[len(aTits)],{{cNumBor ,E2->E2_PREFIXO,SE2->E2_NUM,SE2->E2_TIPO,SE2->E2_NATUREZ,SE2->E2_VALOR }} )
+	//@nLin,	00 PSAY __PrtThinLine()
+	@nLin, 60  PSAY OemToAnsi("RESUMO BORDERÔ ")  
+	nLin += 1
+	@nLin ,00 PSAY __PrtThinLine()
+
+	nLin += 2
+
+	For nX := 1 to len(aTits)
+
+		If !(aTits[nX,5] $ "PIS|CSLL|INSS|IRF|ISS") .and. alltrim(aTits[nX,4]) # "TX"
+			aTits[nX,5] := "PRINCIPAL"
+		endif
+
+		nPos := aScan(aQtdtit,{|x| x[1]+x[2]+x[3]+x[4] == aTits[nX,1]+aTits[nX,2]+aTits[nX,4]+aTits[nX,5] })
+
+		if nPos == 0
+			// NÚMERO BORDERÔ - PREFIXO - TIPO - NATUREZA -
+			AAdd(aQtdtit,{aTits[nX,1],aTits[nX,2],aTits[nX,4],aTits[nX,5],aTits[nX,6],1})
+		else
+			aQtdtit[nPos][5] += aTits[nX,6]
+			aQtdtit[nPos][6] += 1
+		endif
+
+	Next nX
+
+	for nX := 1 to len(aQtdtit)
+
+		if nX > 1
+		 nLin++
+		endif
+
+		IF nLin > 55
+			lFirst := .f.
+			m_pag++
+			Li := 2
+			fr710Cabec( "Resumo", nTipo, Tamanho, @lFirst)
+			nLin := li
+			lNew := .F.
+		End
+
+		If cNumBor # aQtdtit[nX,1]
+
+			cNumBor := aQtdtit[nX,1]
+			/*if nX == 1
+			@nLin,	00 PSAY " PREFIXO     "
+			@nLin,	20 PSAY OemtoAnsi(" TIPO TÍTULO ")
+			@nLin,	40 PSAY " QUANTIDADE  "
+			@nLin,	80 PSAY "  VALOR      "
+			nLin += 2
+			@nLin,	00 PSAY __PrtThinLine()
+			nLin += 2
+			endif*/
+			if nX > 1
+				@nLin,	00 PSAY __PrtThinLine()
+			endif
+			nLin += 1
+			@nLin, 0 PSAY OemToAnsi("Número do Borderô:   ")  
+			@nLin, 20 PSAY cNumBor  
+			nLin += 1
+			// NÚMERO BORDERÔ - PREFIXO - TIPO - NATUREZA - VALOR - QUANTIDADE
+			//			AAdd(aQtdtit,{aTits[nX,1],aTits[nX,2],aTits[nX,4],aTits[nX,5],aTits[nX,6],1})
+		endif
+
+		@nLin,	00 PSAY aQtdtit[nX,2]  
+		@nLin,	20 PSAY aQtdtit[nX,3] + iif(alltrim(aQtdtit[nX,3]) == "TX","- "+alltrim(GETADVFVAL("SED","ED_DESCRIC",XFILIAL("SED")+aQtdtit[nX,4],1)),"")  
+		@nLin,	40 PSAY aQtdtit[nX,6]  
+		@nLin,	60 PSAY aQtdtit[nX,5] Picture "@E 999,999,999.99"  
+
+		nTotValor += aQtdtit[nX,5]
+	next nX
+
+	lNew := .T.
+
+	If nLin > 55
+		// inicio 02/08/2017
+		// Resumo dos títulos por borderô
+		lFirst := .f.
+		m_pag++
+		li := 2
+		fr710Cabec( "Resumo", nTipo, Tamanho, @lFirst)
+
+		/*	@nLin,	00 PSAY " PREFIXO     "
+		@nLin,	20 PSAY OemtoAnsi(" TIPO TÍTULO ")
+		@nLin,	40 PSAY " QUANTIDADE  "
+		@nLin,	80 PSAY "  VALOR      "
+		nLin += 2
+		*/
+		lNew := .F.
+
+		nLin := li + 1
+
+		@nLin,	00 PSAY __PrtThinLine()
+		nLin++
+		@nLin, 75 PSAY OemToAnsi(STR0007)    //"TOTAL GERAL ..... "
+		@nLin,nColunaTotal PSAY nTotValor	Picture "@E 999,999,999.99"  
+		cExtenso := Extenso( nTotValor, .F., 1 )
+		nLin+=2
+		@nLin,	1 PSAY Trim(SubStr(cExtenso,1,100))  
+		If Len(Trim(cExtenso)) > 100
+			li++
+			@nLin, 0 PSAY SubStr(cExtenso,101,Len(Trim(cExtenso))-100)  
+		End
+
+		nLin+=2
+		If cModelo $ "CH/02"
+			@nLin, 0 PSAY OemToAnsi(STR0008)   //"AUTORIZAMOS V.SAS. A EMITIR OS CHEQUES NOMINATIVOS AOS BENEFICIARIOS EM REFERENCIA,"
+			nLin++
+			@nLin, 0 PSAY OemToAnsi(STR0009) + DtoC( mv_par03 )   //"DEBITANDO EM NOSSA CONTA CORRENTE NO DIA "
+			nLin++
+			@nLin, 0 PSAY OemToAnsi(STR0010)    //"PELO VALOR ACIMA TOTAnLinZADO."
+		Elseif cModelo $ "CT/30"
+			@nLin, 0 PSAY OemToAnsi(STR0011)    //"AUTORIZAMOS V.SAS. A PAGAR OS TITULOS ACIMA RELACIONADOS EM NOSSA"
+			nLin++
+			@nLin, 0 PSAY OemToAnsi(STR0012)   + DtoC( mv_par03 ) + OemToAnsi(STR0013)    //"CONTA MOVIMENTO NO DIA "###", PELO VALOR ACIMA TOTAnLinZADO."
+		Elseif cModelo $ "CP/31"
+			@nLin, 0 PSAY OemToAnsi(STR0014)  //"AUTORIZAMOS V.SAS. A PAGAR OS TITULOS EM REFERENCIA, LEVANDO A DEBITO DE NOSSA"
+			nLin++
+			@nLin, 0 PSAY OemToAnsi(STR0015) + cNumConta + OemToAnsi(STR0016)+ DtoC( mv_par03 ) +OemToAnsi(STR0017)   //"CONTA CORRENTE NUM. "###" NO DIA "###" PELO VALOR ACIMA TOTAnLinZADO."
+		Elseif cModelo $ "CC/01/03/04/05/10/41/43"
+			@nLin, 0 PSAY OemToAnsi(STR0018)  //"AUTORIZAMOS V.SAS. A EMITIREM ORDEM DE PAGAMENTO, OU DOC PARA OS BANCOS/CONTAS ACIMA."
+			nLin++
+			@nLin, 0 PSAY OemToAnsi(STR0019)   + cNumConta    //"DOS TITULOS RESPECTIVOS DEBITANDO EM NOSSA C/CORRENTE NUM "
+			nLin++
+			@nLin, 0 PSAY OemToAnsi(STR0020) + dToC( mv_par03 ) +OemToAnsi(STR0021)    //"NO DIA "### " PELO VALOR ACIMA TOTAnLinZADO."
+		Else
+			@nLin, 0 PSAY OemToAnsi(STR0022)   //"AUTORIZAMOS V.SAS. A PAGAR OS TITULOS EM REFERENCIA, LEVANDO A DEBITO DE NOSSA"
+			nLin++
+			@nLin, 0 PSAY OemToAnsi(STR0023) + cNumConta + OemToAnsi(STR0016) + DtoC( mv_par03 ) +OemToAnsi(STR0017)   //"CONTA CORRENTE NUM. "###" NO DIA "###" PELO VALOR ACIMA TOTAnLinZADO."
+		End
+		nLin+=3
+		@nLin,60 PSAY "------------------------------------------"
+		nLin++
+		@nLin,60 PSAY SM0->M0_NOMECOM
+		nLin++
+		@nLin, 0 PSAY " "
+		nTotValor := 0
+	Else
+
+		lNew := .F.
+
+		nLin := nLin + 1
+
+		@nLin,	00 PSAY __PrtThinLine()
+		nLin++
+		@nLin, 75 PSAY OemToAnsi(STR0007)    //"TOTAL GERAL ..... "
+		@nLin,nColunaTotal PSAY nTotValor	Picture "@E 999,999,999.99"  
+		cExtenso := Extenso( nTotValor, .F., 1 )
+		nLin+=2
+		@nLin,	1 PSAY Trim(SubStr(cExtenso,1,100))  
+		If Len(Trim(cExtenso)) > 100
+			li++
+			@nLin, 0 PSAY SubStr(cExtenso,101,Len(Trim(cExtenso))-100)
+		End
+
+		nLin+=2
+		If cModelo $ "CH/02"
+			@nLin, 0 PSAY OemToAnsi(STR0008)   //"AUTORIZAMOS V.SAS. A EMITIR OS CHEQUES NOMINATIVOS AOS BENEFICIARIOS EM REFERENCIA,"
+			nLin++
+			@nLin, 0 PSAY OemToAnsi(STR0009) + DtoC( mv_par03 )   //"DEBITANDO EM NOSSA CONTA CORRENTE NO DIA "
+			nLin++
+			@nLin, 0 PSAY OemToAnsi(STR0010)   //"PELO VALOR ACIMA TOTAnLinZADO."
+		Elseif cModelo $ "CT/30"
+			@nLin, 0 PSAY OemToAnsi(STR0011)    //"AUTORIZAMOS V.SAS. A PAGAR OS TITULOS ACIMA RELACIONADOS EM NOSSA"
+			nLin++
+			@nLin, 0 PSAY OemToAnsi(STR0012)   + DtoC( mv_par03 ) + OemToAnsi(STR0013)    //"CONTA MOVIMENTO NO DIA "###", PELO VALOR ACIMA TOTAnLinZADO."
+		Elseif cModelo $ "CP/31"
+			@nLin, 0 PSAY OemToAnsi(STR0014)   //"AUTORIZAMOS V.SAS. A PAGAR OS TITULOS EM REFERENCIA, LEVANDO A DEBITO DE NOSSA"
+			nLin++
+			@nLin, 0 PSAY OemToAnsi(STR0015) + cNumConta + OemToAnsi(STR0016)+ DtoC( mv_par03 ) +OemToAnsi(STR0017)   //"CONTA CORRENTE NUM. "###" NO DIA "###" PELO VALOR ACIMA TOTAnLinZADO."
+		Elseif cModelo $ "CC/01/03/04/05/10/41/43"
+			@nLin, 0 PSAY OemToAnsi(STR0018)   //"AUTORIZAMOS V.SAS. A EMITIREM ORDEM DE PAGAMENTO, OU DOC PARA OS BANCOS/CONTAS ACIMA."
+			nLin++
+			@nLin, 0 PSAY OemToAnsi(STR0019)   + cNumConta   //"DOS TITULOS RESPECTIVOS DEBITANDO EM NOSSA C/CORRENTE NUM "
+			nLin++
+			@nLin, 0 PSAY OemToAnsi(STR0020) + dToC( mv_par03 ) +OemToAnsi(STR0021)    //"NO DIA "### " PELO VALOR ACIMA TOTAnLinZADO."
+		Else
+			@nLin, 0 PSAY OemToAnsi(STR0022)    //"AUTORIZAMOS V.SAS. A PAGAR OS TITULOS EM REFERENCIA, LEVANDO A DEBITO DE NOSSA"
+			nLin++
+			@nLin, 0 PSAY OemToAnsi(STR0023) + cNumConta + OemToAnsi(STR0016) + DtoC( mv_par03 ) +OemToAnsi(STR0017)   //"CONTA CORRENTE NUM. "###" NO DIA "###" PELO VALOR ACIMA TOTAnLinZADO."
+		End
+		nLin+=3
+		@nLin,60 PSAY "------------------------------------------"
+		nLin++
+		@nLin,60 PSAY SM0->M0_NOMECOM   
+		nLin++
+		@nLin, 0 PSAY " "
+		nTotValor := 0
+	EndIf
+
+
+Return
+
+
+
+
+Static Function fbuscaAprv()
+Local aArea  := GetArea()
+Local cQuery := ""
+Local cAliasTRB :=GetNextAlias()
+Local cNomeAprov := " "
+
+
+cQuery := " SELECT SUBSTR(PDT_LOG,11,16) AS APROV " 
+cQuery += " FROM "+Retsqlname("PDT")
+cQuery += " where d_e_l_e_t_= ' '"
+cQuery += " and pdt_filial = '"+xFilial("PDT")+"'"
+cQuery += " AND PDT_TPAPRO = 'A'"
+cQuery += " AND PDT_LIBERA = 'S'"
+cQuery += " AND PDT_PREFIX = '"+SE2->E2_PREFIXO+"'"
+cQuery += " AND PDT_NUM    = '"+SE2->E2_NUM+"'"
+cQuery += " AND PDT_TIPO   = '"+SE2->E2_TIPO+"'"
+cQuery += " AND PDT_PARCEL = '"+SE2->E2_PARCELA+"'" 
+cQuery += " AND PDT_FORNEC = '"+SE2->E2_FORNECE+"'"
+
+DbUseArea( .T., "TOPCONN", TCGenQry( ,, cQuery ), cAliasTRB, .F., .T.)
+(cAliasTRB)->( DbGoTop() )
+
+If (cAliasTRB)->( Eof() )
+	(cAliasTRB)->( DbCloseArea() )
+	Return cNomeAprov
+EndIf
+
+cNomeAprov := (cAliasTRB)->(APROV)
+
+DbSelectArea(cAliasTRB)
+DbCloseArea()
+
+RestArea( aArea)
+
+Return cNomeAprov

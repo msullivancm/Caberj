@@ -1,0 +1,418 @@
+#Include "rwmake.ch"        // incluido pelo assistente de conversao do AP5 IDE em 05/07/00
+#INCLUDE "IMPIRPJ.CH"
+#INCLUDE "TOPCONN.CH"
+
+/*
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+±±ÚÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄ¿±±
+±±³RdMake    ³ IMPIRPJ  ³ Autor ³                       ³ Data ³          ³±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄ´±±
+±±³Descri‡…o ³ Impressao do comprovante de rendimentos pessoa juridica    ³±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´±±
+±±³Sintaxe e ³ DIRF                                                       ³±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´±±
+±±³ Uso      ³ RdMake                                                     ³±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´±±
+±±³Programar ³ Data   ³ BOPS ³  Motivo da Alteracao                       ³±±
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+ßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßß
+*/
+
+User Function AsoIrPj()        // incluido pelo assistente de conversao do AP5 IDE em 05/07/00  
+
+Local xa := 0//Leonardo Portella - 07/11/14 - Virada TISS 3 - Compilacao TDS
+Local xz := 0//Leonardo Portella - 07/11/14 - Virada TISS 3 - Compilacao TDS
+
+Local cFileFaz	:= ""
+Local cStartPath:= GetSrvProfString("Startpath","")
+Local nContador
+Local nVlTotTr := 0
+Local nVlTotRt := 0
+Local nVltotCs := 0
+Local nVlTotPs := 0
+Local nVlTotCo := 0
+Local nvlTotIn := 0     
+ 
+Private dDataEsp := CToD("28/02/2018") // data "chumbada" solicitação da Contabilidade 
+
+private MunDesc:= " " 
+SetPrvt("CDESEMP,CDESEND,CDESCID,CUF,CTPINSC,CTELEF")
+SetPrvt("CDESCEP,CCODRET,CTIPO,M->RL_CIDABEN,M->RL_NUMDOC,NLIN")
+SetPrvt("NTOTRB,NTOTIR,CMESANT,NTOTBRUTO,NALIQ,NVALIR")
+SetPrvt("T,")
+
+Private lFirst := .T.
+
+If lFirst
+	aVetRel := Array(12,7)
+	
+	For xa := 1 to 12
+		aVetRel[xa][1] := StrZero(xa,2)
+		aVetRel[xa][2] := 0
+		aVetRel[xa][3] := 0
+		aVetRel[xa][4] := 0
+		aVetRel[xa][5] := 0
+		aVetRel[xa][6] := 0
+		aVetRel[xa][7] := 0
+	Next xa
+	lFirst := .F.
+EndIf
+
+cDesEmp := aInfo[3]
+cDesEnd := aInfo[4]
+cDesCid := aInfo[5]
+cUf	  := aInfo[6]
+cTpInsc := Str(aInfo[15],1)
+cTelef  := aInfo[10]
+cDesCep := ainfo[7]
+
+nPis    := 0
+nCofins := 0
+nCsl    := 0
+nInss   := 0
+
+oPrint:StartPage()
+
+/*
+ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+³Cabecalho                                                     ³
+ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+*/
+
+cFileFaz 	:= cStartPath+ "RECEITA" + ".BMP" 			// Empresa+Filial
+
+//-- CABECALHO
+//Box Itens
+nLin := 030
+nLinI:= 030
+nLin +=10
+
+oPrint:Box( nLinI,0030,nLin+195,2350)  		// box Cabecalho
+oPrint:Line(nLinI,1450,nLin+195,1450)		// Linha Div.Cabecalho
+oPrint:SayBitmap(nLinI+10,050, cFileFaz,250,180) // Tem que estar abaixo do RootPath
+
+nLin +=20
+oPrint:say(nLin,500 ,STR0032,oFont13n)				//	ministerio da fazenda
+oPrint:Say(nLin,1475,STR0033,oFont10)				//Comprovante de rendimento
+nLin +=40
+oPrint:Say(nLin,1475,STR0035,oFont10)              //OU CREDITADOS E DE RETENCAO DE IMPOSTO DE
+nLin +=10
+oPrint:say(nLin,500 ,STR0034,oFont13)              //secretaria de receita
+nLin +=30
+oPrint:Say(nLin,1475,STR0036,oFont10)              //RENDA NA FONTE - PESSOA JURIDICA
+nLin +=40
+oPrint:Say(nLin,1560,STR0037,oFont10) 				//ano calendario
+oPrint:Say(nLin,2010,mv_par08 + ")" ,oFont10n)      //ano  base
+
+//Fonte Pagadora
+oPrint:say ( 250, 040,STR0038,oFont12n)		// 1. - FONTE PAGADORA
+oPrint:Box ( 300, 030, 400,2350)
+oPrint:say ( 320, 040,STR0023,oFont08)		  			//Nome Empresarial
+oPrint:say ( 360, 040,PADR(cDesEmp,47),oFont10)
+//Linha Vertical
+oPrint:line( 300,1800, 300,1800)
+oPrint:say ( 320,1900,STR0022,oFont08)					//CNPJ
+oPrint:say ( 360,1900,PADR(cCgc,28),oFont10)
+//Pessoa Juridica Beneficiaria dos Rendimentos
+
+If SRL->(FieldPos("RL_CC"))== 0
+	oPrint:say ( 460, 040,STR0039+PADL(SRL->RL_FILIAL+"-"+SRL->RL_MAT,27),oFont12n)						//2. - PESSOA JURIDICA BENEFICIARIA DOS RENDIMENTOS
+Else
+	oPrint:say ( 460, 040,STR0039+PADL(SRL->RL_FILIAL+"-"+SRL->RL_MAT+"-"+SRL->RL_CC,27),oFont12n)		//2. - PESSOA JURIDICA BENEFICIARIA DOS RENDIMENTOS
+EndIf
+
+oPrint:Box ( 510, 030,620 ,2350)
+oPrint:say ( 530, 040,"NOME  ",oFont08)    				//Nome Empresarial
+
+dbSelectArea("SRL")
+cTipo := TYPE("SRL->RL_CIDABEN")
+If  cTipo == "U"
+	M->RL_CIDABEN := SPACE(20)
+	M->RL_NUMDOC  := SPACE(10)
+Else
+	M->RL_CIDABEN := SRL->RL_CIDABEN
+	M->RL_NUMDOC  := SRL->RL_NUMDOC
+Endif
+
+cQuery:=  "SELECT SR4.* "
+cQuery+=  " FROM "+RetSQLName("SR4")+" SR4 "
+cQuery+=  " WHERE SR4.D_E_L_E_T_ = ' ' "
+cQuery+=  " AND SR4.R4_FILIAL = '" + xFilial("SR4") + "' "
+cQuery+=  " AND SR4.R4_CPFCGC = '" + SRL->RL_CPFCGC  + "' "
+cQuery+=  " AND SR4.R4_ANO    = '" + SR4->R4_ANO    + "' "
+
+cQuery+=  " ORDER BY R4_FILIAL, R4_CPFCGC, R4_MES, R4_ANO "
+
+IF Select("TMPSR4") > 0
+	DbSelectArea("TMPSR4")
+	DbCloseArea()
+ENDIF
+
+TcQuery cQuery Alias "TMPSR4" New
+dbSelectArea("TMPSR4")
+
+If !Eof()
+	oPrint:say ( 530,1900,STR0022,oFont08)							//CNPJ
+	
+	//Descricao do Nome Pessoa Juridica
+	oPrint:say ( 570, 040,PADR(SRL->RL_BENEFIC,40),oFont10)		//"| CNPJ:" ### "NOME EMPR.:"
+	
+	//CNPJ
+	oPrint:say ( 570,1900,TRANSFORM(SUBSTR(SRL->RL_CPFCGC,1,14),"@R ##.###.###/####-##"),oFont10)
+	
+	//CNPJ
+	//oPrint:say ( 680 ,40,"Codigo de Retencao : 1708 ",oFont10)         
+	oPrint:say ( 680 ,40,"Codigo de Retencao : " + SRL->RL_CODRET ,oFont10)
+	oPrint:say ( 720 ,40,"Remuneracao de servicos prestados por pessoas juridicas ",oFont10)
+		
+	//Rendimento e Imposto Retido na fonte
+	oPrint:say ( 780, 040,STR0040,oFont12n)				//"  3  - RENDIMENTO BRUTO E IMPOSTO DE RENDA RETIDO NA FONTE"
+	oPrint:Box ( 830, 030,1750,2350)
+	oPrint:line( 930, 030,930 ,2350)							//LINHA HORIZONTAL
+	oPrint:line( 830, 130,1750, 130)							//Linha Vertical
+	oPrint:line( 830, 510,1750, 510)	 						//Linha Vertical //550
+	oPrint:line( 830, 840,1750, 840)	  						//Linha Vertical
+	oPrint:line( 830,1200,1750,1200)	   					//Linha Vertical
+	oPrint:line( 830,1600,1750,1600)	   					// Linha Vertical
+	oPrint:line( 830,2000,1750,2000)	     				   //Linha Vertical
+	
+	oPrint:say ( 850, 050,STR0024,oFont08)	    				//MES
+	oPrint:say ( 850, 220,"TRIBUTAVEL",oFont08)  				//TRIBUTAVEL
+	//	oPrint:say ( 710, 300,STR0026,oFont08)      				//RETENCAO
+	oPrint:say ( 850, 630,"IRRF"   ,oFont08)      				//RETIDO
+	oPrint:say ( 850, 950,"CSL "   ,oFont08)      				//CSL
+	oPrint:say ( 850,1350,"PIS "   ,oFont08)  	     	      //PIS
+	oPrint:say ( 850,1740,"COFINS" ,oFont08)  				   //COFINS
+	oPrint:say ( 850,2140,"INSS"   ,oFont08)  			      //INSS
+	// Inserir linha para COFINS - encurtar colunas para caber sem problemas....
+	
+	nTotRb := 0.00
+	nTotIr := 0.00
+	nPos   := 950
+	
+	While ! Eof() //.AND. SR4->R4_FILIAL == SRL->RL_FILIAL  .AND. ; //.AND. SR4->R4_MAT == SRL->RL_MAT
+		//SR4->R4_CPFCGC == SRL->RL_CPFCGC
+		
+		nTotBruto := 0
+		nAliq     := 0
+		nValIR    := 0
+		nPis      := 0
+		nCofins   := 0
+		nCsl      := 0
+		nInss     := 0
+		
+		
+		If Len(Alltrim(TMPSR4->R4_TIPOREN)) == 1
+			
+			If ! Alltrim(TMPSR4->R4_TIPOREN) $ "ABD"
+				dbSkip()
+				Loop
+			EndIf
+			
+			If nAliq == 0
+				If Alltrim(TMPSR4->R4_TIPOREN) == "B"
+					nAliq  := TMPSR4->R4_VALOR
+				Endif
+			Endif
+			If Alltrim(TMPSR4->R4_TIPOREN) == "A"
+				nTotBruto := nTotBruto + TMPSR4->R4_VALOR
+			Endif
+			If Alltrim(TMPSR4->R4_TIPOREN) == "D"
+//				If (TMPSR4->R4_CODRET == "1708"  // IR 
+				If (TMPSR4->R4_CODRET == "1708" .or. TMPSR4->R4_CODRET == "8045") // IR
+					nValIR    := nValIR + TMPSR4->R4_VALOR
+				EndIf
+				If TMPSR4->R4_CODRET == "5960" //COFINS
+					nCofins    := nCofins + TMPSR4->R4_VALOR
+				EndIf
+				If TMPSR4->R4_CODRET == "5979" //PIS
+					nPIS    := nPis + TMPSR4->R4_VALOR
+				EndIf
+				If TMPSR4->R4_CODRET == "5987" //CSL
+					nCsl    := nCsl + TMPSR4->R4_VALOR
+				EndIf
+				
+			Endif
+		EndIf
+		
+		i := 0
+		i := aScan(aVetRel,{|x| alltrim(x[1])==TMPSR4->R4_MES})
+		If i > 0
+			aVetRel[i][1] := TMPSR4->R4_MES
+			If nTotBruto > 0
+				aVetRel[i][2] := nTotBruto
+			EndIf
+			If nValIr    > 0
+				aVetrel[i][3] := aVetrel[i][3] + nValIr
+			EndIf
+			If nCsl    > 0
+				aVetRel[i][4] := aVetRel[i][4] + nCsl
+			EndIf
+			If nPis    > 0
+				aVetRel[i][5] := aVetRel[i][5] + nPis
+			EndIf
+			If nCofins    > 0
+				aVetRel[i][6] := aVetRel[i][6] + nCofins
+			EndIf
+			If nAliq    > 0
+				aVetRel[i][7] := aVetRel[i][7] + nAliq
+			EndIf
+		EndIf
+		dbSelectArea("TMPSR4")
+		dbSkip()
+	Enddo
+	dbCloseArea("TMPSR4")
+	
+	//Alterando relatorio para jogar dados para vetor
+	
+	For xz := 1 to len(aVetRel)
+		oPrint:say(nPos, 055,aVetRel[xz][1],oFont14)					                                      //Mes
+		oPrint:say(nPos, 135,PADL(Transform(aVetRel[xz][2],"@E 99,999,999,999.99"),17," "),oFont14)	  //tributavel
+		oPrint:say(nPos, 500,PADL(Transform(aVetRel[xz][3],"@E 99,999,999.99"),14," "),oFont14)		     //Retido
+		oPrint:say(nPos, 860,PADL(Transform(aVetRel[xz][4],"@E 99,999,999.99"),14," "),oFont14)		     //Csl
+		oPrint:say(nPos,1260,PADL(Transform(aVetRel[xz][5],"@E 99,999,999.99"),14," "),oFont14)		     //Pis
+		oPrint:say(nPos,1660,PADL(Transform(aVetRel[xz][6],"@E 99,999,999.99"),14," "),oFont14)		     //Cofins
+		oPrint:say(nPos,2040,PADL(Transform(aVetRel[xz][7],"@E 99,999,999.99"),14," "),oFont14)		     //Inss
+		
+		If xz < 12
+			nPos+=40
+			oPrint:line(npos,030,npos,2350)
+			npos+=30
+		EndIf
+		
+		
+		//-----------------------------------------------------|
+		// Gava Variaveis com os valores totais para impressao.|
+		//-----------------------------------------------------|
+		nVlTotTr += aVetRel[xz][2]
+		nVlTotRt += aVetRel[xz][3]
+		nVltotCs += aVetRel[xz][4]
+		nVlTotPs += aVetRel[xz][5]
+		nVlTotCo += aVetRel[xz][6]
+		nvlTotIn += aVetRel[xz][7]
+		
+	Next xz
+	
+	//---------------//
+	//Imprime Totais||
+	//--------------//
+	
+	nPos += 90
+   oPrint:say(nPos, 30,"Totais",oFont08)	  
+	oPrint:say(nPos, 135,PADL(Transform(nVlTotTr,"@E 99,999,999,999.99"),17," "),oFont14)	  //tributavel
+	oPrint:say(nPos, 500,PADL(Transform(nVlTotRt,"@E 99,999,999.99"),14," "),oFont14)		     //Retido
+	oPrint:say(nPos, 860,PADL(Transform(nVltotCs,"@E 99,999,999.99"),14," "),oFont14)		     //Csl
+	oPrint:say(nPos,1260,PADL(Transform(nVlTotPs,"@E 99,999,999.99"),14," "),oFont14)		     //Pis
+	oPrint:say(nPos,1660,PADL(Transform(nVlTotCo,"@E 99,999,999.99"),14," "),oFont14)		     //Cofins
+	oPrint:say(nPos,2040,PADL(Transform(nvlTotIn,"@E 99,999,999.99"),14," "),oFont14)		     //Inss
+		
+	//INFORMACOES COMPLEMENTARES
+	nPos := 1950 //1640
+	oPrint:say (nPos, 040,STR0041,oFont12n)   	   		//"  4 - INFORMACOES COMPLEMENTARES"
+	nPos += 60
+	nLinI:=nPos -10
+	nItem := 1
+	
+	If Empty(aComplem)
+		nPos+=230
+		oPrint:box(nLinI,0030,nPos ,2350)
+		oPrint:line(nLinI,1900,nPos ,1900)
+	Else
+		nLinhas	:= Int(nPos    + (  (Len(aComplem)+1 )    * 50  ) )
+		oPrint:box(nLinI,0030,nLinhas,2350)
+		oPrint:line(nLinI,1900,nLinhas,1900)
+		For nContador := 1 to len(aComplem)
+			oPrint:say(nPos,0040,aComplem[nContador,1],oFont10)
+			oPrint:Say(nPos,2000,TRANSFORM(aComplem[nContador,2],"@E 99,999,999.99"),oFont12)
+			nPos +=50
+			oPrint:line(nLinI,1900,nPos,1900)
+			nPos +=30
+		Next nContador
+	Endif
+	nPos+=60
+	//RESPONSAVEL PELAS INFORMACOES
+	oPrint:Say(nPos,0040,STR0042,ofont12n)			//"  7. - Responsavel Pelas Informacoes"
+	nPos	+=50
+	oPrint:Box(nPos,0030,nPos + 100,2350)
+	oPrint:Line(nPos,1300,nPos+ 100,1300)
+	oPrint:Line(nPos,1540,nPos+ 100,1540)
+	
+	nPos +=20
+	oPrint:say(nPos,0040,STR0030,oFont08)
+	oPrint:Say(nPos,1340,STR0020,oFont08)
+	oPrint:Say(nPos,1550,STR0031,oFont08)
+	
+	nPos += 30
+	oPrint:say(nPos,0050,cResponsa,ofont10)  
+	oPrint:say(nPos,1340,DtoC(dDataEsp),oFont10)
+//	oPrint:say(nPos,1340,DtoC(dDataBase),oFont10)
+	
+	/*	nPos+=50
+	If cCodRet $ "5952#5960#5979#5987"
+	oPrint:say(nPos,0040,STR0021,oFont08)		// "Aprovado pela IN/SRF No. 459/2004"
+	Else
+	oPrint:say(nPos,0040,STR0043,oFont08)		// "Aprovado pela IN/SRF No. 119/2000"
+	EndIf
+	*/
+Endif
+
+//ENDERECO PARA CORRESPONDENCIA
+  
+  oPrint:say ( 2900, 650,"NOME      ",oFont08)
+  oPrint:say ( 3000, 650,"ENDERECO  ",oFont08) 				//Nome Empresarial    
+  
+  ////////////////////////////////////////////////////////
+  DbSelectArea("BAU")
+  dbSetOrder(4)
+  If DbSeek(xFilial("BAU")+SRL->RL_CPFCGC)   
+     DbSelectArea("BID")
+     dbSetOrder(1)
+     If DbSeek(("  ")+BAU->BAU_MUN)
+        MunDesc:= ALLTRIM(BID->BID_DESCRI)
+     ELSE
+        MunDesc:= " " 
+     End      
+	oPrint:say ( 2950, 650,BAU->BAU_NOME,oFont10)
+  	oPrint:say ( 3050, 650,ALLTRIM(BAU->BAU_END) + " " + ALLTRIM(BAU->BAU_NUMERO) + " " + ALLTRIM(BAU->BAU_COMPL),oFont10)
+	oPrint:say ( 3100, 650,ALLTRIM(BAU->BAU_BAIRRO) +" - " + MunDesc+" - "+BAU->BAU_EST+" CEP: "+BAU->BAU_CEP,oFont10)
+  ELSE 
+     DbSelectArea("SA2")
+     dbSetOrder(3)
+     If DbSeek(xFilial("SA2")+SRL->RL_CPFCGC)
+		oPrint:say ( 2950, 650,SA2->A2_NOME,oFont10)
+  		oPrint:say ( 3050, 650,ALLTRIM(SA2->A2_END) + " " + ALLTRIM(SA2->A2_NR_END),oFont10)
+		oPrint:say ( 3100, 650,ALLTRIM(SA2->A2_BAIRRO) +" - " + SA2->A2_MUN +" - "+SA2->A2_EST+" CEP: "+SA2->A2_CEP,oFont10)
+     Endif 
+  Endif  
+ 
+oPrint:EndPage()
+
+Return(NIL)        // incluido pelo assistente de conversao do AP5 IDE em 04/02/00
+
+
+/*/
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+±±ÉÍÍÍÍÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍÍÍËÍÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍËÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍÍÍÍÍÍ»±±
+±±ºFun‡„o    ³MontaFilt º Autor ³ AP5 IDE            º Data ³  10/08/05   º±±
+±±ÌÍÍÍÍÍÍÍÍÍÍØÍÍÍÍÍÍÍÍÍÍÊÍÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÊÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÍÍÍÍ¹±±
+±±ºDescri‡„o ³ Altera sinais pra montagem de filtro no Sql                º±±
+±±º          ³                                                            º±±
+±±ÌÍÍÍÍÍÍÍÍÍÍØÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¹±±
+±±ºUso       ³ Programa principal                                         º±±
+±±ÈÍÍÍÍÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¼±±
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+ßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßß
+/*/
+
+Static Function MontaFil(cEntr)
+
+cEntr  := StrTran(cEntr,"=="," = ")
+cEntr  := StrTran(cEntr,".and."," and ")
+cEntr  := StrTran(cEntr,".or."," or ")
+cEntr  := StrTran(cEntr,'"',"'")
+
+cFilt := cEntr
+
+Return(cFilt)

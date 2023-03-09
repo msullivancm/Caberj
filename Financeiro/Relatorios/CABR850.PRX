@@ -1,0 +1,816 @@
+#INCLUDE "PROTHEUS.CH"
+
+//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+//³ Variaveis para tratamento dos Sub-Totais por Ocorrencia  ³
+//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+#DEFINE VALORPAGO 	3        
+
+/*/
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+±±ÚÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄ¿±±
+±±³Funcao    ³Finr850   ³ Autor ³ Julio Wittwer         ³ Data ³ 06.12.99 ³±±
+±±³          ³          ³ Autor ³ Jose Novaes           ³ Data ³ 20.12.99 ³±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄ´±±
+±±³Descricao ³Relatorio do Arquivo de Retorno SISPAG                      ³±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´±±
+±±³Sintaxe   ³Finr850()                                                   ³±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´±±
+±±³ Uso      ³ SIGAFIN                                                    ³±±
+±±ÀÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ±±
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+ßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßß
+/*/
+USer Function CabR450()
+
+Local oReport
+Local aAreaR4	:= GetArea()
+Private aSx1  := {}
+Private cPerg := PADR("CAB850", 10)
+
+//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+//³ Variaveis utilizadas para parametros                         ³
+//³ mv_par01            // Arquivo de Entrada                    ³
+//³ mv_par02            // Arquivo de Configuracao               ³
+//³ mv_par03            // Codigo do Banco                       ³
+//³ mv_par04            // Codigo Agencia                        ³
+//³ mv_par05            // Codigo Conta                          ³
+//³ mv_par06            // Codigo SubConta                       ³
+//| mv_par07            // Ocorrencia de                         |
+//| mv_par08            // Ocorrencia Ate                        |
+//| mv_par09            // Desconsidera Ocorrencia               |
+//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+
+Aadd(aSx1,{"GRUPO","ORDEM","PERGUNT"       	      ,"VARIAVL","TIPO","TAMANHO","DECIMAL","GSC","VALID","VAR01"   ,"F3" ,"DEF01"   ,"DEF02"  ,"DEF03" ,"DEF04","DEF05"})
+Aadd(aSx1,{cPerg  ,"01"   ,"Arquivo de Entrada  "		,"mv_ch1" ,"C"   ,65       ,0        ,"G"  ,""     ,"mv_par01","   ",""        ,""       ,""      ,""     ,""     })
+Aadd(aSx1,{cPerg  ,"02"   ,"Arquivo de Config   "		,"mv_ch2" ,"C"   ,12       ,0        ,"G"  ,""     ,"mv_par02","   ",""        ,""       ,""      ,""     ,""     })
+Aadd(aSx1,{cPerg  ,"03"   ,"Codigo do Banco     "		,"mv_ch3" ,"C"   ,03       ,0        ,"G"  ,""     ,"mv_par03","SEE",""		    ,""		  ,""		  ,""     ,""     })
+Aadd(aSx1,{cPerg  ,"04"   ,"Codigo da Agencia   "		,"mv_ch4" ,"C"   ,05       ,0        ,"G"  ,""     ,"mv_par04","   ",""		    ,""		  ,""		  ,""     ,""     })
+Aadd(aSx1,{cPerg  ,"05"   ,"Codigo da Conta     "		,"mv_ch5" ,"C"   ,10       ,0        ,"G"  ,""     ,"mv_par05","   ",""		    ,""		  ,""		  ,""     ,""     })
+Aadd(aSx1,{cPerg  ,"06"   ,"Codigo da SubConta  "		,"mv_ch6" ,"C"   ,03       ,0        ,"G"  ,""     ,"mv_par06","   ",""		    ,""		  ,""		  ,""     ,""     })
+Aadd(aSx1,{cPerg  ,"07"   ,"Da Ocorrencia       "		,"mv_ch7" ,"C"   ,02       ,0        ,"G"  ,""     ,"mv_par07","SEB",""		    ,""		  ,""		  ,""     ,""     })
+Aadd(aSx1,{cPerg  ,"08"   ,"Da Ocorrencia       "		,"mv_ch8" ,"C"   ,02       ,0        ,"G"  ,""     ,"mv_par08","SEB",""		    ,""		  ,""		  ,""     ,""     })
+Aadd(aSx1,{cPerg  ,"09"   ,"Retira a Ocorrencia "		,"mv_ch9" ,"C"   ,02       ,0        ,"G"  ,""     ,"mv_par09","SEB",""		    ,""		  ,""		  ,""     ,""     })
+
+fCriaSX1(cPerg,aSX1)
+
+FinR850R3() // Executa versão anterior do fonte
+
+RestArea(aAreaR4)  
+
+Return
+
+//---------------------------------------------- Release 3 ---------------------------------------------------------
+*/
+/*/
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+±±ÚÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄ¿±±
+±±³Funcao    ³Finr850   ³ Autor ³ Julio Wittwer         ³ Data ³ 06.12.99 ³±±
+±±³          ³          ³ Autor ³ Jose Novaes           ³ Data ³ 20.12.99 ³±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄ´±±
+±±³Descricao ³Relatorio do Arquivo de Retorno SISPAG                      ³±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´±±
+±±³Sintaxe   ³Finr850()                                                   ³±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´±±
+±±³ Uso      ³ SIGAFIN                                                    ³±±
+±±ÀÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ±±
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+ßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßß
+/*/
+Static Function FinR850R3()
+LOCAL wnrel   := "CABR850"          //Nome Default do relatorio em Disco
+LOCAL cString := ""
+LOCAL cDesc1  := "Este programa tem como objetivo imprimir o arquivo"
+LOCAL cDesc2  := "Retorno da Comunicação Bancária SISPAG, conforme"
+LOCAL cDesc3  := "layout previamente configurado"
+
+//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+//³ Define Variaveis ³
+//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+PRIVATE Titulo  := OemToAnsi("Impressao do Retorno do SISPAG ")
+PRIVATE cabec1  := OemToAnsi("TITULO         TP  FORNECEDOR  VENCTO   N.RDA    NOME FORNECEDOR                   VALOR  OCORRENCIA")          
+PRIVATE cabec2  := ""
+PRIVATE aReturn := {OemToAnsi("Zebrado") , 1,OemToAnsi("Administracao"), 2, 2, 1, "",1 }
+PRIVATE cPerg   := "CAB850"   , nLastKey := 0
+PRIVATE nomeprog:= "CABR850"
+PRIVATE nTipo
+PRIVATE tamanho := "M"
+
+//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+//³ Verifica as perguntas selecionadas ³
+//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+pergunte(cPerg,.F.)
+
+//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+//³ Variaveis utilizadas para parametros                         ³
+//³ mv_par01            // Arquivo de Entrada                    ³
+//³ mv_par02            // Arquivo de Configuracao               ³
+//³ mv_par03            // Codigo do Banco                       ³
+//³ mv_par04            // Codigo Agencia                        ³
+//³ mv_par05            // Codigo Conta                          ³
+//³ mv_par06            // Codigo SubConta                       ³
+//| mv_par07            // Ocorrencia De
+//| mv_par08            // Ocorrencia Ate
+//| mv_par09            // Desconsidera Ocorrencia
+//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+
+//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+//³ Envia controle para a funcao SETPRINT ³
+//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+
+wnrel:= SetPrint(cString,wnrel,cPerg,@titulo,cDesc1,cDesc2,cDesc3,.F.,"",,Tamanho)
+
+nTipo:=Iif(aReturn[4]==1,GetMv("MV_COMP"),GetMv("MV_NORM"))
+
+If nLastKey == 27
+	Return
+End
+
+SetDefault(aReturn,cString)
+
+If nLastKey == 27
+   Return
+Endif
+
+RptStatus( {| lEnd | Fa850Imp(@lEnd,wnRel,cString) } , Titulo )
+
+Set Device to Screen
+If aReturn[5] = 1
+   Set Printer To
+   dbCommitAll()
+   Ourspool(wnrel)
+End
+
+MS_FLUSH()
+
+Return
+
+/*/
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+±±ÚÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄ¿±±
+±±³Funcao    ³ FA850Imp ³ Autor ³ Julio Wittwer         ³ Data ³ 06.12.99 ³±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄ´±±
+±±³Descricao ³ Impressao da Comunicacao Bancaria - Retorno SISPAG         ³±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´±±
+±±³Sintaxe   ³ FA850Imp()                                                 ³±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´±±
+±±³ Uso      ³ FINR850                                                    ³±±
+±±ÀÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ±±
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+ßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßß
+/*/
+STATIC FUNCTION FA850IMP(lEnd,wnRel,cString)
+
+LOCAL aHeadA  := {}, aHead1 := {}, aHead2   := {}
+LOCAL aDetA   := {}, aDetB  := {}, aDetJ    := {}
+LOCAL aTraiA  := {}, aTrai1 := {}, aTrai2   := {}
+LOCAL nBytes  := 0 , nTamArq  := 0 , nLidos  := 0
+LOCAL cArqConf:= "", cArqEnt:= "", nHdlConf := 0
+LOCAL xBuffer := "", cTabela:= "", cRegistro:= "", cRetorno:= ""
+LOCAL cSegmento:= "",cNumtit:= "", cValpag  := "", nRectit:= 0
+Local aDetN  := {}
+Local aDetO  := {}
+Local nTamTit := TamSX3("E2_PREFIXO")[1]+TamSX3("E2_NUM")[1]+TamSX3("E2_PARCELA")[1]+;
+						TamSX3("E2_TIPO")[1]+TamSX3("E2_FORNECE")[1]
+Local lAchouTit := .T.
+Local nAscan := 0
+Local cTabRej := GetMv("MV_TABREJ",,"")
+Local nValt := 0      
+Local aCntOco := {}     
+Local nX := 0
+Local	cDesc1 := "DATA" 
+Local	cDesc2 := "PRINCIPAL"     
+Local	cDesc3 := "MULTA"
+Local	cDesc4 := "JUROS"			
+Local	lDataGrv := .F.      
+Local	lDifPag := GetNewPar("MV_DIFPAG",.F.)
+Local lPaMov	:= .F.
+Local cKeySE5	:= ""
+
+//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+//³ Variaveis utilizadas para Impressao do Cabecalho e Rodape    ³
+//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+Private cbtxt   := SPACE(10)
+Private cbcont  := 0
+Private li      := 80
+Private m_pag   := 1
+
+//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+//³ Posiciona no Banco indicado                                  ³
+//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+SA6->(dbSeek(xFilial("SA6")+mv_par03+mv_par04+mv_par05))
+
+//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+//³ Verifica configuracao Remota                                 ³
+//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+If !SEE->(dbSeek(xFilial("SEE")+mv_par03+mv_par04+mv_par05+mv_par06))
+	Help(" ",1,"PAR150")
+	Return .F.
+Endif
+
+//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+//³ Verifica se a tabela existe           ³
+//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+cTabela := Iif( Empty(SEE->EE_TABELA), "17" , SEE->EE_TABELA )
+If !SX5->(dbSeek(cFilial+cTabela))
+	Help(" ",1,"PAR150")
+	Return .F.
+Endif
+
+//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+//³ Leitura da Configuracao SISPAG ³
+//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+cArqConf := alltrim(mv_par02)
+If !FILE(cArqConf)
+	Help(" ",1,"NOARQPAR")
+	Return .F.
+Endif
+nHdlConf := FOPEN(cArqConf,0)
+
+If nHdlConf < 0
+	Help(" ",1,"NOARQUIVO",,cArqConf,5,1)
+	Return .F.
+Endif
+
+nTamArq := FSEEK(nHdlConf,0,2)
+FSEEK(nHdlConf,0,0)
+xBuffer := Space(85)
+
+//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+//³ Preenche os arrays de acordo com o Identificador  ³
+//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+While nBytes < nTamArq
+
+	FREAD(nHdlConf,@xBuffer,85)
+	IF SubStr(xBuffer,1,1) == "A" .or. SubStr(xBuffer,1,1) == Chr(1)
+      AADD(aHeadA,{  SubStr(xBuffer,02,15),;
+                     SubStr(xBuffer,17,03),;
+                     SubStr(xBuffer,20,03),;
+                     SubStr(xBuffer,23,01),;
+                     SubStr(xBuffer,24,60)})
+	ElseIf SubStr(xBuffer,1,1) == "B" .or. SubStr(xBuffer,1,1) == Chr(2)
+		AADD(aHead1,{  SubStr(xBuffer,02,15) ,SubStr(xBuffer,17,03),;
+							SubStr(xBuffer,20,03) ,SubStr(xBuffer,23,01),;
+							SubStr(xBuffer,24,60 ) } )
+	ElseIf SubStr(xBuffer,1,1) == "C" .or. SubStr(xBuffer,1,1) == Chr(3)
+		AADD(aHead2,{  SubStr(xBuffer,02,15) ,SubStr(xBuffer,17,03),;
+							SubStr(xBuffer,20,03) ,SubStr(xBuffer,23,01),;
+							SubStr(xBuffer,24,60 ) } )
+	Elseif SubStr(xBuffer,1,1) == "D" .or. SubStr(xBuffer,1,1) == Chr(4)
+		AADD(aTrai1,{  SubStr(xBuffer,02,15) ,SubStr(xBuffer,17,03),;
+							SubStr(xBuffer,20,03) ,SubStr(xBuffer,23,01),;
+							SubStr(xBuffer,24,60) } )
+	Elseif SubStr(xBuffer,1,1) == "E" .or. SubStr(xBuffer,1,1) == Chr(5)
+		AADD(aTrai2,{  SubStr(xBuffer,02,15) ,SubStr(xBuffer,17,03),;
+							SubStr(xBuffer,20,03) ,SubStr(xBuffer,23,01),;
+							SubStr(xBuffer,24,60) } )
+	Elseif SubStr(xBuffer,1,1) == "F" .or. SubStr(xBuffer,1,1) == Chr(6)
+		AADD(aTraiA,{  SubStr(xBuffer,02,15) ,SubStr(xBuffer,17,03),;
+							SubStr(xBuffer,20,03) ,SubStr(xBuffer,23,01),;
+							SubStr(xBuffer,24,60) } )
+	Elseif SubStr(xBuffer,1,1) == "G" .or. SubStr(xBuffer,1,1) == Chr(7)
+		AADD(aDetA,{   SubStr(xBuffer,02,15) ,SubStr(xBuffer,17,03),;
+							SubStr(xBuffer,20,03) ,SubStr(xBuffer,23,01),;
+							SubStr(xBuffer,24,60) } )
+	Elseif SubStr(xBuffer,1,1) == "H" .or. SubStr(xBuffer,1,1) == Chr(8)
+		AADD(aDetB,{   SubStr(xBuffer,02,15) ,SubStr(xBuffer,17,03),;
+							SubStr(xBuffer,20,03) ,SubStr(xBuffer,23,01),;
+							SubStr(xBuffer,24,60) } )
+	Elseif SubStr(xBuffer,1,1) == "J" .or. SubStr(xBuffer,1,1) == Chr(10)
+		AADD(aDetJ,{   SubStr(xBuffer,02,15) ,SubStr(xBuffer,17,03),;
+							SubStr(xBuffer,20,03) ,SubStr(xBuffer,23,01),;
+							SubStr(xBuffer,24,60) } )
+	Elseif SubStr(xBuffer,1,1) == "N" .or. SubStr(xBuffer,1,1) == Chr(16)
+		AADD(aDetN,{   SubStr(xBuffer,02,15) ,SubStr(xBuffer,17,03),;
+			SubStr(xBuffer,20,03) ,SubStr(xBuffer,23,01),;
+			SubStr(xBuffer,24,60) } )
+	Elseif SubStr(xBuffer,1,1) == "O" .or. SubStr(xBuffer,1,1) == Chr(17)
+		AADD(aDetO,{   SubStr(xBuffer,02,15) ,SubStr(xBuffer,17,03),;
+			SubStr(xBuffer,20,03) ,SubStr(xBuffer,23,01),;
+			SubStr(xBuffer,24,60) } )
+	Endif
+	nBytes += 85
+Enddo
+fclose(nHdlConf)
+
+If Len(aHeadA) == 0  .And. Len(aHead1) == 0 .And. Len(aHead2) == 0 ;
+		.And. Len(aTrai1) == 0 .And. Len(aTrai2) == 0 ;
+		.And. Len(aDetA)  == 0 .And. Len(aDetB)  == 0 ;
+		.And. Len(aDetJ)  == 0 .And. Len(aDetN)  == 0 ;
+		.And. Len(aDetO)  == 0
+	Help(" ",1,"AX044BCO")
+	Return .F.
+Endif
+
+//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+//³ Abre arquivo enviado pelo banco ³
+//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+cArqEnt := mv_par01
+IF !FILE(cArqEnt)
+	Help(" ",1,"NOARQENT")
+	Return .F.
+Endif
+nHdlBco := FOPEN(cArqEnt,0)
+If nHdlBco < 0
+	Help(" ",1,"NOARQUIVO",,cArqEnt,5,1)
+	Return .F.
+Endif
+
+//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+//³ Le arquivo enviado pelo banco ³
+//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+
+nLidos := 0
+nTamArq := FSEEK(nHdlBco,0,2)
+FSEEK(nHdlBco,0,0)
+xBuffer := Space(242)
+
+SetRegua(nTamArq/242)
+
+While nLidos <= nTamArq .and. !lEnd
+	
+	IF lEnd
+		@ PROW()+1, 001 PSAY OemToAnsi("CANCELADO PELO OPERADOR")
+		Exit
+	End
+	
+	IF li > 58
+		cabec(Titulo,cabec1,cabec2,nomeprog,tamanho,nTipo)
+	End
+	//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+	//³ Le linha do arquivo retorno ³
+	//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+
+	FREAD(nHdlBco,@xBuffer,242)
+	nLidos += 242
+	IncRegua()
+	
+	//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+	//³ Registro:ÚÄ0 - Header de Arquivo     ³
+	//³          ³ÚÄÄ1 - Header de Lote      ³
+	//³          ³³    3 - Detalhes Variados ³
+	//³          ³ÀÄÄ5 - Trailler de Lote    ³
+	//³          ÀÄ9 - Trailler de Arquivo   ³
+	//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+	cRegistro := Subst( xBuffer , Val(aHeada[3,2]) , ;
+							    1+Val(aHeada[3,3])-Val(aHeada[3,2]))
+
+	IF cRegistro == "0"
+		Loop
+	Endif
+	If cRegistro == "1"
+		Loop
+	Endif
+	
+	cCodOcorr := Alltrim(SubStr(xBuffer,231,10)) 
+
+	If (cCodOcorr < mv_par07) .Or. (cCodOcorr > mv_par08) .Or. Alltrim(cCodOcorr) == mv_par09
+	   Loop
+	ENdif  
+	
+	 
+	//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+	//³ Retornos: 00-Credito efetuado BD-Pagamento Agendado  TA-Lote nao aceito ³
+	//³ Retornos: BE-Pagto Agendado c/Forma Alterada p/ OP   RJ-Pagto Rejeitado ³
+	//³ Header de Lote - verificar se houve rejeicao                            ³
+	//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+
+	//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+	//³ Codigos de Rejeicao - TABELA=60                                         ³
+	//³                                                                         ³
+	//³ AD - Forma de lancamento invalida (Forma X Segmento)                    ³
+	//³ AH - Numero sequencial do registro no lote invalido                     ³
+	//³ AJ - Tipo de movimento invalido                                         ³
+	//³ AL - Codigo do Banco do favorecido ou depositario invalido              ³
+	//³ AM - Agencia do cedente invalido                                        ³
+	//³ AN - Conta corrente do cedente invalido                                 ³
+	//³ AO - Nome do cedente invalido                                           ³
+	//³ AP - Data de lancamento / pagamento invalida                            ³
+	//³ BC - Nosso numero invalido                                              ³
+	//³ IA - Remetente / Motivo invalido                                        ³
+	//³ IB - Valor do titulo invalido                                           ³
+	//³ IC - Valor do abatimento invalido                                       ³
+	//³ ID - Valor do desconto invalido                                         ³
+	//³ IE - Valor da mora invalido                                             ³
+	//³ IF - Valor da multa invalido                                            ³
+	//³ IG - Valor da deducao invalido                                          ³
+	//³ IH - Valor do acrescimo invalido                                        ³
+	//³ II - Data de vecnto invalida                                            ³
+	//³ IJ - Sequencia invalida de segmento                                     ³
+	//³ IK - Codigo de instrucao invalida                                       ³
+	//³ IL - Uso banco invalido para unibanco                                   ³
+	//³ IM - Tipo X Forma nao compativel                                        ³
+	//³ IN - Banco / Agencia nao pertence as pracas de compensacao ITAU         ³
+	//³ IO - Identificacao Tipo de Cheque invalido                              ³
+	//³ IP - Rejeicao do DAC do codigo de barras                                ³
+	//³                                                                         ³
+	//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+	If cRegistro == "9"
+		//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+		//³ Final do lote e arquivo - Sai da leitura ³
+		//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+		Exit
+	Endif                      	
+
+	If cRegistro != "3"
+		LOOP
+	Endif	
+
+	//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+	//³ Segmentos opcionais : B                               ³
+	//³ Obs: Segmentos A e J possuem informacoes sobre o      ³
+	//³ retorno.                                              ³
+	//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+	cSegmento := Subst( xBuffer , Val(aDeta[5,2]) , 1+Val(aDeta[5,3])-Val(aDeta[5,2]) )
+
+	If cSegmento == "A"
+		cRetorno   := Subst( xBuffer, Val(aDeta[Len(aDeta),2]) , 1+Val(aDeta[Len(aDeta),3] )-Val(aDeta[Len(aDeta),2]))
+		cNumTit    := Subst( xBuffer, Val(aDeta[11,2])         , 1+Val(aDeta[11,3] )-Val(aDeta[11,2]))
+		cValPag    := Subst( xBuffer, Val(aDeta[15,2])         , 1+Val(aDeta[15,3] )-Val(aDeta[15,2]))
+		
+	ElseIf cSegmento == "J"
+		cRetorno   := Subst( xBuffer, Val(aDetJ[Len(aDetJ),2]) , 1+Val(aDetJ[Len(aDetJ),3])-Val(aDetJ[Len(aDetJ),2]))
+		cNumTit    := Subst( xBuffer, Val(aDetJ[20,2])         , 1+Val(aDetJ[20,3] )-Val(aDetJ[20,2]))
+		cValPag    := Subst( xBuffer, Val(aDetJ[18,2])         , 1+Val(aDetJ[18,3] )-Val(aDetJ[18,2]))
+	
+	ElseIf cSegmento == "N"
+		If !lDifPag
+			cRetorno := Subst( xBuffer, Val(aDetN[Len(aDetN),2]) , 1+Val(aDetN[Len(aDetN),3])-Val(aDetN[Len(aDetN),2]))
+		Else
+			nAscan := Ascan(aDetN, {|e| AllTrim(Upper(e[1]))=="OCORRENCIAS"})                                                 
+			If nAscan > 0
+				cRetorno    := Subst( xBuffer, Val(aDetN[nAscan,2])         , 1+Val(aDetN[nAscan,3] )-Val(aDetN[nAscan,2]))		
+			Else	
+				ApMsgAlert("Por favor, indique no registro detalhe do arquivo de configuração segmento N, no nome do campo, o identificador OCORRENCIAS utilizado para localizar, no arquivo retorno, o valor dos campos.")
+			EndIf
+		EndIf
+		
+		// Procura a posicao do numero do titulo
+		nAscan := Ascan(aDetN, {|e| AllTrim(Upper(e[1]))=="SEU NUMERO"})                                                 
+		If nAscan > 0
+			cNumTit    := Subst( xBuffer, Val(aDetN[nAscan,2])         , 1+Val(aDetN[nAscan,3] )-Val(aDetN[nAscan,2]))		
+		Else	
+			ApMsgAlert("Por favor, indique no registro detalhe do arquivo de configuração segmento N, no nome do campo, o identificador 'SEU NUMERO' utilizado para localizar, no arquivo retorno,o título a ser baixado.")
+		EndIf
+		
+		//Retorno contem configuracao de campos de acordo com o tipo do tributo
+		If lDifPag 
+			//Verifico o tipo do imposto para saber qual posicao do array
+			//contem as posicoes dos campos com os dados do tributo
+			cTipoImp := Substr( xBuffer,Val(aDetN[07,2])         , 1+Val(aDetN[07,3] )-Val(aDetN[07,2]))		   
+		   Do Case
+				Case cTipoImp == "01"		// 01 - GPS
+					cDesc1 := "DATA GPS" 
+					cDesc2 := "PRINCIPAL GPS"     
+					cDesc3 := "MULTA GPS"
+					cDesc4 := "JUROS GPS"			
+				Case cTipoImp == "02"		//02 - DARF
+					cDesc1 := "DATA DARF"
+					cDesc2 := "PRINCIPAL DARF"     
+					cDesc3 := "MULTA DARF"
+					cDesc4 := "JUROS DARF"
+				Case cTipoImp == "03"	//03 - DARF Simples
+					cDesc1 := "DATA SIMPLES"
+					cDesc2 := "PRINC. SIMPLES"	
+					cDesc3 := "MULTA SIMPLES"
+					cDesc4 := "JUROS SIMPLES"
+				Case cTipoImp == "04"	//04 - DARJ 
+					cDesc1 := "DATA DARJ"
+					cDesc2 := "PRINCIPAL DARJ"			
+					cDesc3 := "MULTA DARJ"
+					cDesc4 := "JUROS DARJ"
+				Case cTipoImp == "05"	//05 - ICMS SP
+					cDesc1 := "DATA ICMS"
+					cDesc2 := "PRINCIPAL ICMS"			
+					cDesc3 := "MULTA ICMS"
+					cDesc4 := "JUROS ICMS"
+				Case cTipoImp $ "07#08"	//07 - IPVA (SP e MG), 08 - DPVAT
+					cDesc1 := "DATA IPVA"
+					cDesc2 := "PRINCIPAL IPVA"			
+					cDesc3 := "MULTA IPVA"
+					cDesc4 := "JUROS IPVA"
+				Case cTipoImp $ "11"	//11 - FGTS
+					cDesc1 := "DATA FGTS"
+					cDesc2 := "PRINCIPAL FGTS"								
+			EndCase
+		Else
+			nPos := Ascan(aDetN, {|e| AllTrim(Upper(e[1]))=="DATA"})
+			If nPos <= 0
+				cTipoImp := Substr( xBuffer,Val(aDetN[07,2])         , 1+Val(aDetN[07,3] )-Val(aDetN[07,2]))		
+				If cTipoImp == "01"			//GPS
+					nPos := 15
+				ElseIf cTipoImp == "02"		//DARF
+					nPos := 18			
+				ElseIf cTipoImp $ "03#04#05"	//03 - DARF Simples, 04 - DARJ e 05 - ICMS SP
+					nPos := 20			
+				Endif
+			Endif
+			//Verifico o tipo do imposto para saber qual posicao do array
+			//contem as posicoes das datas de baixa.
+			cData      := Substr( xBuffer,Val(aDetN[nPos,2])         , 1+Val(aDetN[nPos,3] )-Val(aDetN[nPos,2]))
+			cData      := ChangDate(cData,SEE->EE_TIPODAT)
+			dBaixa     := Ctod(Substr(cData,1,2)+"/"+Substr(cData,3,2)+"/"+Substr(cData,5),"ddmm"+Replicate("y",Len(Substr(cData,5))))
+			lDataGrv   := .T.	   
+	   EndIF
+		
+		// Procura a posicao da data do tributo		
+		If !lDataGrv .And. lDifPag 
+			nAscan := Ascan(aDetN, {|e| AllTrim(Upper(e[1]))==cDesc1})
+			If nAscan > 0
+				cData := Substr( xBuffer, Val(aDetN[nAscan,2])         , 1+Val(aDetN[nAscan,3] )-Val(aDetN[nAscan,2]))
+				cData      := ChangDate(cData,SEE->EE_TIPODAT)
+				dBaixa     := Ctod(Substr(cData,1,2)+"/"+Substr(cData,3,2)+"/"+Substr(cData,5),"ddmm"+Replicate("y",Len(Substr(cData,5))))
+			Else
+				ApMsgAlert("Por favor, indique no registro detalhe do arquivo de configuração segmento N, no nome do campo, o identificador "+ cDesc1 + " utilizado para localizar, no arquivo retorno, o valor da multa.")
+			Endif	
+		EndIf
+	
+		// Procura a posicao do valor principal do tributo		
+		nAscan := Ascan(aDetN, {|e| AllTrim(Upper(e[1]))==cDesc2})
+		If nAscan > 0
+			cValPag    := Subst( xBuffer, Val(aDetN[nAscan,2])         , 1+Val(aDetN[nAscan,3] )-Val(aDetN[nAscan,2]))
+		Else
+			ApMsgAlert("Por favor, indique no registro detalhe do arquivo de configuração segmento N, no nome do campo, o identificador "+ cDesc2 + " utilizado para localizar, no arquivo retorno, o valor da multa.")
+		Endif	
+
+		// Procura a posicao da multa do tributo
+		nAscan := Ascan(aDetN, {|e| AllTrim(Upper(e[1]))==cDesc3})
+		If cTipoImp $ "11" //FGTS
+			nMulta := 0
+		ElseIf nAscan > 0
+			nMulta := Round(Val(Subst( xBuffer, Val(aDetN[nAscan,2])         , 1+Val(aDetN[nAscan,3] )-Val(aDetN[nAscan,2])))/100,2)
+		Else
+			ApMsgAlert("Por favor, indique no registro detalhe do arquivo de configuração segmento N, no nome do campo, o identificador "+ cDesc3 + " utilizado para localizar, no arquivo retorno, o valor da multa.")
+		Endif	
+
+		// Procura a posicao do juros do tributo
+		nAscan := Ascan(aDetN, {|e| AllTrim(Upper(e[1]))==cDesc4})
+		If cTipoImp $ "11" //FGTS
+			nJuros := 0
+		ElseIf nAscan > 0
+			cValJur    := Subst( xBuffer, Val(aDetN[nAscan,2])         , 1+Val(aDetN[nAscan,3] )-Val(aDetN[nAscan,2]))
+			nJuros	  := Val(cValJur)/100       
+		Else
+			ApMsgAlert("Por favor, indique no registro detalhe do arquivo de configuração segmento N, no nome do campo, o identificador "+ cDesc4 + " utilizado para localizar, no arquivo retorno, o valor da multa.")
+		Endif	  
+	ElseIf cSegmento == "O"
+		cRetorno   := Subst( xBuffer, Val(aDetO[Len(aDetO),2]) , 1+Val(aDetO[Len(aDetO),3])-Val(aDetO[Len(aDetO),2]))
+		cNumTit    := Subst( xBuffer, Val(aDetO[16,2])         , 1+Val(aDetO[16,3] )-Val(aDetO[16,2]))
+		cValPag    := Subst( xBuffer, Val(aDetO[14,2])         , 1+Val(aDetO[14,3] )-Val(aDetO[14,2]))
+	Else
+		Loop
+	Endif
+
+	nvalpag := val(cvalpag)/100
+	
+	//Totalizador Geral do Arquivo de Retorno	
+	nValT  += nValPag
+
+	//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+	//³ Verifica se existe o titulo no SE2.                           ³
+	//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+	dbSelectArea("SE2")
+	dbSetOrder(11)  // Filial+IdCnab
+	nRecTit := Recno()
+	lAchouTit := .T.
+	If	!DbSeek(xFilial("SE2")+Substr(cNumTit,1,10))
+		dbSetOrder(1)
+		If !dbSeek(xFilial("SE2")+Pad(cNumTit,nTamTit))
+			lAchouTit := .F.	
+      Endif
+	Endif	      
+
+	If lAchouTit 
+		@ li,00 PSAY SE2->E2_PREFIXO+" "+SE2->E2_NUM+" "+SE2->E2_PARCELA
+		@ li,15 PSAY SE2->E2_TIPO   +" "+SE2->E2_FORNECE
+      @ li,30 PSAY SE2->E2_VENCREA
+      @ Li,40 PSAY SE2->E2_CODRDA
+      @ li,50 PSAY SUBSTR(SE2->E2_NOMFOR,1,30)
+   Else
+		@ li,00 PSAY cNumTit
+	Endif
+	@ li,75 PSAY nvalpag PICTURE tm(nvalpag,13)
+
+	//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+	//³ Verifica se existe o titulo no SE2.                           ³
+	//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+	If !lAchouTit
+		@ li,90 PSAY OemToAnsi("titulo nao encontrado")
+		//Totaliza Ocorrencia
+		TotOcorr (cRetorno,"Titulos nao encontrados",nValPag,aCntOco)
+		li++
+		dbGoTo(nRecTit)
+		Loop
+	Endif
+	If SE2->E2_SALDO = 0
+		@ li,90 PSAY OemToAnsi("titulo ja baixado")
+		//Totaliza Ocorrencia
+		TotOcorr (cRetorno,"Titulos ja baixados",nValPag,aCntOco)
+		li++
+		dbGoTo(nRecTit)
+		Loop
+	Endif
+
+	//Totaliza Ocorrencia
+	If lAchouTit
+		TotOcorr (cRetorno,fa850rejei(cRetorno,cTabRej),nValPag,aCntOco)
+	Endif
+	
+Enddo
+
+	//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+   //³ Imprime Subtotais por ocorrencia  ³
+   //ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+   Li+=2
+   @li,000 PSAY OemToAnsi("SubTotais do Relatorio")
+  	Li+=2   
+	For nX :=1 to Len(aCntOco)         
+		@li,000 PSAY aCntOco[nX][1] + " - " + Substr(aCntOco[nX][2],1,30) 
+		@li,038 PSAY (aCntOco[nX][VALORPAGO])  picture Tm((aCntOco[nX][03]),12) //'@E 9,999,999,999.99'
+		Li ++
+	Next
+	Li+=2
+
+	If (Len(aCntOco) + Li) > 58
+   	Cabec(Titulo+' - '+mv_par01,cabec1,cabec2,nomeprog,tamanho,nTipo)
+   Endif
+
+   //ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+   //³ Imprime Totais                ³
+   //ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+	@li,000 PSAY OemToAnsi("Totais do Relatorio")
+	@li,38  PSAY nValT       picture Tm(nValT,12)  //'@E 9,999,999,999.99'
+	roda(cbcont,cbtxt,tamanho)
+
+//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+//³ Fecha os Arquivos ASCII ³
+//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+FCLOSE(nHdlBco)
+
+Return
+
+/*/
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+±±ÚÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄ¿±±
+±±³Funcao    ³fA850Rejei³ Autor ³ Julio Wittwer         ³ Data ³ 06/12/99 ³±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄ´±±
+±±³Descricao ³Trata titulo rejeitado.                                     ³±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´±±
+±±³Sintaxe   ³fa850Rejei                                                  ³±±
+±±ÃÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´±±
+±±³ Uso      ³ Generico                                                   ³±±
+±±ÀÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ±±
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+ßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßß
+/*/
+Static Function fa850Rejei(cRetString,cTabela)
+Local cDescr := " "
+Local nX := 0
+Local nTotAbat := 0
+Local nValPadrao := 0
+
+nJuros		:= If(Type("nJuros") != "N"	,0,nJuros	)
+nMulta		:= IF(Type("nMulta") != "N"	,0,nMulta	)
+nDescont		:= If(Type("nDescont") != "N",0,nDescont	)
+
+
+IF "00" $ cRetString
+	//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+	//³ 00-Credito efetuado ³
+	//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+   cDescr := "TITULO OK"
+
+	//Verifico existencia de movimento anterior (arquivo reprocessado)
+	lPaMov = .F.
+	dbSelectArea("SE5")
+	SE5->(DBSETORDER(2))  //E5_FILIAL+E5_TIPODOC+E5_PREFIXO+E5_NUMERO+E5_PARCELA+E5_TIPO                   
+	cKeySe5 := xFilial("SE5")+IIF(SE2->E2_TIPO $ MVPAGANT,"PA","TX")+SE2->(E2_PREFIXO+E2_NUM+E2_PARCELA)
+	cKeySe5 += IIF(SE2->E2_TIPO $ MVPAGANT,"PA ","TXA")
+	If SE5->(MsSeek(cKeySe5))
+		While !SE5->(EOF()) .and. SE5->(E5_FILIAL+E5_TIPODOC+E5_PREFIXO+E5_NUMERO+E5_PARCELA+E5_TIPO) == cKeySe5
+			If SE2->(E2_FORNECE+E2_LOJA) == SE5->(E5_CLIFOR+E5_LOJA)
+			   cDescr := "PA JA DEBITADO"
+			   EXIT
+			Else
+				SE5->(dbSkip())
+			Endif
+		Enddo
+	Endif
+
+	nValPadrao := nValPag-(nJuros+nMulta-nDescont)
+	nTotAbat	:= SumAbatPag(SE2->E2_PREFIXO,SE2->E2_NUM,SE2->E2_PARCELA,SE2->E2_FORNECE,SE2->E2_MOEDA,"S",dDatabase,SE2->E2_LOJA)
+	If Round(NoRound((SE2->E2_SALDO-nTotAbat),3),2) < Round(NoRound(nValPadrao,3),2)
+	   cDescr := "VLR PAGO MAIOR"
+
+	ElseIf Round(NoRound((SE2->E2_SALDO-nTotAbat),3),2) > Round(NoRound(nValPadrao,3),2)
+	   cDescr := "VLR PAGO MENOR"
+
+	Endif
+
+ElseIf ("BD" $ cRetString) 
+	//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+	//³ BD-Pagamento Agendado ³
+	//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+   cDescr := "PAGAMENTO AGENDADO"
+ElseIf ("BE" $ cRetString) 
+	//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+	//³ BE-Pagto Agendado c/Forma Alterada p/ OP ³
+	//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+   cDescr := "PGTO AGENDADO ALTER. P/ OP"
+Else
+	If !Empty(cTabela)
+		For nX := 1 to Len(Alltrim(cRetString)) Step 2
+			// Imprime e retorna o conteudo da tabela de rejeicoes
+			cDescr := Left(Tabela(cTabela,Substr(cRetString,nX,2),.F.),40)
+			If Empty(cDescr) 
+			   cDescr := "OCORRENCIA NAO ENCONTRADA "
+			Endif
+  		Next			
+   Else
+	   cDescr := "OCORRENCIA NAO ENCONTRADA "
+	Endif			
+Endif
+
+If !Empty(cDescr)
+	@ li,90 PSAY cDescr 
+	li++
+Endif
+
+Return cDescr
+
+/*
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+±±ÉÍÍÍÍÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍÍÍËÍÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍËÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍÍÍÍÍÍ»±±
+±±ºFuncao    ³TotOcorr  ºAutor  ³Ricardo A. Canteras º Data ³  05/10/2005 º±±
+±±ÌÍÍÍÍÍÍÍÍÍÍØÍÍÍÍÍÍÍÍÍÍÊÍÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÊÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÍÍÍÍ¹±±
+±±ºDesc.     ³Acumula o valor pago por ocorrencia		                    º±±
+±±ÌÍÍÍÍÍÍÍÍÍÍØÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¹±±
+±±ºUso       ³FINR850                                                     º±±
+±±ÈÍÍÍÍÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¼±±
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+ßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßß
+*/
+Static Function TotOcorr(cOcorr,cDescr,nValPag,aCntOco)
+
+Local aArea := GetArea()
+Local nCntOco := 0
+Default cDescr:=""                          
+//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+//³ Verifica codigo da ocorrencia ³
+//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+dbSelectArea("SEB")
+
+//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+//³ Efetua contagem dos SubTotais por ocorrencia  ³
+//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ    
+If (dbSeek(xFilial("SEB")+mv_par03+cOcorr+"R"))
+	nCntOco := Ascan(aCntOco, { |X| X[1] == SEB->EB_OCORR})	
+	If nCntOco == 0
+		Aadd(aCntOco,{SEB->EB_OCORR,Subs(SEB->EB_DESCRI,1,27),nValPAG})
+	Else                                         
+		aCntOco[nCntOco][VALORPAGO]+=nValPag
+	Endif                     
+Else
+	nCntOco := Ascan(aCntOco, { |X| X[1] == Pad(cOcorr,Len(SEB->EB_OCORR))})
+	If nCntOco == 0
+		Aadd(aCntOco,{Pad(cOcorr,Len(SEB->EB_OCORR)),Subs(cDescr,1,27),nValPAG})
+	Else                                         
+		aCntOco[nCntOco][VALORPAGO]+=nValPag
+	Endif
+Endif
+
+RestArea (aArea)
+
+Return
+
+**************************
+Static Function fCriaSx1()
+**************************
+
+Local Z 	:= 0//Leonardo Portella - 07/11/14 - Virada TISS 3 - Compilacao TDS
+Local X1 	:= 0//Leonardo Portella - 07/11/14 - Virada TISS 3 - Compilacao TDS
+
+SX1->(DbSetOrder(1))
+If !SX1->(DbSeek(cPerg+aSx1[Len(aSx1),2]))
+   SX1->(DbSeek(cPerg))
+  	While SX1->(!Eof()) .And. Alltrim(SX1->X1_GRUPO) == cPerg
+    		SX1->(Reclock("SX1",.F.,.F.))
+         SX1->(DbDelete())
+         SX1->(MsunLock())
+         SX1->(DbSkip())
+	End
+	For X1:=2 To Len(aSX1)
+       SX1->(RecLock("SX1",.T.))
+       For Z:=1 To Len(aSX1[1])
+           cCampo := "X1_"+aSX1[1,Z]
+           SX1->(FieldPut(FieldPos(cCampo),aSx1[X1,Z] ))
+       Next
+       SX1->(MsunLock())
+	Next
+Endif
+	
+Return

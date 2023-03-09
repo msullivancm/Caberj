@@ -1,0 +1,652 @@
+#INCLUDE "PROTHEUS.CH"
+#Include "TOPCONN.CH"    
+
+                                                                                                                           
+/*/                                                                                                            
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+±±ÉÍÍÍÍÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍÍÍËÍÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍËÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍÍÍÍ»±±
+±±ºPrograma  ³CABR137   º Autor ³Altamiro              º Data ³ 01/10/12  º±±
+±±ÌÍÍÍÍÍÍÍÍÍÍØÍÍÍÍÍÍÍÍÍÍÊÍÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÊÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÍÍ¹±±
+±±ºDescricao ³ Rotina para Gerar planilha do custo para Gepla             º±±
+±±º          ³                                                            º±±
+±±ÈÍÍÍÍÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¼±±
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+ßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßß
+/*/                  
+
+User Function CABA137 vide caba137
+
+Local cMsg			:= ""
+Private cDpj        := 'Não'   
+private cImp        := 'Não'
+Private oLeTxt
+Private lAbortPrint :=.F.
+Private cPerg       := "CABA137"
+Private cTitulo     := "Extração Custo caberj / Integral	"
+Private lpvez       :=.T.   
+Private cTpCrit     :=" "  
+Private lImporta    := .F.  
+Private f_ok        := .F.
+Private nLocaliz    := 0 // 1 - zzq -- 2 se2  -- 0 nao localizado         
+private cqueryi     := ' ' 
+private cpgto       := ' '     
+private cpgtoI      := ' '    
+private cpgtoF      := ' '    
+
+private cTitCSald   := ' '   
+PRIVATE nVlrTitPri  := 0.00
+PRIVATE nVlrTitcmp  := 0.00   
+private cNomeArq1   := ' '   
+
+Private aDadosInt   := {}
+Private cEmpresa    := Iif(cEmpAnt == '01','C','I') 
+
+private cAliasCst   := GetNextAlias() 
+
+PRIVATE I := 1
+PRIVATE X := 1
+AjustaSX1(cPerg)                                                                     
+
+//If Pergunte(cPerg,.T.) = .F.
+
+//	Return
+
+//Endif 
+                                                                             
+cpgto  := mv_par01                 
+cpgtoI := mv_par01    
+cpgtoF := mv_par01     
+*****************************************************************************
+/*
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+±±ÉÍÍÍÍÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍÍÍËÍÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍËÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍÍÍÍÍÍ»±±
+±±ºFun‡„o    ³ OKLETXT  º Autor ³                    º Data ³  09/04/03   º±±
+±±ÌÍÍÍÍÍÍÍÍÍÍØÍÍÍÍÍÍÍÍÍÍÊÍÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÊÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÍÍÍÍ¹±±
+±±ºDescri‡„o ³ Funcao chamada pelo botao OK na tela inicial de processamenº±±
+±±º          ³ to. Executa a leitura do arquivo texto.                    º±±
+±±ÌÍÍÍÍÍÍÍÍÍÍØÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¹±±
+±±ºUso       ³ Programa principal                                         º±±
+±±ÈÍÍÍÍÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¼±±
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+ßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßß
+*/                                                                                                                                      
+
+ //AltaV12PRD-janela
+ 
+Processa({||Processa1()}, cTitulo, "", .T.)
+
+//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+//³ Libera impressao                                                         ³
+//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+
+
+MsgInfo("Processo finalizado")
+
+Return                 
+
+**************************************************************************
+
+/*/
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+±±ÉÍÍÍÍÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍÍÍËÍÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍËÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍÍÍÍÍÍ»±±
+±±ºFun‡„o    ³ PROCESSA1º Autor ³ Jean Schulz        º Data ³  11/11/06   º±±
+±±ÌÍÍÍÍÍÍÍÍÍÍØÍÍÍÍÍÍÍÍÍÍÊÍÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÊÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÍÍÍÍ¹±±
+±±ºDescri‡„o ³ Funcao auxiliar chamada pela PROCESSA.  A funcao PROCESSA  º±±
+±±º          ³ monta a janela com a regua de processamento.               º±±
+±±ÌÍÍÍÍÍÍÍÍÍÍØÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¹±±
+±±ºUso       ³ Programa principal                                         º±±
+±±ÈÍÍÍÍÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¼±±
+±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+ßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßß
+/*/                                                                         
+
+
+Static Function Processa1()   
+///  Intergral 
+ cqueryi := CRLF+"SELECT "
+ If cEmpresa== 'I'
+    cqueryi += CRLF+" 'Integral' Emp, "
+ Else          
+    cqueryi += CRLF+" 'Caberj' Emp, "            
+ endIF 
+ cqueryi += CRLF+" refer, "  
+                   
+ cqueryi += CRLF+" matricula ," 
+ cqueryi += CRLF+" nomusr ,"
+
+ cqueryi += CRLF+" CODEMP,"  
+ cqueryi += CRLF+" GRUPO_PLANO,"        
+ cqueryi += CRLF+" NOME_PLANO,"      
+ cqueryi += CRLF+" substr(DTEVENT,7,2)||'/'|| substr(DTEVENT,5,2)||'/'||substr(DTEVENT,1,4)  DtEvent, "  
+ cqueryi += CRLF+" CodEvento, "           
+ cqueryi += CRLF+" Nome_Evento, "           
+ cqueryi += CRLF+" ZZT_TPCUST,  "            
+ cqueryi += CRLF+" codrda , "
+ cqueryi += CRLF+" nomrda , " 
+ cqueryi += CRLF+" GRPPAG , " 
+ cqueryi += CRLF+" DESCGRP, " 
+ cqueryi += CRLF+" tippre , "      
+ cqueryi += CRLF+" TIPO , anomespag , "    
+ cqueryi += CRLF+" SUM(VL_APROV+GLOSADO) APRESENTADO , "            
+ cqueryi += CRLF+" SUM(GLOSADO) GLOSADO , "           
+ cqueryi += CRLF+" SUM(VL_APROV) PAGO , "         
+ cqueryi += CRLF+" SUM(Vl_Participacao) COPART, " 
+ cqueryi += CRLF+" NVL(RETORNA_QTD_FAIXA_ATUARIA(SUBSTR(matricula,1,4),SUBSTR(matricula,5,4),SUBSTR(matricula,9,6),SUBSTR(matricula,15,2),'20'||substr(DTEVENT,7,2)),0) QTD_FAIXAS "         
+ cqueryi += CRLF+" FROM( "                      
+ cqueryi += CRLF+" SELECT /*+first_rows index_asc(BD7 BD70205)*/ "  
+ cqueryi += CRLF+"       bd6_codope || bd6_codemp || bd6_matric || bd6_tipreg || bd6_digito  matricula , " 
+ cqueryi += CRLF+"       bd6_nomusr nomusr , "
+ cqueryi += CRLF+"       BD7_CODPLA PLANO,   "
+ cqueryi += CRLF+"       BD6_YNEVEN CodEvento, "
+ cqueryi += CRLF+"       ZZT_EVENTO Nome_Evento, "
+ cqueryi += CRLF+"       QTDE , "
+ cqueryi += CRLF+"       Sum(BD6F.BD6_QTDPRO) Ocorrencia , "    
+ cqueryi += CRLF+"       Sum(BD6F.BD6_VLRGLO) Glosado , " 
+ cqueryi += CRLF+"       Sum(BD7F.VLRPAG)  Vl_Aprov , " 
+ cqueryi += CRLF+"       sum(Decode(BD6F.BD6_BLOCPA,'1',0,Decode(Sign(BD6F.BD6_VLRTPF),-1,0,Decode(BD6_CODEMP,'0004',0,'0009',0,BD6F.BD6_VLRTPF)))) Vl_Participacao , "           
+ cqueryi += CRLF+"       EXPOS EXPOSICAO_ANS , "          
+ cqueryi += CRLF+"       RETORNA_DESC_GRUPO_PLANO ( TRIM(BI3_YGRPLA),'"+cEmpresa+"') GRUPO_PLANO, "           
+ cqueryi += CRLF+"       Decode(BD6_CODEMP,'0007',Trim(BI3_NREDUZ)||' (SEPE)',BI3_NREDUZ) NOME_PLANO, "          
+ cqueryi += CRLF+"       ZZT_TPCUST , "          
+ cqueryi += CRLF+"       BD6_YPROJ PROJ, "          
+ cqueryi += CRLF+"       decode(BD6_CODLDP,'0010','Recup Glosa','0019','Recup Glosa','0017','Rateio','Conta') TIPO, " 
+ 
+               //          decode(BD6_CODLDP,'0010','Recup Glosa','0019','Recup Glosa','0017','Rateio','Conta') TIPO,
+          
+ cqueryi += CRLF+"       BD6_CODEMP CODEMP, "           
+ cqueryi += CRLF+"       RETORNA_DESCRI_GRUPOEMP('"+cEmpresa+"',BD6_CODEMP) NOME_EMP, "            
+ cqueryi += CRLF+"       TO_DATE(BD6_DATPRO,'YYYYMMDD')  DTEVENT ,"              
+ cqueryi += CRLF+"       bd7f.refer refer ,bd7f.codrda , bd7f.nomrda , "          
+ cqueryi += CRLF+"       bd7f.GRPPAG GRPPAG , bd7f.DESCGRP DESCGRP , bd7f.tippre tippre , bd6_anopag || bd6_mespag anomespag "       
+ cqueryi += CRLF+"      FROM "           
+ cqueryi += CRLF+"      (SELECT BD7.BD7_FILIAL,BD7_CODPLA,SIGA_TIPO_EXPOSICAO_ANS(BD7_CODEMP,BD7_MATRIC,BD7_TIPREG,To_Date(Trim(BD7_DATPRO),'YYYYMMDD')) EXPOS,"           
+ cqueryi += CRLF+"       BD7.BD7_OPELOT,"           
+ cqueryi += CRLF+"       BD7.BD7_CODOPE, BD7.BD7_CODLDP, BD7.BD7_CODPEG, BD7.BD7_NUMERO, BD7.BD7_ORIMOV, BD7_CODPRO,"           
+ cqueryi += CRLF+"       BD7.BD7_SEQUEN,  Sum(BD7.BD7_VLRPAG) AS VLRPAG,"           
+ cqueryi += CRLF+"       COUNT(DISTINCT BD7_CODEMP||BD7_MATRIC||BD7_TIPREG) QTDE ,"            
+ cqueryi += CRLF+"       substr(BD7.BD7_NUMLOT,1,6) refer ,"            
+ cqueryi += CRLF+"       bd7.bd7_codrda CODRDA , bd7.bd7_nomrda NOMRDA ,"           
+ cqueryi += CRLF+"       BAU_GRPPAG GRPPAG , B16_DESCRI  DESCGRP , bau_tippre tippre"         
+ cqueryi += CRLF+"      FROM "+RetSqlName("BD7") +" BD7 ,"+ RetSqlName("BAU") + " BAU , "+ RetSqlName("B16")+"  B16 "          
+ cqueryi += CRLF+"      WHERE BD7.BD7_FILIAL='" + xFilial("BD7") +"' "           
+ cqueryi += CRLF+"      AND BD7_OPELOT = '0001' "          
+ cqueryi += CRLF+"      AND BD7.BD7_NUMLOT >= '"+cpgtoI+"0001' AND BD7.BD7_NUMLOT <= '"+cpgtoF+"9999' "       
+ cqueryi += CRLF+"      AND BD7_SITUAC = 1 "         
+ cqueryi += CRLF+"      AND BD7_OPEUSR >='0001'"          
+ cqueryi += CRLF+"      AND BD7_CODEMP >= '0001'"          
+ cqueryi += CRLF+"      AND BD7_MATRIC >= '000001'"          
+ cqueryi += CRLF+"      AND BD7_TIPREG >= '00'"          
+ cqueryi += CRLF+"      AND BAU_FILIAL ='" + xFilial("BAU") +"' AND BAU.D_e_l_e_t_ = ' ' and bau.R_E_C_D_E_L_ = 0 "          
+ cqueryi += CRLF+"      AND B16_FILIAL ='" + xFilial("B16") +"' AND B16.D_E_L_E_T_ = ' '"           
+ cqueryi += CRLF+"      AND BD7.BD7_CODOPE = '0001'"           
+ cqueryi += CRLF+"      AND BD7.BD7_FASE = '4' "         
+ cqueryi += CRLF+"      AND BD7.BD7_BLOPAG <> '1' "           
+ cqueryi += CRLF+"      AND BAU_CODIGO = BD7.BD7_CODRDA"           
+ cqueryi += CRLF+"      AND bau_grppag = B16_CODIGO"           
+ cqueryi += CRLF+"      AND BD7.D_E_L_E_T_ = ' '"           
+ cqueryi += CRLF+"      GROUP BY BD7_FILIAL, BD7_CODPLA, BD7.BD7_OPELOT,BD7_CODPRO,"           
+ cqueryi += CRLF+"      SIGA_TIPO_EXPOSICAO_ANS(BD7_CODEMP,BD7_MATRIC,BD7_TIPREG,To_Date(Trim(BD7_DATPRO),'YYYYMMDD')),"           
+ cqueryi += CRLF+"      BD7_FILIAL, BD7_CODOPE, BD7_CODLDP, BD7_CODPEG, BD7_NUMERO, BD7_ORIMOV, BD7_SEQUEN ,"          
+ cqueryi += CRLF+"      bd7.bd7_codrda, bd7.bd7_nomrda ,BAU_GRPPAG, B16_DESCRI, bau_tippre ,"            
+ cqueryi += CRLF+"      substr(BD7.BD7_NUMLOT,1,6)) BD7F,"           
+ cqueryi += CRLF+"      "+RetSqlName("BD6")+" BD6F ,"+ RetSqlName("BI3")+" BI3 , "+RetSqlName("ZZT")+" ZZT"        
+ cqueryi += CRLF+"    WHERE ZZT_FILIAL=' '"           
+ cqueryi += CRLF+"      and BI3_FILIAL=' '"           
+ cqueryi += CRLF+"      AND BD6F.BD6_FILIAL=' '"           
+ cqueryi += CRLF+"      AND BD7F.BD7_FILIAL = BD6F.BD6_FILIAL"           
+ cqueryi += CRLF+"      AND BD7F.BD7_CODOPE = BD6F.BD6_CODOPE"           
+ cqueryi += CRLF+"      AND BD7F.BD7_CODLDP = BD6F.BD6_CODLDP"           
+ cqueryi += CRLF+"      AND BD7F.BD7_CODPEG = BD6F.BD6_CODPEG"           
+ cqueryi += CRLF+"      AND BD7F.BD7_NUMERO = BD6F.BD6_NUMERO"           
+ cqueryi += CRLF+"      AND BD7F.BD7_ORIMOV = BD6F.BD6_ORIMOV"           
+ cqueryi += CRLF+"      and BD7F.BD7_SEQUEN = BD6F.BD6_SEQUEN"           
+ cqueryi += CRLF+"      AND BD6F.BD6_CODPRO = BD7F.BD7_CODPRO"           
+ cqueryi += CRLF+"      AND BI3_FILIAL =BD7_FILIAL"           
+ cqueryi += CRLF+"      AND BI3_CODINT=BD7_CODOPE"           
+ cqueryi += CRLF+"      AND BI3_CODIGO=BD7_CODPLA"          
+ cqueryi += CRLF+"      AND BD6_YNEVEN=ZZT_CODEV"           
+ cqueryi += CRLF+"      AND BI3.D_E_L_E_T_ = ' '"           
+ cqueryi += CRLF+"      AND ZZT.D_E_L_E_T_ = ' '"           
+ cqueryi += CRLF+"    GROUP BY EXPOS,BD6_CODEMP,"           
+ cqueryi += CRLF+"    decode(BD6_CODLDP,'0010','Recup Glosa','0019','Recup Glosa','0017','Rateio','Conta'),"           
+ cqueryi += CRLF+"    BD7_CODPLA,"           
+ cqueryi += CRLF+"    TRIM(BI3_YGRPLA),Decode(BD6_CODEMP,'0007',Trim(BI3_NREDUZ)||' (SEPE)',BI3_NREDUZ),"           
+ cqueryi += CRLF+"    BD6_YNEVEN,"           
+ cqueryi += CRLF+"    ZZT_EVENTO,QTDE ,ZZT_TPCUST ,"           
+ cqueryi += CRLF+"    BD6_YPROJ,"           
+ cqueryi += CRLF+"    BD6_CODEMP ,"           
+ cqueryi += CRLF+"    RETORNA_DESCRI_GRUPOEMP('"+cEmpresa+"',BD6_CODEMP) ,"            
+ cqueryi += CRLF+"    TO_DATE(BD6_DATPRO,'YYYYMMDD') ,"            
+ cqueryi += CRLF+"    bd7f.refer ,bd7f.codrda , bd7f.nomrda ,"          
+ cqueryi += CRLF+"    bd7f.GRPPAG , bd7f.DESCGRP , bd7f.tippre , "
+ cqueryi += CRLF+"    bd6_codope || bd6_codemp || bd6_matric || bd6_tipreg || bd6_digito   , " 
+ cqueryi += CRLF+"    bd6_nomusr ,bd6_anopag || bd6_mespag "          
+ cqueryi += CRLF+"  UNION ALL"           
+ cqueryi += CRLF+"  SELECT     ' '  matricula , " 
+ cqueryi += CRLF+"             ' ' nomusr , "
+ cqueryi += CRLF+" NVL( RETORNA_PLANO_USU_MS ('"+cEmpresa+"',BGQ_CODOPE,BGQ_CODEMP,BGQ_MATRIC,'00','N'),BBB_YCODPL) PLANO,"           
+ cqueryi += CRLF+" BGQ_YNEVEN CodEvento,"           
+ cqueryi += CRLF+" ZZT_EVENTO Nome_Evento,"           
+ cqueryi += CRLF+" Count(DISTINCT BGQ_CODSEQ)QTDE,"           
+ cqueryi += CRLF+" Count(BGQ_CODSEQ) Ocorrencia,"           
+ cqueryi += CRLF+"             0 Glosado,"           
+ cqueryi += CRLF+"             Sum(Decode(BBB_TIPSER,1,-1*BGQ_VALOR,BGQ_VALOR)) Vl_Aprov,"           
+ cqueryi += CRLF+"             0 Vl_Participacao,"           
+ cqueryi += CRLF+"             decode(nvl(trim(BGQ_CODEMP),RETORNA_GRUPO_EMP(BI3_CODIGO)),'0004',2,'0009',2,0) EXPOSICAO_ANS,"            
+ cqueryi += CRLF+"             RETORNA_DESC_GRUPO_PLANO ( TRIM(BI3_YGRPLA),'"+cEmpresa+"') GRUPO_PLANO,"           
+ cqueryi += CRLF+"             BI3_NREDUZ NOME_PLANO,"           
+ cqueryi += CRLF+"             ZZT_TPCUST ,"           
+ cqueryi += CRLF+"             BGQ_YPROJ PROJ ,"           
+ cqueryi += CRLF+"             'Lancamentos Deb/Cred' Tipo ,"           
+ cqueryi += CRLF+"             BGQ_CODEMP CODEMP,"           
+ cqueryi += CRLF+"             RETORNA_DESCRI_GRUPOEMP('"+cEmpresa+"',BGQ_CODEMP) ,"           
+ cqueryi += CRLF+"             TO_DATE(BGQ_ANO||BGQ_MES||'01','YYYYMMDD') DTEVENT ,"             
+ cqueryi += CRLF+"             substr(BGQ_NUMLOT,1,6) refer ,"          
+ cqueryi += CRLF+"              bgq_codigo CODRDA , bgq_nome NOMRDA ,"           
+ cqueryi += CRLF+"              BAU_GRPPAG GRPPAG , B16_DESCRI  DESCGRP , bau_tippre tippre , BGQ_ANO||BGQ_MES ANOMESPAG"          
+ cqueryi += CRLF+"        FROM "+RetSqlName("BGQ") +" BGQ ,"+ RetSqlName("BBB") +" BBB ,"+  RetSqlName("BI3") + " BI3 , "+ RetSqlName("ZZT") +" ZZT , " +RetSqlName("BAU")+" BAU ,"+ RetSqlName("B16")+" B16"          
+ cqueryi += CRLF+"       WHERE BGQ_FILIAL = '" + xFilial("BGQ") +"'"           
+ cqueryi += CRLF+"         AND BGQ_CODLAN <> '050'"           
+ cqueryi += CRLF+"         AND BBB_FILIAL = '" + xFilial("BBB") +"' "           
+ cqueryi += CRLF+"         AND BBB_CODSER = BGQ_CODLAN"           
+ cqueryi += CRLF+"         AND ZZT_FILIAL = '" + xFilial("ZZT") +"'"           
+ cqueryi += CRLF+"         AND BGQ_YNEVEN=ZZT_CODEV"           
+ cqueryi += CRLF+"         AND BI3_FILIAL = '" + xFilial("BI3") +"'"           
+ cqueryi += CRLF+"         AND BI3_CODIGO=NVL( RETORNA_PLANO_USU_MS ('"+cEmpresa+"',BGQ_CODOPE,BGQ_CODEMP,BGQ_MATRIC,'00','N'),BBB_YCODPL)"           
+ cqueryi += CRLF+"         AND BGQ_NUMLOT >= '"+cpgtoI+"0001' AND BGQ_NUMLOT <= '"+cpgtoF+"9999'"           
+ cqueryi += CRLF+"         AND BAU_FILIAL =' ' AND BAU.D_e_l_e_t_ = ' ' and bau.R_E_C_D_E_L_ = 0"           
+ cqueryi += CRLF+"         AND B16_FILIAL =' ' AND B16.D_E_L_E_T_ = ' '"           
+ cqueryi += CRLF+"         AND BAU_CODIGO = bgq_codigo"          
+ cqueryi += CRLF+"         AND bau_grppag = B16_CODIGO"           
+ cqueryi += CRLF+"         AND BI3.D_E_L_E_T_ = ' '"           
+ cqueryi += CRLF+"         AND ZZT.D_E_L_E_T_ = ' '"           
+ cqueryi += CRLF+"         AND BGQ.D_E_L_E_T_ = ' '"           
+ cqueryi += CRLF+"         AND BBB.D_E_L_E_T_ = ' '"           
+ cqueryi += CRLF+"    GROUP BY NVL( RETORNA_PLANO_USU_MS ('"+cEmpresa+"',BGQ_CODOPE,BGQ_CODEMP,BGQ_MATRIC,'00','N'),BBB_YCODPL)  ,"            
+ cqueryi += CRLF+"             BGQ_YNEVEN ,  ZZT_EVENTO, ZZT_TPCUST,"           
+ cqueryi += CRLF+"             decode(nvl(trim(BGQ_CODEMP),RETORNA_GRUPO_EMP(BI3_CODIGO)),'0004',2,'0009',2,0),"           
+ cqueryi += CRLF+"             RETORNA_DESC_GRUPO_PLANO ( TRIM(BI3_YGRPLA),'"+cEmpresa+"'),BI3_NREDUZ ,"           
+ cqueryi += CRLF+"             BGQ_YPROJ ,BGQ_CODEMP , RETORNA_DESCRI_GRUPOEMP('"+cEmpresa+"',BGQ_CODEMP) ,"            
+ cqueryi += CRLF+"             TO_DATE(BGQ_ANO||BGQ_MES||'01','YYYYMMDD') ,"             
+ cqueryi += CRLF+"             substr(BGQ_NUMLOT,1,6)  ,"          
+ cqueryi += CRLF+"             bgq_codigo  , bgq_nome  ,"           
+ cqueryi += CRLF+"             BAU_GRPPAG  , B16_DESCRI , bau_tippre, BGQ_ANO||BGQ_MES "           
+ cqueryi += CRLF+"UNION ALL"           
+ cqueryi += CRLF+"      SELECT "
+ cqueryi += CRLF+"             matricula , " 
+ cqueryi += CRLF+"             nomusr , "
+ cqueryi += CRLF+"             PLANO , "           
+ cqueryi += CRLF+"             CODEVENTO,"           
+ cqueryi += CRLF+"             NOME_EVENTO,"           
+ cqueryi += CRLF+"             SUM(QTDE),"           
+ cqueryi += CRLF+"             SUM(OCORRENCIA),"           
+ cqueryi += CRLF+"             SUM(GLOSADO),"           
+ cqueryi += CRLF+"             SUM(VL_APROV) VL_APROV,"           
+ cqueryi += CRLF+"             SUM(VL_PARTICIPACAO) VL_PARTICIPACAO,"           
+ cqueryi += CRLF+"             EXPOSICAO_ANS ,"           
+ cqueryi += CRLF+"             GRUPO_PLANO,"           
+ cqueryi += CRLF+"             NOME_PLANO,"           
+ cqueryi += CRLF+"             ZZT_TPCUST,"           
+ cqueryi += CRLF+"             PROJ,"           
+ cqueryi += CRLF+"             'Material' Tipo, "              
+ cqueryi += CRLF+"             CODEMP,"           
+ cqueryi += CRLF+"             RETORNA_DESCRI_GRUPOEMP ('"+cEmpresa+"',CODEMP) NOME_EMP ,"             
+ cqueryi += CRLF+"             DTEVENT ,"            
+ cqueryi += CRLF+"             refer ,"           
+ cqueryi += CRLF+"             '000000' CODRDA , 'Material' NOMRDA ,"           
+ cqueryi += CRLF+"             '0000' GRPPAG , 'Material'  DESCGRP ,"       
+ cqueryi += CRLF+"             'Material' tippre , ANOMESPAG"          
+ cqueryi += CRLF+"FROM("           
+ cqueryi += CRLF+" SELECT "
+ cqueryi += CRLF+" bd6_codope || bd6_codemp || bd6_matric || bd6_tipreg || bd6_digito  matricula , " 
+ cqueryi += CRLF+" bd6_nomusr nomusr , "
+ cqueryi += CRLF+" BD6_CODPLA PLANO , "           
+ cqueryi += CRLF+" BD6_YNEVEN CodEvento,"           
+ cqueryi += CRLF+" ZZT_EVENTO Nome_Evento,"           
+ cqueryi += CRLF+" COUNT(DISTINCT BD6_CODEMP||BD6_MATRIC||BD6_TIPREG) QTDE,"           
+ cqueryi += CRLF+" Sum(D1_QUANT) Ocorrencia,"           
+ cqueryi += CRLF+" Sum(BD6_VLRGLO) Glosado,"           
+ cqueryi += CRLF+" Sum(D1_TOTAL)-Sum(D1_VALDESC) Vl_Aprov,"           
+ cqueryi += CRLF+" RETORNA_VL_COPART_OPME (BD6_CODOPE,BD6_CODLDP,BD6_CODPEG,BD6_NUMERO,'"+cEmpresa+"') Vl_Participacao,"           
+ cqueryi += CRLF+" SIGA_TIPO_EXPOSICAO_ANS(BD6_CODEMP,BD6_MATRIC,BD6_TIPREG,To_Date(Trim(BD6_DATPRO),'YYYYMMDD')) EXPOSICAO_ANS ,"           
+ cqueryi += CRLF+" RETORNA_DESC_GRUPO_PLANO ( TRIM(BI3_YGRPLA),'"+cEmpresa+"') GRUPO_PLANO,"           
+ cqueryi += CRLF+" Decode(BD6_CODEMP,'0007',Trim(BI3_NREDUZ)||' (SEPE)',BI3_NREDUZ) NOME_PLANO,"           
+ cqueryi += CRLF+" 0 Val_adiant , B19_DOC,"           
+ cqueryi += CRLF+" ZZT_TPCUST ,"           
+ cqueryi += CRLF+" BD6_YPROJ PROJ,"                                   
+ cqueryi += CRLF+" BD6_CODEMP CODEMP,"            
+ cqueryi += CRLF+" TO_DATE(BD6_DATPRO,'YYYYMMDD') DTEVENT ,"            
+ cqueryi += CRLF+" substr(F1_EMISSAO,1,6) refer , bd6_anopag || bd6_mespag anomespag"             
+ cqueryi += CRLF+" from "+ RetSqlName("B19")+" B19,"+ RetSqlName("SD1")+" SD1 ,"+ RetSqlName("SF1") +" SF1, "+RetSqlName("BD6")+" BD6 ,"           
+ cqueryi += CRLF+"      "+RetSqlName("SA2") +" SA2,"+ RetSqlName("ZZT")+" ZZT ,"+ RetSqlName("BI3") +" BI3"           
+ cqueryi += CRLF+"  WHERE BI3_FILIAL='" + xFilial("BI3") +"'"           
+ cqueryi += CRLF+"    AND  A2_FILIAL='" + xFilial("SA2") +"'"                           
+ cqueryi += CRLF+"    AND F1_YDTCON >= '"+cpgtoI+"01' AND F1_YDTCON <= '"+cpgtoF+"31' "
+ //AND F1_EMISSAO >= '"+cpgto+"01'  AND F1_EMISSAO <= '"+cpgto+"31'"                            
+ cqueryi += CRLF+"    AND A2_COD = B19_FORNEC"           
+ cqueryi += CRLF+"    AND D1_FORNECE= A2_COD"           
+ cqueryi += CRLF+"    AND f1_FORNECE= A2_COD"           
+ cqueryi += CRLF+"    AND D1_DOC = F1_DOC "          
+ cqueryi += CRLF+"    AND B19_DOC = D1_DOC"           
+ cqueryi += CRLF+"    AND D1_ITEM = B19_ITEM"           
+ cqueryi += CRLF+"    and BD6_FILIAL = '" + xFilial("BD6") +"'"           
+ cqueryi += CRLF+"    AND ZZT_FILIAL = '" + xFilial("ZZT") +"'"            
+ cqueryi += CRLF+"    AND BD6_CODPLA=BI3_CODIGO"           
+ cqueryi += CRLF+"    AND BD6_CODOPE = SubStr(B19_GUIA,01,04)"           
+ cqueryi += CRLF+"    AND BD6_CODLDP = SubStr(B19_GUIA,05,04)"           
+ cqueryi += CRLF+"    AND BD6_CODPEG = SubStr(B19_GUIA,09,08)"           
+ cqueryi += CRLF+"    AND BD6_NUMERO = SubStr(B19_GUIA,17,08)"           
+ cqueryi += CRLF+"    AND BD6_ORIMOV = SubStr(B19_GUIA,25,01)"           
+ cqueryi += CRLF+"    AND BD6_SEQUEN = SubStr(B19_GUIA,26,03)"           
+ cqueryi += CRLF+"    AND BD6_FASE IN (3,4)"           
+ cqueryi += CRLF+"    AND BD6_CODLDP='0013'"           
+ cqueryi += CRLF+"    AND BD6_SITUAC = 1"           
+ cqueryi += CRLF+"    AND BD6_YNEVEN=ZZT_CODEV"           
+ cqueryi += CRLF+"    AND SA2.D_E_L_E_T_ = ' '"           
+ cqueryi += CRLF+"    AND B19.D_E_L_E_T_ = ' '"           
+ cqueryi += CRLF+"    AND SD1.D_E_L_E_T_ = ' '"           
+ cqueryi += CRLF+"    AND SF1.D_E_L_E_T_ = ' '"           
+ cqueryi += CRLF+"    AND BD6.D_E_L_E_T_ = ' '"           
+ cqueryi += CRLF+"    AND ZZT.D_E_L_E_T_ = ' '"           
+ cqueryi += CRLF+"    AND BI3.D_E_L_E_T_ = ' '"           
+ cqueryi += CRLF+"    GROUP BY SIGA_TIPO_EXPOSICAO_ANS(BD6_CODEMP,BD6_MATRIC,BD6_TIPREG,To_Date(Trim(BD6_DATPRO),'YYYYMMDD')),"           
+ cqueryi += CRLF+"    BD6_CODEMP,"           
+ cqueryi += CRLF+"    BD6_CODPLA,"           
+ cqueryi += CRLF+"    TRIM(BI3_YGRPLA),Decode(BD6_CODEMP,'0007',Trim(BI3_NREDUZ)||' (SEPE)',BI3_NREDUZ),"           
+ cqueryi += CRLF+"    BD6_YNEVEN, B19_DOC,"           
+ cqueryi += CRLF+"    ZZT_EVENTO,ZZT_TPCUST,"           
+ cqueryi += CRLF+"    BD6_YPROJ,"           
+ cqueryi += CRLF+"    RETORNA_VL_COPART_OPME (BD6_CODOPE,BD6_CODLDP,BD6_CODPEG,BD6_NUMERO,'"+cEmpresa+"'),"                            
+ cqueryi += CRLF+"    BD6_CODEMP,"            
+ cqueryi += CRLF+"    TO_DATE(BD6_DATPRO,'YYYYMMDD') ,"            
+ cqueryi += CRLF+"    substr(F1_EMISSAO,1,6) ,"           
+ cqueryi += CRLF+"    bd6_codope||bd6_codemp||bd6_matric || bd6_tipreg || bd6_digito , " 
+ cqueryi += CRLF+"    bd6_nomusr, bd6_anopag || bd6_mespag ) "
+ cqueryi += CRLF+"  GROUP BY  PLANO, NOME_EVENTO, matricula , nomusr , "
+ cqueryi += CRLF+"  CODEVENTO, "           
+ cqueryi += CRLF+"  GRUPO_PLANO, "           
+ cqueryi += CRLF+"  NOME_PLANO, "           
+ cqueryi += CRLF+"  EXPOSICAO_ANS,ZZT_TPCUST,PROJ, "           
+ cqueryi += CRLF+"  CODEMP, "           
+ cqueryi += CRLF+"  RETORNA_DESCRI_GRUPOEMP ('"+cEmpresa+"',CODEMP), "            
+ cqueryi += CRLF+"  DTEVENT, "            
+ cqueryi += CRLF+"  refer , anomespag"           
+ cqueryi += CRLF+"UNION ALL"           
+ cqueryi += CRLF+" SELECT  "
+ cqueryi += CRLF+" bd6_codope || bd6_codemp || bd6_matric || bd6_tipreg || bd6_digito   matricula , " 
+ cqueryi += CRLF+" bd6_nomusr  nomusr ,"
+ cqueryi += CRLF+" Nvl(Trim(BA1_CODPLA),BA3_CODPLA)  Plano,"           
+ cqueryi += CRLF+" BD6_YNEVEN CodEvento,"           
+ cqueryi += CRLF+" ZZT_EVENTO Nome_Evento,"           
+ cqueryi += CRLF+" COUNT(DISTINCT B44_OPEUSR||B44_CODEMP||B44_MATRIC||B44_TIPREG) Qtde, "          
+ cqueryi += CRLF+" Sum(B45_QTDPRO) Ocorrencia,"           
+ cqueryi += CRLF+" Sum(B45_VLRGLO) Glosado,"           
+ cqueryi += CRLF+" Sum(B45_VLRPAG) Val_Aprov,"           
+ cqueryi += CRLF+" 0 Vl_Participacao,"           
+ cqueryi += CRLF+" SIGA_TIPO_EXPOSICAO_ANS(B44_CODEMP,B44_MATRIC,B44_TIPREG,To_Date(Trim(B44_DATPRO),'YYYYMMDD')) EXPOSICAO_ANS,"           
+ cqueryi += CRLF+" RETORNA_DESC_GRUPO_PLANO ( TRIM(BI3_YGRPLA),'"+cEmpresa+"') GRUPO_PLANO,"           
+ cqueryi += CRLF+" Decode(B44_CODEMP,'0007',Trim(BI3_NREDUZ)||' (SEPE)',BI3_NREDUZ) NOME_PLANO,"           
+ cqueryi += CRLF+" ZZT_TPCUST ,"           
+ cqueryi += CRLF+" BD6_YPROJ PROJ,"           
+ cqueryi += CRLF+" 'Reembolso' Tipo,"                
+ cqueryi += CRLF+" B44_CODEMP CODEMP,"           
+ cqueryi += CRLF+" RETORNA_DESCRI_GRUPOEMP('"+cEmpresa+"',B44_CODEMP) NOME_EMP ,"           
+ cqueryi += CRLF+" TO_DATE(BD6_DATPRO,'YYYYMMDD') DTEVENT ,"           
+ cqueryi += CRLF+" substr(E1_EMISSAO,1,6) refer  ,"          
+ cqueryi += CRLF+" '000000' CODRDA , 'Reembolso' NOMRDA ,"           
+ cqueryi += CRLF+" '0000' GRPPAG , 'Reembolso'  DESCGRP  ,"      
+ cqueryi += CRLF+" 'Rembolso' tippre , bd6_anopag || bd6_mespag anomespag"        
+ cqueryi += CRLF+" from "+ RetSqlName("B44")+" C , "+ RetSqlName("B45")+" D , "+ RetSqlName("SE1") +" T , "+ RetSqlName("BA1") +" U , "+ RetSqlName("BA3") +" F ,"+ RetSqlName("BI3")+ " BI3 , " +RetSqlName("BG9") +"  BG9 , "           
+ cqueryi += CRLF+" "+ RetSqlName("ZZT")+" ZZT,"+ RetSqlName("BD6")+" BD6 , "+RetSqlName("ZZQ") +" ZZQ "          
+ cqueryi += CRLF+" WHERE B45_FILIAL='" + xFilial("B45") +"'"           
+ cqueryi += CRLF+" AND B44_FILIAL='" + xFilial("B44") +"'"           
+ cqueryi += CRLF+" AND BI3_FILIAL='" + xFilial("BI3") +"'"           
+ cqueryi += CRLF+" AND BA3_FILIAL='" + xFilial("BA3") +"'"           
+ cqueryi += CRLF+" AND BA1_FILIAL='" + xFilial("BA1") +"'"           
+ cqueryi += CRLF+" AND BG9_FILIAL='" + xFilial("BG9") +"'"           
+ cqueryi += CRLF+" AND ZZT_FILIAL='" + xFilial("ZZT") +"'"           
+ cqueryi += CRLF+" and BD6_FILIAL='" + xFilial("BD6") +"'"           
+ cqueryi += CRLF+" AND ZZQ_FILIAL='" + xFilial("ZZQ") +"'"           
+ cqueryi += CRLF+" AND E1_FILIAL='" + xFilial("SE1") +"'"           
+ cqueryi += CRLF+" AND E1_PREFIXO='RLE' "           
+ cqueryi += CRLF+" AND B44_CODLDP=B45_CODLDP"           
+ cqueryi += CRLF+" AND B44_CODPEG=B45_CODPEG"           
+ cqueryi += CRLF+" AND B44_NUMAUT=B45_NUMAUT"           
+ cqueryi += CRLF+" AND B44_PREFIX =E1_PREFIXO"           
+ cqueryi += CRLF+" AND B44_NUM=E1_NUM"           
+ cqueryi += CRLF+" AND BA1_CODINT=BA3_CODINT"           
+ cqueryi += CRLF+" AND BA1_CODEMP=BA3_CODEMP"           
+ cqueryi += CRLF+" AND BA1_MATRIC=BA3_MATRIC"           
+ cqueryi += CRLF+" AND BA1_CODINT=B44_OPEUSR"           
+ cqueryi += CRLF+" AND BA1_CODEMP=B44_CODEMP"           
+ cqueryi += CRLF+" AND BA1_MATRIC=B44_MATRIC"           
+ cqueryi += CRLF+" AND BA1_TIPREG=B44_TIPREG"           
+ cqueryi += CRLF+" AND BI3_CODINT=BA1_CODINT"           
+ cqueryi += CRLF+" AND B44_OPEUSR=BG9_CODINT"           
+ cqueryi += CRLF+" AND B44_CODEMP=BG9_CODIGO"          
+ cqueryi += CRLF+" AND BI3_CODIGO=Nvl(Trim(BA1_CODPLA),BA3_CODPLA)"           
+// cqueryi += CRLF+"         AND SubStr(B44_YDTCON,1,6)='"+cpgto+"'"         
+ cqueryi += CRLF+" AND B44_YDTCON >= '"+cpgtoI+"01' AND B44_YDTCON <= '"+cpgtoF+"31' "        
+//AND E1_EMISSAO >= '"+cpgto+"01'  AND E1_EMISSAO <= '"+cpgto+"31'"             
+ cqueryi += CRLF+" AND BD6_CODOPE='0001'"           
+ cqueryi += CRLF+" AND B45_CODLDP=BD6_CODLDP"           
+ cqueryi += CRLF+" AND B45_CODPEG=BD6_CODPEG"           
+ cqueryi += CRLF+"         AND B45_NUMERO=BD6_NUMERO"           
+ cqueryi += CRLF+"         AND B45_SEQUEN=BD6_SEQUEN"           
+ cqueryi += CRLF+"         AND B45_CODPAD=BD6_CODPAD"           
+ cqueryi += CRLF+"         AND B45_CODPRO=BD6_CODPRO"           
+ cqueryi += CRLF+"         and BD6_YNEVEN=ZZT_CODEV"           
+ cqueryi += CRLF+"         AND ZZQ_SEQUEN = B44_YCDPTC"            
+ cqueryi += CRLF+"         AND C.D_E_L_E_T_=' '"          
+ cqueryi += CRLF+"         AND D.D_E_L_E_T_=' '"           
+ cqueryi += CRLF+"         AND T.D_E_L_E_T_=' '"           
+ cqueryi += CRLF+"         AND U.D_E_L_E_T_=' '"           
+ cqueryi += CRLF+"         AND F.D_E_L_E_T_=' '"           
+ cqueryi += CRLF+"         AND BI3.D_E_L_E_T_=' '"           
+ cqueryi += CRLF+"         AND BG9.D_E_L_E_T_=' '"           
+ cqueryi += CRLF+"         AND ZZT.D_E_L_E_T_=' '"           
+ cqueryi += CRLF+"         AND ZZQ.D_E_L_E_T_=' '"           
+ cqueryi += CRLF+"         AND BD6.D_E_L_E_T_=' '"           
+ cqueryi += CRLF+"    GROUP BY"                                       
+ cqueryi += CRLF+"             bd6_codope || bd6_codemp || bd6_matric || bd6_tipreg || bd6_digito , " 
+ cqueryi += CRLF+"             bd6_nomusr ,  "
+ cqueryi += CRLF+"             Nvl(Trim(BA1_CODPLA),BA3_CODPLA) ,"           
+ cqueryi += CRLF+"             RETORNA_DESC_GRUPO_PLANO ( TRIM(BI3_YGRPLA),'"+cEmpresa+"') ,"           
+ cqueryi += CRLF+"             Decode(B44_CODEMP,'0007',Trim(BI3_NREDUZ)||' (SEPE)',BI3_NREDUZ),"           
+ cqueryi += CRLF+"             SIGA_TIPO_EXPOSICAO_ANS(B44_CODEMP,B44_MATRIC,B44_TIPREG,To_Date(Trim(B44_DATPRO),'YYYYMMDD')),B44_ANOAUT,B44_MESAUT,"           
+ cqueryi += CRLF+"             ZZT_EVENTO,ZZT_TPCUST ,"           
+ cqueryi += CRLF+"             BD6_YNEVEN,"           
+ cqueryi += CRLF+"             BD6_YPROJ,"           
+ cqueryi += CRLF+"             (CASE WHEN (B45_ZZZCOD NOT IN('04','11','21','29','37','45','53','75','83','91','99','9H','9O','9S','9V','00','9Z','AA','AI',"           
+ cqueryi += CRLF+"                                'AQ','AY','B6','BE','BM','BU','C4','C8','CB','CG','CN','CU','D1','DD','DW','E5','ED','EZ','F0')"           
+ cqueryi += CRLF+"              AND ZZQ_TIPPRO<>'1')"           
+ cqueryi += CRLF+"              then '2'  else '1' end),"           
+ cqueryi += CRLF+"             B44_CODEMP ,"           
+ cqueryi += CRLF+"             RETORNA_DESCRI_GRUPOEMP('"+cEmpresa+"',B44_CODEMP),"           
+ cqueryi += CRLF+"             TO_DATE(BD6_DATPRO,'YYYYMMDD') ,"           
+ cqueryi += CRLF+"             substr(E1_EMISSAO,1,6) , bd6_anopag || bd6_mespag "             
+ cqueryi += CRLF+"             )"           
+ cqueryi += CRLF+"             Group By"           
+ cqueryi += CRLF+" refer,"            
+ cqueryi += CRLF+" CODEMP,"           
+ cqueryi += CRLF+" GRUPO_PLANO,"            
+ cqueryi += CRLF+" NOME_PLANO,"           
+ cqueryi += CRLF+" substr(DTEVENT,7,2)||'/'|| substr(DTEVENT,5,2)||'/'||substr(DTEVENT,1,4) ,"       
+ cqueryi += CRLF+" CodEvento,"           
+ cqueryi += CRLF+" Nome_Evento,"           
+ cqueryi += CRLF+" ZZT_TPCUST ,"          
+ cqueryi += CRLF+" codrda , nomrda ,"          
+ cqueryi += CRLF+" GRPPAG , DESCGRP ,"       
+ cqueryi += CRLF+" tippre , TIPO ,"
+ cqueryi += CRLF+" matricula , " 
+ cqueryi += CRLF+" nomusr , anomespag ,"
+ cqueryi += CRLF+" NVL(RETORNA_QTD_FAIXA_ATUARIA(SUBSTR(matricula,1,4),SUBSTR(matricula,5,4),SUBSTR(matricula,9,6),SUBSTR(matricula,15,2),'20'||substr(DTEVENT,7,2)),0) "
+                     
+  If Select((cAliasCst)) <> 0 
+       (cAliasCst)->(DbCloseArea()) 
+  Endif
+    
+  TcQuery cQueryi New Alias (cAliasCst)  
+
+                                                                                           
+  (cAliasCst)->(dbGoTop())                                                   
+
+  While !((cAliasCst)->(Eof()))                                                                                                                                                                                                   
+    
+        aAdd(aDadosInt , {(cAliasCst)->Emp,;         
+                          (cAliasCst)->refer,;  
+                          (cAliasCst)->CODEMP,;      
+                          (cAliasCst)->GRUPO_PLANO,; 
+                          (cAliasCst)->NOME_PLANO,;  
+                          (cAliasCst)->DtEvent,;     
+                          (cAliasCst)->CodEvento,;   
+                          (cAliasCst)->Nome_Evento,; 
+                          (cAliasCst)->ZZT_TPCUST,;  
+                          (cAliasCst)->codrda ,;     
+                          (cAliasCst)->nomrda ,;     
+                          (cAliasCst)->GRPPAG ,;     
+                          (cAliasCst)->DESCGRP ,;    
+                          (cAliasCst)->tippre ,;     
+                          (cAliasCst)->TIPO ,;       
+                          (cAliasCst)->APRESENTADO ,;
+                          (cAliasCst)->GLOSADO ,;    
+                          (cAliasCst)->PAGO ,;       
+                          (cAliasCst)->COPART,;
+                          (cAliasCst)->matricula,;  
+                          (cAliasCst)->nomusr ,;
+                          (cAliasCst)->anomespag,;
+                          (cAliasCst)->QTD_FAIXAS })   
+        (cAliasCst)->(DbSkip())
+
+    EndDo 
+
+FGrvPlan1()    
+     
+Return()    
+
+
+Static Function AjustaSX1(cPerg)
+
+Local aHelpPor := {}
+
+PutSx1(cPerg,"01",OemToAnsi("Comp do Custo Inicial(AAAAMM)") 	,"","","mv_ch1","C",06,0,0,"G","","","","","mv_par01","","","","","","","","","","","","","","","","",aHelpPor,{},{})
+PutSx1(cPerg,"02",OemToAnsi("Comp do Custo Final  (AAAAMM)") 	,"","","mv_ch2","C",06,0,0,"G","","","","","mv_par02","","","","","","","","","","","","","","","","",aHelpPor,{},{})
+
+
+
+Pergunte(cPerg,.T.)
+
+Return 
+
+
+
+Static Function FGrvPlan1()     
+
+   If cEmpAnt == '02'
+      cNomDadCab:= '1 - Custo Intergal'
+   Else                                
+      cNomDadCab:= '1 - Custo Caberj'
+   EndIf 
+   cComp     := cpgtoI + ' à ' + cpgtoF
+   cNomPla   := ' '                   
+ 
+     	cNomeArq := "C:\TEMP\"+cComp+" - "+cNomDadCab+"_"+SubStr(DtoS(date()),7,2)+"_"+SubStr(DtoS(date()),5,2)+"_"+SubStr(DtoS(date()),1,4)+"_"+STRTRAN(TIME(),":","_")+".csv"
+		nHandle := FCREATE(cNomeArq)
+        cMontaTxt := cNomDadCab
+        cMontaTxt += CRLF
+        FWrite(nHandle,cMontaTxt)        		 
+        cMontaTxt := 'Competencia : '+cComp
+        cMontaTxt += CRLF
+        FWrite(nHandle,cMontaTxt)		 
+        cMontaTxt := 'Planilha : '+cNomDadCab  
+        cMontaTxt += CRLF
+        FWrite(nHandle,cMontaTxt)		
+        
+        cMontaTxt := "Empresa ;"    
+        cMontaTxt += "Referencia  ;"    
+        cMontaTxt += "Matricula   ;"   
+        cMontaTxt += "Nome Usuario;"   
+        cMontaTxt += "Cod Empresa ;"    
+        cMontaTxt += "Grupo Plano ;"
+		cMontaTxt += "Nome Plan   ;" 
+		cMontaTxt += "Dt Evento   ;"  
+        cMontaTxt += "Cod Evento  ;"		 
+		cMontaTxt += "Nome Evento ;"   
+		cMontaTxt += "Tipo Custo  ;"   
+		cMontaTxt += "Codigo Rda  ;"  		
+		cMontaTxt += "Nome Rda    ;"      		  
+		cMontaTxt += "Grupo de pagto ;"
+        cMontaTxt += "Desc Grp Pagto ;"
+		cMontaTxt += "Prefixo ;" 
+		cMontaTxt += "Tipo       ;" 
+		cMontaTxt += "Vlr Apresentado ;"   
+		cMontaTxt += "Vlr Glosado     ;"   
+		cMontaTxt += "Vlr Pago        ;"  		
+		cMontaTxt += "Vlr Coparte     ;"      		 
+		cMontaTxt += "Ano Mes guia    ;" 
+		cMontaTxt += "Qtda Faixa      ;"
+		
+		cMontaTxt += CRLF // Salto de linha para .csv (excel)
+             
+		FWrite(nHandle,cMontaTxt)
+		
+      For nCount:=1 to len(aDadosInt)
+      
+                               cMontaTxt := trim(aDadosInt[nCount][1])  + ";"	 
+                               cMontaTxt += trim(aDadosInt[nCount][2])  + ";"	
+              				   cMontaTxt += trim(aDadosInt[nCount][20])  + ";"	
+					           cMontaTxt += trim(aDadosInt[nCount][21])  + ";"	                               
+              				   cMontaTxt += trim(aDadosInt[nCount][3])  + ";"	
+					           cMontaTxt += trim(aDadosInt[nCount][4])  + ";"	
+              		  		   cMontaTxt += trim(aDadosInt[nCount][5])  + ";"	
+              				   cMontaTxt += trim(aDadosInt[nCount][6])  + ";"	
+              				   cMontaTxt += str(aDadosInt[nCount][7])  + ";"	
+              				   cMontaTxt += trim(aDadosInt[nCount][8])  + ";"	
+				               cMontaTxt += trim(aDadosInt[nCount][9])  + ";"	
+              				   cMontaTxt += trim(aDadosInt[nCount][10]) + ";"	
+              		           cMontaTxt += trim(aDadosInt[nCount][11]) + ";"	
+                               cMontaTxt += trim(aDadosInt[nCount][12]) + ";"	
+                               cMontaTxt += trim(aDadosInt[nCount][13]) + ";"	 
+                               cMontaTxt += trim(aDadosInt[nCount][14]) + ";"	
+                               cMontaTxt += trim(aDadosInt[nCount][15]) + ";"	
+                               cMontaTxt += Transform(aDadosInt[nCount][16],'@E  999,999,999.99')+ ";"                  
+                               cMontaTxt += Transform(aDadosInt[nCount][17],'@E  999,999,999.99')+ ";" 
+                               cMontaTxt += Transform(aDadosInt[nCount][18],'@E  999,999,999.99')+ ";"     
+                               cMontaTxt += Transform(aDadosInt[nCount][19],'@E  999,999,999.99')+ ";"                    
+                               cMontaTxt += trim(aDadosInt[nCount][22]) + ";"	 
+                               cMontaTxt += Transform(aDadosInt[nCount][23],'@E 9,999')+ ";"
+         
+    	  cMontaTxt += CRLF // Salto de linha para .csv (excel)      
+		      
+		  FWrite(nHandle,cMontaTxt)
+	
+      Next 
+
+	If nHandle > 0
+		
+		// encerra gravação no arquivo
+		FClose(nHandle)
+		cNomeArq1+= cNomeArq + CRLF
+	  //	MsgAlert("Relatorio salvo em: "+cNomeArq)
+		
+   
+	    MsgAlert("Relatorio(s) salvo(s) em: "+ CRLF +cNomeArq1)
+
+	EndIf                                 
+	  
+
+	If nHandle > 0
+		
+		// encerra gravação no arquivo
+		FClose(nHandle)
+	//	cNomeArq1+= cNomeArq + CRLF
+	//	MsgAlert("Relatorio salvo em: "+cNomeArq)
+		
+	EndIf           
+	    
+
+Return ()    
+///////

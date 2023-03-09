@@ -1,0 +1,27 @@
+#INCLUDE 'PROTHEUS.CH'
+#INCLUDE 'PARMTYPE.CH'
+#INCLUDE 'APWEBSRV.CH'
+#INCLUDE 'TBICONN.CH'
+#INCLUDE 'TOPCONN.CH'
+#INCLUDE 'RWMAKE.CH'
+#INCLUDE 'AP5MAIL.CH'
+#INCLUDE 'FONT.CH'
+#INCLUDE 'COLORS.CH'
+
+User Function CABV057(_cMatric)
+
+	local lret := .T.
+
+	if !(empty(_cMatric))
+
+		//lret := U_CABV004('BE4_USUARI','BE4_PRVINT')
+		U_CABV004('BE4_USUARI','BE4_PRVINT')
+		U_CABV029("1")
+		U_CABV028('1','2')
+		u_CABV056(_cMatric)
+
+		lRet	:= U_CABV067( _cMatric, .F., "BE4_USUARI")
+
+	endIf
+
+return lret
