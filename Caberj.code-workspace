@@ -18,8 +18,20 @@
 				"user": "marcus.sullivan",
 				"smartClientPath": "/Users/sullivan/Downloads/23-02-14-P12_INCLUDES/",
 				"enable": true
+			},
+			{
+				"environment": "dsv_sullivan",
+				"name": "dsv_sullivan",
+				"server": "10.19.1.10",
+				"port": "7725",
+				"serverVersion": "210324P",
+				"passwordCipher": "fGirBVyGyGjd9vMVzQWvBHjcoe1VHX+SEGdgbBzpgpxam40zT5RSIXc/cImxpVG8AA/JSmjrxyzSb1KPI43abF5z=",
+				"includeList": "/Users/sullivan/source/includes_p12_tlpp\\",
+				"user": "marcus.sullivan",
+				"smartClientPath": "/Users/sullivan/Downloads/23-02-14-P12_INCLUDES/",
+				"enable": true
 			}
 		],
-		"advpl.selectedEnvironment": "hml_rest"
+		"advpl.selectedEnvironment": "dsv_sullivan"
 	}
 }
