@@ -5,6 +5,21 @@
 		}
 	],
 	"settings": {
-		"totvsLanguageServer.welcomePage": false
+		"totvsLanguageServer.welcomePage": false,
+		"advpl.environments": [
+			{
+				"environment": "hml_rest",
+				"name": "hml_rest",
+				"server": "10.19.1.10",
+				"port": "7077",
+				"serverVersion": "210324P",
+				"passwordCipher": "uq36tP0p/ACLJa0/QFVRaiswJjhNRDxaeCNBZECQtnkYXU0f6RtfW1EQ3G7cdQ8XAA/RwLvFbKGjymGa4Xib09eh=",
+				"includeList": "/Users/sullivan/Downloads/23-02-14-P12_INCLUDES\\",
+				"user": "marcus.sullivan",
+				"smartClientPath": "/Users/sullivan/Downloads/23-02-14-P12_INCLUDES/",
+				"enable": true
+			}
+		],
+		"advpl.selectedEnvironment": "hml_rest"
 	}
 }
