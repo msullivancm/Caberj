@@ -1,0 +1,50 @@
+#include "totvs.ch"
+ 
+User Function restValidation()
+    Local oRestClient := FWRest():New("https://www.caberj.com.br/apirestdesenv")
+    Local aHeader := {"tenantId: 01,01"}
+
+    // inclui o campo Authorization no formato <usuario>:<senha> na base64
+    Aadd(aHeader, "Authorization: Basic " + Encode64("restuser:P@ssw0rd2023"))
+
+    // chamada da classe exemplo de REST com retorno de lista
+    oRestClient:setPath("/apirestdesenv/crud/query")
+    ;oRestClient:setPath("/apirestdesenv/sample?startIndex=2&count=10")
+    If oRestClient:Get(aHeader)
+        ConOut("GET", oRestClient:GetResult())
+    Else
+        ConOut("GET", oRestClient:GetLastError())
+    EndIf
+
+    // chamada da classe exemplo de REST para operações CRUD
+    oRestClient:setPath("/apirestdesenv/sample/1")
+    If oRestClient:Get(aHeader)
+        ConOut("GET", oRestClient:GetResult())
+    Else
+        ConOut("GET", oRestClient:GetLastError())
+    EndIf
+
+
+    // define o conteúdo do body
+    oRestClient:SetPostParams("body")
+
+    If oRestClient:Post(aHeader)
+        ConOut("POST", oRestClient:GetResult())
+    Else
+        ConOut("POST", oRestClient:GetLastError())
+    EndIf
+
+
+    // para os métodos PUT e DELETE o conteúdo body é enviado por parametro
+    If oRestClient:Put(aHeader, "body")
+        ConOut("PUT", oRestClient:GetResult())
+    Else
+        ConOut("PUT", oRestClient:GetLastError())
+    EndIf
+
+    If oRestClient:Delete(aHeader, "body")
+        ConOut("DELETE", oRestClient:GetResult())
+    Else
+        ConOut("DELETE", oRestClient:GetLastError())
+    EndIf
+Return 

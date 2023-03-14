@@ -5,8 +5,8 @@
 Retorna dados de um usuário existente
 Parâmetros via [raw body]
 ------------------------------------------------------------------*/
-@get("sample/rest/crud/body")
-function getBodyUser()
+@get("apirestdesenv/crud/body")
+static function getBodyUser()
 
   local cUser := ''
   local jBody := ''
@@ -26,8 +26,8 @@ return
 Retorna dados de um usuário existente
 Parâmetros via [querystring]
 ------------------------------------------------------------------*/
-@Get("sample/rest/crud/query")
-function getQueryUser()
+@Get("apirestdesenv/crud/query")
+static function getQueryUser()
   local cUser   := ''
   local jQuery  := jsonObject():New()
 
@@ -45,8 +45,8 @@ return
 Retorna dados de um usuário existente
 Parâmetros via [pathstring]
 ------------------------------------------------------------------*/
-@Get("sample/rest/crud/path/:user")
-function getPathUser()
+@Get("apirestdesenv/crud/path/:user")
+static function getPathUser()
   local cUser := ''
   local jPath := jsonObject():New()
 
