@@ -1,6 +1,35 @@
 #include "tlpp-core.th"
 #include "tlpp-rest.th"
 
+//Retorna rede credenciada em json
+@get("mobile/redecredenciada")
+User function getRedeCredenciada()
+  local ojBody := ''
+  local cRet  := ''
+  Local nRegs := 0
+  Local oJsonRet  := NIL         // Recebe o JSON de Saida
+  Local aJson  := {} //Array json
+
+  //Abre conex�o com o banco de dados caso esteja rodando via job
+  TCLink()
+
+  BeginSql alias "BXTEMP"
+    Select B1_DESC from SB1010
+  EndSql
+
+  oJsonRet := JsonObject():new()
+  //Enquanto houver registros
+  While ! BXTEMP->(EoF())
+    aAdd(aJson, JsonObject():new())
+    nRegs := Len(aJson)
+    aJson[nRegs]['B1_DESC']:=EncodeUTF8(BXTEMP->B1_DESC, "cp1252")
+    BXTEMP->(DbSkip())
+  EndDo
+  BXTEMP->(DbCloseArea())
+  oJsonRet:Set(aJson) //Atribui o array ao objeto Json na raiz
+
+return oRest:setResponse(oJsonRet)
+
 /*------------------------------------------------------------------
 Retorna dados de um usuário existente
 Parâmetros via [raw body]
