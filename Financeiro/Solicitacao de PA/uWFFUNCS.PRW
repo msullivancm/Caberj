@@ -41,7 +41,7 @@ For n_Aprov := 1 to Len( a_Aprov )
 	
 	oProcess := TWFProcess():New(cCodProcesso, cAssunto) 
 	oProcess:NewTask(cAssunto, cHtmlModelo)  
-	conout("(INICIO|ATUAPV)Processo: " + oProcess:fProcessID + " - Task: " + oProcess:fTaskID )
+	QOut("(INICIO|ATUAPV)Processo: " + oProcess:fProcessID + " - Task: " + oProcess:fTaskID )
 	
 	oProcess:oHtml:ValByName( "c_Emp"		, ALLTRIM(SM0->M0_NOME) +  " - Aprovador:" + usrfullname(a_Aprov[n_Aprov][1])  )
 	oProcess:oHtml:ValByName( "c_CodSpa"	, PA0->PA0_NUM  )  // Marcela Coimbra - GLPI 37859
@@ -69,7 +69,7 @@ For n_Aprov := 1 to Len( a_Aprov )
 	
 	EndIf 
 	             
-	conout( "0 " + c_Grupo )
+	QOut( "0 " + c_Grupo )
 	
 	If u_fPosSAL(c_Grupo, a_Aprov[n_Aprov][1])
 	     
@@ -77,17 +77,17 @@ For n_Aprov := 1 to Len( a_Aprov )
 	
 	EndIf
 	
-	conout( "1 " + c_Grupo )
+	QOut( "1 " + c_Grupo )
 	
 	aAdd( oProcess:aParams, PA0->PA0_NUM )
 	aAdd( oProcess:aParams, PA0->PA0_FORNECE )
 	aAdd( oProcess:aParams, a_Aprov[n_Aprov][1] ) // usuáro do aprovador
 	
-	conout( "2 " + c_Grupo )
+	QOut( "2 " + c_Grupo )
 	
 	aAdd( oProcess:aParams, c_Grupo ) // codigo do aprovador//
 
-	conout( "1 " + c_Grupo )
+	QOut( "1 " + c_Grupo )
 
 	aAdd( oProcess:aParams, a_Aprov[n_Aprov][2] ) // e-mail
 	                        
@@ -169,7 +169,7 @@ For n_Aprov := 1 to Len( a_Aprov )
 	cHtmlModelo := "HTML\WFAPSPA.HTML"
 	
 	oProcess:NewTask(cAssunto, cHtmlModelo)  
-	conout("(INICIO|WFLINK)Processo: " + oProcess:fProcessID + " - Task: " + oProcess:fTaskID )
+	QOut("(INICIO|WFLINK)Processo: " + oProcess:fProcessID + " - Task: " + oProcess:fTaskID )
 	oProcess:cSubject := cAssunto
 	
 	oProcess:cTo := a_Aprov[n_Aprov][2]
@@ -222,15 +222,15 @@ Private a_VetSe2	:= {}
 
 
 
-conout( " ___ Obs: " 	+ c_Obs		)
-conout( " ___ Opc: " 	+ c_Opc		)
-conout( " ___ Num SP: " + c_PA0Num	)
-conout( " ___ Cod For: "+ c_Fornec	)
-conout( " ___ Grade: " 	+ c_Grade 	)
-conout( " ___ Dia: " 	+ c_Dia 	)
-conout( " ___ Mes: " 	+ c_Mes 	)
-conout( " ___ Ano: " 	+ c_Ano 	)
-//conout( " ___ Banco: " 	+ c_OpBco 	)
+QOut( " ___ Obs: " 	+ c_Obs		)
+QOut( " ___ Opc: " 	+ c_Opc		)
+QOut( " ___ Num SP: " + c_PA0Num	)
+QOut( " ___ Cod For: "+ c_Fornec	)
+QOut( " ___ Grade: " 	+ c_Grade 	)
+QOut( " ___ Dia: " 	+ c_Dia 	)
+QOut( " ___ Mes: " 	+ c_Mes 	)
+QOut( " ___ Ano: " 	+ c_Ano 	)
+//QOut( " ___ Banco: " 	+ c_OpBco 	)
 
 If Alltrim( c_Opc ) == 'S'
 	
@@ -240,8 +240,8 @@ If Alltrim( c_Opc ) == 'S'
 	 
 		l_Libera := u_fAltGrade({SCR->CR_NUM,"PA",SCR->CR_VALLIB,c_User,,c_Grade,,1,,dDataBase},dDataBase,4,, @l_Niv)// Cria grade  
 
-conout( "__1" + IIF(l_Niv, ' - LIBERADO', '- NAO LIBERADO')	)
-conout( "__2" + IIF(l_Libera, ' - LIBERADO', '- NAO LIBERADO')	)
+QOut( "__1" + IIF(l_Niv, ' - LIBERADO', '- NAO LIBERADO')	)
+QOut( "__2" + IIF(l_Libera, ' - LIBERADO', '- NAO LIBERADO')	)
 
 
 			Reclock("SCR", .F.)                 
@@ -256,13 +256,13 @@ conout( "__2" + IIF(l_Libera, ' - LIBERADO', '- NAO LIBERADO')	)
 
     Else 
     
-	    conout( "***** Não encontrou SCR na hora da liberação"	)
+	    QOut( "***** Não encontrou SCR na hora da liberação"	)
     
     EndIf                                 
 		
 	If l_Libera    
 		
-		conout( "------ SPA totalmente Liberada "	)
+		QOut( "------ SPA totalmente Liberada "	)
 		
 		If !Empty(SCR->CR_YBANCO)
 			
@@ -342,15 +342,15 @@ conout( "__2" + IIF(l_Libera, ' - LIBERADO', '- NAO LIBERADO')	)
 					
 		Else                                                              
 		
-			conout( "Não encontrou PA0 na hora da liberação"	)
+			QOut( "Não encontrou PA0 na hora da liberação"	)
 		
 		EndIf
 	
 	Else    
 
 
-conout( "MATA MAMAE 3" + IIF(l_Niv, ' - LIBERADO', '- NAO LIBERADO')	)
-conout( "MATA MAMAE 4" + IIF(l_Libera, ' - LIBERADO', '- NAO LIBERADO')	)
+QOut( "MATA MAMAE 3" + IIF(l_Niv, ' - LIBERADO', '- NAO LIBERADO')	)
+QOut( "MATA MAMAE 4" + IIF(l_Libera, ' - LIBERADO', '- NAO LIBERADO')	)
 	
 	If l_Niv
 	
@@ -371,7 +371,7 @@ conout( "MATA MAMAE 4" + IIF(l_Libera, ' - LIBERADO', '- NAO LIBERADO')	)
 		    
 			
 		   		u_016WFApro( a_SaldoPls,  a_VetSe2 , PA0->PA0_NUM, c_Grade )   
-		   		conout( "MATA A MAMAE"	)
+		   		QOut( "MATA A MAMAE"	)
 			
 		EndIf
 				

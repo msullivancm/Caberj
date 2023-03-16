@@ -64,7 +64,7 @@ User Function MSUSR01A(aEmp)
 	//GLPI 51809
 	If lSched // valida se é schedule - Mateus Medeiros - 31/08/18 -
 
-		conout("MSUSR01A - "+iif(cEmpAnt=='01','CABERJ','Integral'))
+		QOut("MSUSR01A - "+iif(cEmpAnt=='01','CABERJ','Integral'))
 		cEmpDe		:= mv_par01
 		cEmpAte		:= mv_par02
 		nIdadeMin	:= mv_par03
@@ -122,12 +122,12 @@ User Function MSUSR01B(aParSched)
 	RpcSetType(3)
 	RpcSetEnv(aParSched[1], aParSched[2],,,'PLS',,)
 
-	Conout("Processo de Criacao de usuarios no portal Mobile Saude - Empresa" + cEmpAnt + " - MSUSR01B - Iniciado" )
+	QOut("Processo de Criacao de usuarios no portal Mobile Saude - Empresa" + cEmpAnt + " - MSUSR01B - Iniciado" )
 
 	nH := PLSAbreSem("MSUSR01B" + aParSched[1] + ".SMF", .F.)
 
 	if nH == 0
-		Conout("MSUSR01B - Finalizado por trava no semaforo")
+		QOut("MSUSR01B - Finalizado por trava no semaforo")
 		RpcClearEnv()
 		return()
 	endif
@@ -135,7 +135,7 @@ User Function MSUSR01B(aParSched)
 	//MS01CRIA(.F.)
 	USUSCHED()
 
-	Conout("Processo de Criacao de usuarios no portal Mobile Saude - Empresa" + cEmpAnt + " - MSUSR01B - Finalizado")
+	QOut("Processo de Criacao de usuarios no portal Mobile Saude - Empresa" + cEmpAnt + " - MSUSR01B - Finalizado")
 
 	PLSFechaSem(nH, "SCH001.SMF")
 

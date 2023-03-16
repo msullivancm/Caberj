@@ -41,7 +41,7 @@ User Function CABA597()
 	Private	c_CobNiv:= ""
 	Private	n_Total := ""		
 	
-	conout( ":-) CABA597" )
+	QOut( ":-) CABA597" )
 	
 	aadd(a_Titulos, { 	"Enviado"				,;    
 						"Regra"				,;	
@@ -74,7 +74,7 @@ User Function CABA597()
 	
    	//ddatabase := stod('20180208')
 	
-	conout( ":-) " )		
+	QOut( ":-) " )		
 							
    //	c_Qry:= " SELECT  (TO_DATE('20180208','YYYYMMDD') - TO_DATE(E1_VENCREA,'YYYYMMDD')) DIAS, " + c_Eol
    	c_Qry:= " SELECT  DISTINCT ROUND( (SYSDATE ) - TO_DATE(E1_VENCREA,'YYYYMMDD')) DIAS, " + c_Eol
@@ -182,7 +182,7 @@ User Function CABA597()
 	
 	While !QRYCEL->( EOf() )   
 	
-		conout(":-) QRYCEL") 
+		QOut(":-) QRYCEL") 
 	
 		If QRYCEL->NUM_BO <> 0 .OR. QRYCEL->ZG_CODIGO <> ' ' .OR. Empty(QRYCEL->EMAIL)     
 		
@@ -402,7 +402,7 @@ Static Function fAvisa2(c_To, c_Dias, c_Nome, a_Dados, c_CobNiv )
 	
   //	Local c_Cco := "coimbra.marcela@gmail.com;esther_csm@hotmail.com;"  + c_To
 	
-	conout(":-) fAvisa2") 
+	QOut(":-) fAvisa2") 
 //c_To := "coimbra.marcela@gmail.com;esther_csm@hotmail.com;alanjpl@yahoo.com.br" 
 		
 
@@ -469,7 +469,7 @@ Static Function fAvisa1(c_To, a_Dados, n_Total, c_Nome, c_CobNiv )
 	Local c_Processo    := " "  
    //	Local c_Cco := "coimbra.marcela@gmail.com;esther_csm@hotmail.com;"  + c_To 
 	
-	conout(":-) fAvisa1") 
+	QOut(":-) fAvisa1") 
 	
 	
 	

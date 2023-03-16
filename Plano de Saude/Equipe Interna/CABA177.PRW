@@ -860,9 +860,9 @@ PREPARE ENVIRONMENT EMPRESA "02" FILIAL '0201'
 
  
 If !lMsErroAuto 
- ConOut("Tit. Baixado na integral , Com susseso 02 !!!! ") 
+ QOut("Tit. Baixado na integral , Com susseso 02 !!!! ") 
 Else 
- ConOut("A T E N Ç Ã O , Erro na Baixa!!!! , Avise a TI ") 
+ QOut("A T E N Ç Ã O , Erro na Baixa!!!! , Avise a TI ") 
  MostraErro()
 EndIf
 
@@ -1441,9 +1441,9 @@ aVetor:= {{"B1_COD" ,'PA01           ' ,NIL},;
 MSExecAuto({|x,y| Mata010(x,y)},aVetor,3)
 
 If !lMsErroAuto 
- ConOut("Produto incluído na empresa 99") 
+ QOut("Produto incluído na empresa 99") 
 Else 
- ConOut("Erro na inclusao!") 
+ QOut("Erro na inclusao!") 
  MostraErro()
 EndIf
 
@@ -1461,9 +1461,9 @@ PREPARE ENVIRONMENT EMPRESA "02" FILIAL '0201'
 MSExecAuto({|x,y| Mata010(x,y)},aVetor,3)
 
 If !lMsErroAuto 
- ConOut("Produto incluído na empresa 02 ") 
+ QOut("Produto incluído na empresa 02 ") 
 Else 
- ConOut("Erro na inclusao!") 
+ QOut("Erro na inclusao!") 
  MostraErro()
 EndIf
 

@@ -46,11 +46,11 @@ User Function CABA351()
 	
 	c_Dia := cvaltochar(dow(DATE()))
 
-	conout("CABA351 - INICIANDO ROTINA MUDANCA DE BLOQUEIO PARA DEFINITIVO " )
+	QOut("CABA351 - INICIANDO ROTINA MUDANCA DE BLOQUEIO PARA DEFINITIVO " )
 
 	f597Gera()
 
-	conout("CABA351 - FINALIZANDO ROTINA MUDANCA DE BLOQUEIO PARA DEFINITIVO " )
+	QOut("CABA351 - FINALIZANDO ROTINA MUDANCA DE BLOQUEIO PARA DEFINITIVO " )
 
 	RESET ENVIRONMENT
 
@@ -123,7 +123,7 @@ Static Function f597Gera()
 
 	ELSE
 
-		conout("CABA351 - VETOR VAZIO - NAO ENVIOU EMAIL" )
+		QOut("CABA351 - VETOR VAZIO - NAO ENVIOU EMAIL" )
 
 	EndIf
 
@@ -265,7 +265,7 @@ Static Function EnvEmail1( c_Dest, a_Vet, c_Assunto )
 	Local _lSendOk     := .F.
 	Local n_Cout	   := 0
 
-	conout("CABA351 - ENTRANDO NA ROTINA DE EMAIL" )
+	QOut("CABA351 - ENTRANDO NA ROTINA DE EMAIL" )
 
 	c_Mensagem := ' <table>'
 	c_Mensagem += ' <TR><TD>'
@@ -307,7 +307,7 @@ Static Function EnvEmail1( c_Dest, a_Vet, c_Assunto )
 
 		If l_Ok
 
-			conout("CABA351 - DISPARANDO EMAIL" )
+			QOut("CABA351 - DISPARANDO EMAIL" )
 			SEND MAIL From _cMailConta To _cTo  Subject _cAssunto Body c_Mensagem  Result _lSendOk
 
 		Else
@@ -325,10 +325,10 @@ Static Function EnvEmail1( c_Dest, a_Vet, c_Assunto )
 
 	ELSE
 
-		conout("CABA351 - _cMailServer E _cMailConta VAZIOS" )
+		QOut("CABA351 - _cMailServer E _cMailConta VAZIOS" )
 
 	EndIf
 
-	conout("CABA351 - SAINDO NA ROTINA DE EMAIL" )
+	QOut("CABA351 - SAINDO NA ROTINA DE EMAIL" )
 
 return()

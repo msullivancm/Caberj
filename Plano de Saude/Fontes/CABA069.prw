@@ -1717,7 +1717,7 @@ User Function CAB69ZZ(_cParam)
 
 		// Cria componente
 		oWebEngine := TWebEngine():New(oDlg, 0,0,aSize[3],aSize[5]/3.0,, nPort)
-		oWebEngine:bLoadFinished := {|self,url| conout("Termino da carga do pagina: " + url) }
+		oWebEngine:bLoadFinished := {|self,url| QOut("Termino da carga do pagina: " + url) }
 		oWebEngine:navigate("http://relatorios.caberj.com.br/Administrativo/Paineis/protocoloatend_beneficiario.asp?idCPF=" + BA1->BA1_CPFUSR + "")
 		oWebEngine:Align := CONTROL_ALIGN_ALLCLIENT
 
@@ -2212,7 +2212,7 @@ Static Function fGravaHist(cArea,cAreaAnterior,cCodSla)
 		nStatus := TCSqlExec(cUpd)
 
 		If (nStatus < 0)
-			conout("TCSQLError() " + TCSQLError())
+			QOut("TCSQLError() " + TCSQLError())
 		endif
 	Else
 
@@ -2741,7 +2741,7 @@ Static Function fSendMailCob(cArea,cMsg)
 	oServer:Init("", _cMailServer, _cMailConta, _cMailSenha)
 
 	If( (nErro := oServer:SmtpConnect()) != 0 )
-		conout( "Nao conectou.", oServer:GetErrorString( nErro ) )
+		QOut( "Nao conectou.", oServer:GetErrorString( nErro ) )
 		Aviso( "Nao conectou.",  oServer:GetErrorString( nErro ), { "Fechar" }, 2 )
 		Return
 	EndIf
@@ -2775,7 +2775,7 @@ Static Function fSendMailCob(cArea,cMsg)
 	nErro := oMessage:Send( oServer )
 	If( nErro != 0 )
 
-		conout( "Nao enviou o e-mail.", oServer:GetErrorString( nErro ) )
+		QOut( "Nao enviou o e-mail.", oServer:GetErrorString( nErro ) )
 		Aviso( "Nao enviou o e-mail.",  oServer:GetErrorString( nErro ), { "Fechar" }, 2 )
 		Return
 
@@ -2805,7 +2805,7 @@ Static Function fSendMailCob(cArea,cMsg)
 
 	nErro := oServer:SmtpDisconnect()
 	If( nErro != 0 )
-		conout( "Nao desconectou.", oServer:GetErrorString( nErro ) )
+		QOut( "Nao desconectou.", oServer:GetErrorString( nErro ) )
 		Aviso( "Nao desconectou.",  oServer:GetErrorString( nErro ), { "Fechar" }, 2 )
 		Return
 	EndIf
@@ -2929,7 +2929,7 @@ Static Function FGRAVVINC(cProt)
 		nStatus := TCSqlExec(cUpd)
 
 		If (nStatus < 0)
-			conout("TCSQLError() " + TCSQLError())
+			QOut("TCSQLError() " + TCSQLError())
 		Endif
 
 		cQueryZX := "SELECT * FROM " +RetSqlName("SZX") + " WHERE ZX_SEQ = '"+cProt+"'  AND D_E_L_E_T_ =' ' "

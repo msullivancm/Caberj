@@ -1214,7 +1214,7 @@ For nQ := 1 to Len(aArray1)  //Loop para gerar uma guia para cada ususario conti
 			
 			PLUPTENC(cAliasAux,K_Incluir)
 		//Else
-		//	CONOUT("Gravacao de itens nao implementada") //
+		//	QOut("Gravacao de itens nao implementada") //
 		//Endif
 	Next
 Next

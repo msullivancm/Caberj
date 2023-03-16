@@ -328,7 +328,7 @@ WSMETHOD lista_boletos WSRECEIVE _cChvBenf WSSEND _oRet WSSERVICE WS002
 	_cQuery += "	AND BA1.D_E_L_E_T_ 	= ' ' " + cEnt
 	_cQuery += "	AND BA3.D_E_L_E_T_ 	= ' ' " + cEnt
 	_cQuery += " ORDER BY 1, 13 " + cEnt //Ordenando por: Matricula e Data de Vencimento.
-	//CONOuT(_cQuery)
+	//QOut(_cQuery)
 	If Select(_cAlias1) > 0
 		(_cAlias1)->(DbCloseArea())
 	EndIf
@@ -426,9 +426,9 @@ WSMETHOD lista_boletos WSRECEIVE _cChvBenf WSSEND _oRet WSSERVICE WS002
 			oTemp:_dDtEmis	:= (_cAlias1)->(E1_EMISSAO) //Data de emissão do boleto Formato: yyyy-MM-dd
 			oTemp:_dDtVenc	:= (_cAlias1)->(E1_VENCREA) //Data de vencimento do boleto Formato: yyyy-MM-dd
 
-		/*	conout("Data de Vencimento Real: "+cvaltochar((_cAlias1)->(E1_VENCREA)))
-			conout("Data de Vencimento Real: "+cvaltochar(dDatabase))
-			conout(IIF((_cAlias1)->(E1_VENCREA) <= dDatabase,"P","A"))*/
+		/*	QOut("Data de Vencimento Real: "+cvaltochar((_cAlias1)->(E1_VENCREA)))
+			QOut("Data de Vencimento Real: "+cvaltochar(dDatabase))
+			QOut(IIF((_cAlias1)->(E1_VENCREA) <= dDatabase,"P","A"))*/
 			oTemp:_cSituac	:= IIF((_cAlias1)->(E1_VENCREA) >= dDatabase,"P","A") //P = A Vencer (em aberto porém ainda não está vencido) || A = Atrasado (em aberto, porém já vencido)
 			oTemp:_cTpCobr	:= _cTipPag
 			oTemp:_nValor	:= (_cAlias1)->(E1_VALOR)

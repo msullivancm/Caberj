@@ -78,7 +78,7 @@ Static Function RunCont
 Local nTamFile, nTamLin, cBuffer, nBtLidos, inserir  
 Private aLista := {}
 
-conout("runcont")
+QOut("runcont")
 
 nTamFile := fSeek(nHdl,0,2)
 fSeek(nHdl,0,0)
@@ -216,6 +216,6 @@ Static Function fEnvMail
 
    DISCONNECT SMTP SERVER
    
-   Conout(cErrorMsg)
+   QOut(cErrorMsg)
 
 Return

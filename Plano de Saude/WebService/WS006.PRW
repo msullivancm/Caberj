@@ -322,7 +322,7 @@ WSMETHOD extrato_utilizacao WSRECEIVE _cChvBenf, _cChvEmpr, _cAno, _cMes  WSSEND
 			_cQuery += "	AND BA1.BA1_TIPREG = SUBSTR('" + _cChvBenf + "',15,2)									" + cEnt
 			_cQuery += "	AND BA1.BA1_DIGITO = SUBSTR('" + _cChvBenf + "',17,1)									" + cEnt
 
-			//CONOUT(_cQuery)
+			//QOut(_cQuery)
 
 			If Select(_cAlias2) > 0
 				(_cAlias2)->(DbCloseArea())
@@ -470,7 +470,7 @@ WSMETHOD extrato_utilizacao WSRECEIVE _cChvBenf, _cChvEmpr, _cAno, _cMes  WSSEND
 				_cQuery += " 	AND BAU.D_E_L_E_T_ 	= ' '																										" + cEnt
 				_cQuery += " GROUP BY BD6.BD6_OPEUSR||BD6.BD6_CODEMP||BD6.BD6_MATRIC||BD6.BD6_TIPREG||BD6.BD6_DIGITO , NVL(TRIM(BD6.BD6_NOMUSR),BA1_NOMUSR)		" + cEnt
 
-				//CONOUT(_cQuery)
+				//QOut(_cQuery)
 
 				If Select(_cAlias3) > 0
 					(_cAlias3)->(DbCloseArea())
@@ -621,7 +621,7 @@ WSMETHOD extrato_utilizacao WSRECEIVE _cChvBenf, _cChvEmpr, _cAno, _cMes  WSSEND
 						_cQuery += " 	AND BAU.D_E_L_E_T_  = ' '																										" + cEnt
 						_cQuery += " 	AND ZZT.D_E_L_E_T_  = ' '																										" + cEnt
 
-						//CONOUT(_cQuery)
+						//QOut(_cQuery)
 
 						If Select(_cAlias4) > 0
 							(_cAlias4)->(DbCloseArea())

@@ -500,7 +500,7 @@ While ! TRBBA3->(Eof())
 	aVlrCO := aClone(aVlrFam[3])
 	
 	If  Type('aValor') <> "A"
-		CONOUT("[SIGAPLS] Retorno da funcao PLSVLRFAM invalida matricula "+BA3->(BA3_CODINT+BA3_CODEMP+BA3_MATRIC))
+		QOut("[SIGAPLS] Retorno da funcao PLSVLRFAM invalida matricula "+BA3->(BA3_CODINT+BA3_CODEMP+BA3_MATRIC))
 		TRBBA3->(DbSkip())
 		Loop
 	Endif

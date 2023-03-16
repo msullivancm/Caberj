@@ -43,7 +43,7 @@ If IsInCallStack('PLSPEGBATH')
 	
 	c_Amb 		:= AllTrim(Upper(GetEnvServer()))
 	
-	ConOut('- Ponto de entrada: [ PLNEGMFAS ]: Monitorar Mudança de fase em LOTE: Empresa [ ' + cEmpAnt + ' ] Ambiente [ ' + c_Amb + ' ] Alias [ ' + BCL->BCL_ALIAS + ' ] Chave [ ' + BCI->(BCI_CODLDP + BCI_CODPEG) + ' ]')
+	QOut('- Ponto de entrada: [ PLNEGMFAS ]: Monitorar Mudança de fase em LOTE: Empresa [ ' + cEmpAnt + ' ] Ambiente [ ' + c_Amb + ' ] Alias [ ' + BCL->BCL_ALIAS + ' ] Chave [ ' + BCI->(BCI_CODLDP + BCI_CODPEG) + ' ]')
 		
 EndIf
 

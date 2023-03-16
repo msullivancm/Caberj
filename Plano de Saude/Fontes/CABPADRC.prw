@@ -656,7 +656,7 @@ If nOperation == MODEL_OPERATION_INSERT .Or. nOperation == MODEL_OPERATION_UPDAT
 						oGEN:GetDadReg(cAIte,1, xFilial(cAIte)+cGuiaSadt,,,.F. )
 						oGEN:GetDadReg(cACri,1, xFilial(cACri)+cGuiaSadt,,,.F. )
 					Else
-						CoNout("Integridade, Não foi possível encontrar o BEA com base no BE4 chave [" + B53->B53_NUMGUI + "]")	 //"Integridade, Não foi possível encontrar o BEA com base no BE4 chave ["
+						QOut("Integridade, Não foi possível encontrar o BEA com base no BE4 chave [" + B53->B53_NUMGUI + "]")	 //"Integridade, Não foi possível encontrar o BEA com base no BE4 chave ["
 					EndIf   
 					oGEN:Destroy()
 				EndIf

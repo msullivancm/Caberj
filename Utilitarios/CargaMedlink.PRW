@@ -52,7 +52,7 @@ Private lSchedule	:= If(empty(aSchedule),.F.,aSchedule[1][1])
 nFTP := 2//Medlink
 
 If lSchedule
-	ConOut(&cDataHora + ' - Preparando ambiente')   
+	QOut(&cDataHora + ' - Preparando ambiente')   
 
 	//Na query da procedure considera a Caberj e a Integral
 	PREPARE ENVIRONMENT EMPRESA "01" FILIAL "01"
@@ -118,7 +118,7 @@ If !lSchedule
 	Next
 EndIf
 
-ConOut('OPERATIVA - ' + DtoC(Date()) + ' ' + Time() + ' Iniciando carga em paralelo com carga MEDLINK [ U_exCarOper ] - [ ' + AllTrim(Upper(GetEnvServer())) + ' ]')
+QOut('OPERATIVA - ' + DtoC(Date()) + ' ' + Time() + ' Iniciando carga em paralelo com carga MEDLINK [ U_exCarOper ] - [ ' + AllTrim(Upper(GetEnvServer())) + ' ]')
 
 //Inicializa as variaveis
 PutGlbValue('ThreadOperativa', "INICIADO" )
@@ -131,7 +131,7 @@ GlbUnLock()
 //Paralelismo
 StartJob('U_exCarOper', AllTrim(Upper(GetEnvServer())), .F., cEmpAnt,lSchedule)//StartJob( cADVPLFun , cEnvironment , lWaitRun , < [param1, …paramN] > )
            
-ConOut('MEDLINK - ' + DtoC(Date()) + ' ' + Time() + ' Iniciando carga em paralelo com carga OPERATIVA [ U_exCarMed ] - [ ' + AllTrim(Upper(GetEnvServer())) + ' ]')
+QOut('MEDLINK - ' + DtoC(Date()) + ' ' + Time() + ' Iniciando carga em paralelo com carga OPERATIVA [ U_exCarMed ] - [ ' + AllTrim(Upper(GetEnvServer())) + ' ]')
 
 //Inicializa as variaveis
 PutGlbValue('ThreadMedlink', "INICIADO" )
@@ -216,7 +216,7 @@ RpcSetEnv(cEmp,,,,'PLS')
 
 Private cDataHora	:= "'MEDLINK - ' + DtoC(Date()) + ' ' + Time()"
 
-ConOut(&cDataHora + ' - ThreadMedlink [ ' + GetGlbValue('ThreadMedlink') + ' ]')
+QOut(&cDataHora + ' - ThreadMedlink [ ' + GetGlbValue('ThreadMedlink') + ' ]')
 
 Private cNomeArq	:= "MEDLINK_CARGA_GrupoCaberj_" + DtoS(Date()) + ".txt" //Nome que a Procedure gera para o arquivo de carga
 Private cArq		:= cPath + cNomeArq 
@@ -224,7 +224,7 @@ Private cArqTmp		:= "\\srvdbp\backup\" + cNomeArq  // motta 19/5/14 alteracao do
 Private cArqDest 	:= cPath + left(cNomeArq,len(cNomeArq) - 4) + ".zip"
 Private nFTP 		:= 2//Medlink
 
-ConOut(&cDataHora + ' - Iniciando carga')   
+QOut(&cDataHora + ' - Iniciando carga')   
 
 PutGlbValue('TMedlinkStatus',&cDataHora + ' - Iniciando carga')
 GlbUnLock()
@@ -270,7 +270,7 @@ Else
 	cQuery := "END;"
 EndIf					
 
-ConOut(&cDataHora + ' - Executando procedure...') 
+QOut(&cDataHora + ' - Executando procedure...') 
 
 PutGlbValue('TMedlinkStatus',&cDataHora + ' - Executando procedure...')
 GlbUnLock()
@@ -278,7 +278,7 @@ GlbUnLock()
 If TcSqlExec(cQuery) <> 0
 	
 	cErro := &cDataHora + " - Erro na execução da procedure " + CRLF + Space(3) + cQuery + CRLF + Space(3) + 'TcSqlError [ ' + TcSqlError() + ' ]'
-	ConOut(cErro) 
+	QOut(cErro) 
 	lOk := .F.
 	
 	PutGlbValue('TMedlinkStatus',cErro)
@@ -286,19 +286,19 @@ If TcSqlExec(cQuery) <> 0
 
 EndIf
 
-ConOut(&cDataHora + ' - Fim procedure...')
+QOut(&cDataHora + ' - Fim procedure...')
 
 If lOk
     
 	If !File(cArq)
 		lOk := .F.
 		cErro := &cDataHora + " - Arquivo de carga Medlink (" + cArq + ") não foi encontrado!"
-		ConOut(cErro)    
+		QOut(cErro)    
 		
 		PutGlbValue('TMedlinkStatus',cErro)
 		GlbUnLock()
 	Else                                                       
-		ConOut(&cDataHora + " - Movendo o arquivo " + cArq + " para " + cArqTmp)
+		QOut(&cDataHora + " - Movendo o arquivo " + cArq + " para " + cArqTmp)
 
 		PutGlbValue('TMedlinkStatus',&cDataHora + " - Movendo o arquivo " + cArq + " para " + cArqTmp)
 		GlbUnLock()
@@ -306,14 +306,14 @@ If lOk
 		If !MoveFile(cArq,cArqTmp,.F.)
 			lOk := .F.
 			cErro := &cDataHora + " - Não foi possível copiar o arquivo: " + cArq + " para " + cArqTmp + "!"
-			ConOut(cErro)
+			QOut(cErro)
 
 			PutGlbValue('TMedlinkStatus',cErro)
 			GlbUnLock()
 		EndIf
 		
 		If lOk
-			ConOut(&cDataHora + ' - Compactando arquivo...')
+			QOut(&cDataHora + ' - Compactando arquivo...')
 			
 			PutGlbValue('TMedlinkStatus',&cDataHora + ' - Compactando arquivo...')
 			GlbUnLock()			         
@@ -321,7 +321,7 @@ If lOk
 			If !File(cWinRar)
 				lOk := .F.
 				cErro := &cDataHora + " - Programa compactador WinRar não encontrado no caminho " + cWinRar + "!"
-				ConOut(cErro)
+				QOut(cErro)
 
 				PutGlbValue('TMedlinkStatus',cErro)
 				GlbUnLock()
@@ -345,14 +345,14 @@ If lOk
 				//Leonardo Portella - 29/11/13 - Fim
 				
 				If lResWait
-					ConOut(&cDataHora + " - Resultado WaitRunSrv: Realizado com sucesso!")
+					QOut(&cDataHora + " - Resultado WaitRunSrv: Realizado com sucesso!")
 
 					PutGlbValue('TMedlinkStatus',&cDataHora + " - Resultado WaitRunSrv: Realizado com sucesso!")
 					GlbUnLock()
 				Else
 					lOk := .F.
 					cErro := &cDataHora + " - Resultado WaitRunSrv: Erro na execução da compactação..."
-					ConOut(cErro)
+					QOut(cErro)
 
 					PutGlbValue('TMedlinkStatus',cErro)
 					GlbUnLock()
@@ -363,13 +363,13 @@ If lOk
 				If lOk .and. !File(cArqDest) 
 					lOk := .F.
 					cErro := &cDataHora + " - Arquivo de carga Medlink COMPACTADO (" + cArqDest + ") não foi encontrado!"
-					ConOut(cErro)
+					QOut(cErro)
 					
 					PutGlbValue('TMedlinkStatus',cErro)
 					GlbUnLock()
 				ElseIf lOk 
 
-					ConOut(&cDataHora + " - Início do Upload Medlink.")    
+					QOut(&cDataHora + " - Início do Upload Medlink.")    
 					
 					PutGlbValue('TMedlinkStatus',&cDataHora + " - Início do Upload Medlink.")
 					GlbUnLock()
@@ -379,13 +379,13 @@ If lOk
 					If !aRet[1]
 						lOk		:= .F.
 						cErro 	:= &cDataHora + " - " + aRet[2]
-						ConOut(cErro) 
+						QOut(cErro) 
 						
 						PutGlbValue('TMedlinkStatus',cErro)
 						GlbUnLock()
 					Else
 						FErase(cArqDest)
-						ConOut(&cDataHora + " - Término do Upload Medlink.")      
+						QOut(&cDataHora + " - Término do Upload Medlink.")      
 						
 						PutGlbValue('TMedlinkStatus',&cDataHora + " - Término do Upload Medlink.")
 						GlbUnLock()
@@ -402,12 +402,12 @@ If lOk
 aMail := EnviaMail(lOk,cErro,'Medlink',lSchedule)
 
 If !aMail[1]
-	ConOut(&cDataHora + " - Erro ao enviar o e-mail de confirmação carga Medlink : " + aMail[2])
+	QOut(&cDataHora + " - Erro ao enviar o e-mail de confirmação carga Medlink : " + aMail[2])
 
 	PutGlbValue('TMedlinkStatus',&cDataHora + " - Erro ao enviar o e-mail de confirmação carga Medlink : " + aMail[2])
 	GlbUnLock()
 Else  
-	ConOut(&cDataHora + " - E-mail de confirmação carga Medlink enviado.")    
+	QOut(&cDataHora + " - E-mail de confirmação carga Medlink enviado.")    
 	
 	PutGlbValue('TMedlinkStatus',&cDataHora + " - E-mail de confirmação carga Medlink enviado.")
 	GlbUnLock()
@@ -415,7 +415,7 @@ EndIf
        
 cMsg := &cDataHora + If(lOk,' - Carga Medlink efetuada com sucesso!',' - Ocorreram erros na carga Medlink...' + CRLF + CRLF + cErro)  
 
-ConOut(cMsg)
+QOut(cMsg)
 
 PutGlbValue('TMedlinkStatus',cMsg)
 GlbUnLock()
@@ -428,7 +428,7 @@ Else
 	GlbUnLock()   
 EndIf
 
-ConOut(&cDataHora + ' - ThreadMedlink [ ' + GetGlbValue('ThreadMedlink') + ' ]')
+QOut(&cDataHora + ' - ThreadMedlink [ ' + GetGlbValue('ThreadMedlink') + ' ]')
 
 Return
 
@@ -445,7 +445,7 @@ RpcSetEnv(cEmp,,,,'PLS')
 
 Private cDataHora	:= "'OPERATIVA - ' + DtoC(Date()) + ' ' + Time()"
 
-ConOut(&cDataHora + ' - ThreadOperativa [ ' + GetGlbValue('ThreadOperativa') + ' ]')
+QOut(&cDataHora + ' - ThreadOperativa [ ' + GetGlbValue('ThreadOperativa') + ' ]')
 
 Private cNomeArq	:= "OPERATIVA_CARGA_GrupoCaberj_" + DtoS(Date()) + ".txt" //Nome que a Procedure gera para o arquivo de carga
 Private cArq		:= cPath + cNomeArq 
@@ -453,7 +453,7 @@ Private cArqTmp		:= "\\srvdbp\backup\" + cNomeArq  // motta 19/5/14  lteracao do
 Private cArqDest 	:= cPath + left(cNomeArq,len(cNomeArq) - 4) + ".zip"
 Private nFTP 		:= 1 //Operativa - Ricardo Azevedo em ferias da Aline, a carga OPERATIVA tambem sera feita no FTP Caberj - e-mail Em 08/02/2013 14:43  
 
-ConOut(&cDataHora + ' - Iniciando carga')   
+QOut(&cDataHora + ' - Iniciando carga')   
 
 PutGlbValue('TOperativaStatus',&cDataHora + ' - Iniciando carga')
 GlbUnLock()
@@ -464,7 +464,7 @@ cQuery += 'BEGIN '
 cQuery += 'GERA_ARQUIVOS_OPERATIVA(PSAIDA); '
 cQuery += 'END; '						
 
-ConOut(&cDataHora + ' - Executando procedure...')   
+QOut(&cDataHora + ' - Executando procedure...')   
 
 PutGlbValue('TOperativaStatus',&cDataHora + ' - Executando procedure...')
 GlbUnLock()
@@ -472,7 +472,7 @@ GlbUnLock()
 If TcSqlExec(cQuery) <> 0
 	
 	cErro := &cDataHora + " - Erro na execução da procedure " + CRLF + Space(3) + cQuery + CRLF + Space(3) + 'TcSqlError [ ' + TcSqlError() + ' ]'
-	ConOut(cErro) 
+	QOut(cErro) 
 	lOk := .F. 
 	
 	PutGlbValue('TOperativaStatus',cErro)
@@ -480,7 +480,7 @@ If TcSqlExec(cQuery) <> 0
 
 EndIf
 
-ConOut(&cDataHora + ' - Fim procedure...')   
+QOut(&cDataHora + ' - Fim procedure...')   
 
 PutGlbValue('TOperativaStatus',&cDataHora + ' - Fim procedure...')
 GlbUnLock()
@@ -490,12 +490,12 @@ If lOk
 	If !File(cArq)
 		lOk := .F.
 		cErro := &cDataHora + " - Arquivo de carga Operativa (" + cArq + ") não foi encontrado!"
-		ConOut(cErro)   
+		QOut(cErro)   
 		
 		PutGlbValue('TOperativaStatus',cErro)
 		GlbUnLock()
 	Else                                                       
-		ConOut(&cDataHora + " - Movendo o arquivo " + cArq + " para " + cArqTmp)
+		QOut(&cDataHora + " - Movendo o arquivo " + cArq + " para " + cArqTmp)
 		 
 		PutGlbValue('TOperativaStatus',&cDataHora + " - Movendo o arquivo " + cArq + " para " + cArqTmp)
 		GlbUnLock()
@@ -503,7 +503,7 @@ If lOk
 		If !MoveFile(cArq,cArqTmp,.F.)
 			lOk := .F.
 			cErro := &cDataHora + " - Não foi possível copiar o arquivo: " + cArq + " para " + cArqTmp + "!"
-			ConOut(cErro)
+			QOut(cErro)
 			
 			PutGlbValue('TOperativaStatus',cErro)
 			GlbUnLock()
@@ -511,7 +511,7 @@ If lOk
 		
 		If lOk
 			
-			ConOut(&cDataHora + ' - Compactando arquivo...')
+			QOut(&cDataHora + ' - Compactando arquivo...')
 
 			PutGlbValue('TOperativaStatus',&cDataHora + ' - Compactando arquivo...')
 			GlbUnLock()
@@ -519,7 +519,7 @@ If lOk
 			If !File(cWinRar)
 				lOk := .F.
 				cErro := &cDataHora + " - Programa compactador WinRar não encontrado no caminho " + cWinRar + "!"
-				ConOut(cErro)
+				QOut(cErro)
 
 				PutGlbValue('TOperativaStatus',cErro)
 				GlbUnLock()
@@ -542,14 +542,14 @@ If lOk
 				lResWait := WaitRunSrv( cWinRar + ' a "' + cArqDest + '" "' + cArqTmp + '"' , .T. , "\\"+AllTrim(GetMv("MV_XSRVTOP"))+"\Protheus_Data\" )     
 
 				If lResWait
-					ConOut(&cDataHora + " - Resultado WaitRunSrv: Realizado com sucesso!")
+					QOut(&cDataHora + " - Resultado WaitRunSrv: Realizado com sucesso!")
 					
 					PutGlbValue('TOperativaStatus',cErro)
 					GlbUnLock()
 				Else
 					lOk := .F.
 					cErro := &cDataHora + " - Resultado WaitRunSrv: Erro na execução da compactação..."
-					ConOut(cErro)
+					QOut(cErro)
 
 					PutGlbValue('TOperativaStatus',cErro)
 					GlbUnLock()
@@ -560,26 +560,26 @@ If lOk
 				If lOk .and. !File(cArqDest) 
 					lOk := .F.
 					cErro := &cDataHora + " - Arquivo de carga Operativa COMPACTADO (" + cArqDest + ") não foi encontrado!"
-					ConOut(cErro)
+					QOut(cErro)
 
 					PutGlbValue('TOperativaStatus',cErro)
 					GlbUnLock()
 				ElseIf lOk                  
 				
-					ConOut(&cDataHora + " - Início do Upload Operativa.") 
+					QOut(&cDataHora + " - Início do Upload Operativa.") 
 					
 					aRet := UploadFTP(cArqDest)
 					
 					If !aRet[1]
 						lOk		:= .F.
 						cErro 	:= &cDataHora + " - " + aRet[2]
-						ConOut(cErro)
+						QOut(cErro)
 
 						PutGlbValue('TOperativaStatus',cErro)
 						GlbUnLock()
 					Else
 						FErase(cArqDest)
-						ConOut(&cDataHora + " - Término do Upload Operativa.")
+						QOut(&cDataHora + " - Término do Upload Operativa.")
 
 						PutGlbValue('TOperativaStatus',&cDataHora + " - Término do Upload Operativa.")
 						GlbUnLock()
@@ -596,12 +596,12 @@ EndIf
 aMail := EnviaMail(lOk,cErro,'Operativa',lSchedule)
 
 If !aMail[1]
-	ConOut(&cDataHora + " - Erro ao enviar o e-mail de confirmação carga Operativa : " + aMail[2])
+	QOut(&cDataHora + " - Erro ao enviar o e-mail de confirmação carga Operativa : " + aMail[2])
 
 	PutGlbValue('TOperativaStatus',&cDataHora + " - Erro ao enviar o e-mail de confirmação carga Operativa : " + aMail[2])
 	GlbUnLock()
 Else  
-	ConOut(&cDataHora + " - E-mail de confirmação carga Operativa enviado.")
+	QOut(&cDataHora + " - E-mail de confirmação carga Operativa enviado.")
 
 	PutGlbValue('TOperativaStatus',&cDataHora + " - E-mail de confirmação carga Operativa enviado.")
 	GlbUnLock()
@@ -610,7 +610,7 @@ EndIf
 PutGlbValue('ThreadOperativa', "FINALIZADO")
 GlbUnLock()  
 
-ConOut(&cDataHora + ' - ThreadOperativa [ ' + GetGlbValue('ThreadOperativa') + ' ]')
+QOut(&cDataHora + ' - ThreadOperativa [ ' + GetGlbValue('ThreadOperativa') + ' ]')
 
 Return
 
@@ -685,7 +685,7 @@ If lRet
 
 	If nFTP == 1 
 	        
-		ConOut('Operativa - Diretorio atual [ ' + FtpGetCurDir() + ' ] ')
+		QOut('Operativa - Diretorio atual [ ' + FtpGetCurDir() + ' ] ')
 			
 		aPasta 		:= Separa(cPastaDes,'\',.F.) 
 		cNovoCam	:= ''
@@ -697,7 +697,7 @@ If lRet
 			If !FTPDirChange(cNovoCam)
 				lRet 	:= .F.
 				cLog 	:= 'Não foi possível mudar para o diretorio [ ' + cNovoCam + ' ] - Diretorio atual [ ' + FtpGetCurDir() + ' ] - Diretório destino [ ' + cPastaBus + ' ] [ ' + cEmpresa + ' ]'
-				ConOut(cLog)
+				QOut(cLog)
 				exit
 			EndIf
 
@@ -708,12 +708,12 @@ If lRet
 			aInfoFTP 	:= FTPDirectory("*.zip")
         
 			If len(aInfoFTP) == 0
-				ConOut('Operativa - Nenhum arquivo a ser deletado no FTP [ ' + cServidor + ' ] - Diretorio atual [ ' + FtpGetCurDir() + ' ] ')		
+				QOut('Operativa - Nenhum arquivo a ser deletado no FTP [ ' + cServidor + ' ] - Diretorio atual [ ' + FtpGetCurDir() + ' ] ')		
 			Else
 				//Operativa - Deleto todos os arquivos
 				For nI := 1 to len(aInfoFTP)
 					FTPERASE(cPastaDes + aInfoFTP[nI][1])
-					ConOut('Operativa - Arquivo deletado: ' + aInfoFTP[nI][1] + ' [ ' + cServidor + ' ]')
+					QOut('Operativa - Arquivo deletado: ' + aInfoFTP[nI][1] + ' [ ' + cServidor + ' ]')
 			  	Next
 			EndIf
 		EndIf
@@ -723,7 +723,7 @@ If lRet
 	//Else
 	ElseIf nFTP == 2
 	        
-		ConOut('Medlink - Diretorio atual [ ' + FtpGetCurDir() + ' ] ')
+		QOut('Medlink - Diretorio atual [ ' + FtpGetCurDir() + ' ] ')
 			
 		aPasta 		:= Separa(cPastaDes,'\',.F.) 
 		cNovoCam	:= ''
@@ -735,7 +735,7 @@ If lRet
 			If !FTPDirChange(cNovoCam)
 				lRet 	:= .F.
 				cLog 	:= 'Não foi possível mudar para o diretorio [ ' + cNovoCam + ' ] - Diretorio atual [ ' + FtpGetCurDir() + ' ] - Diretório destino [ ' + cPastaBus + ' ] [ ' + cEmpresa + ' ]'
-				ConOut(cLog)
+				QOut(cLog)
 				exit
 			EndIf
 
@@ -943,7 +943,7 @@ User Function TSTSCH
 Local nI := 0
 
 For nI := 1 to 10
-	Conout('Teste schedule')
+	QOut('Teste schedule')
 Next
 
 Return

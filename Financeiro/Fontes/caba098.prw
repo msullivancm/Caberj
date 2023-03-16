@@ -509,7 +509,7 @@ User Function CABA098e(lSchedule)
 
 	Default lSchedule 	:= .T.
 	
-	conout("INÍCIO PROCESSAMENTO - SCHEDULE CABA611 - "+Time())
+	QOut("INÍCIO PROCESSAMENTO - SCHEDULE CABA611 - "+Time())
 
 	******************************************
 	*'Executa a busca pelos anexos das guias'*
@@ -517,7 +517,7 @@ User Function CABA098e(lSchedule)
 	execAnexo(lSchedule/*,aEmpresas[nX]*/)
 	******************************************
 
-	conout("FIM PROCESSAMENTO - SCHEDULE CABA611 - "+Time())
+	QOut("FIM PROCESSAMENTO - SCHEDULE CABA611 - "+Time())
 	
 Return
 
@@ -534,10 +534,10 @@ Static Function execAnexo(lSchedule)
 	// Query buscar as informações dos arquivo  
 	if cEmpAnt == '01'
 		cRegAns := '324361'
-		conout("INÍCIO PROCESSAMENTO - SCHEDULE CABA098E - CABERJ - "+Time())
+		QOut("INÍCIO PROCESSAMENTO - SCHEDULE CABA098E - CABERJ - "+Time())
 	else	
 		 cRegAns :=  '415774'		
-		 conout("INÍCIO PROCESSAMENTO - SCHEDULE CABA098E - INTEGRAL - "+Time())
+		 QOut("INÍCIO PROCESSAMENTO - SCHEDULE CABA098E - INTEGRAL - "+Time())
 	endif 
 	
 
@@ -578,9 +578,9 @@ Static Function execAnexo(lSchedule)
 			cQuery += "END;" + CRLF
 
 			If TcSqlExec(cQuery) <> 0	
-				conout("Atenção","Erro na execuçao do envio de boletos.")   
+				QOut("Atenção","Erro na execuçao do envio de boletos.")   
 			Else                 
-				conout("Atenção","Execução de envio de boleto finalizada.") 
+				QOut("Atenção","Execução de envio de boleto finalizada.") 
 			EndIf  
 
 		Endif
@@ -745,9 +745,9 @@ User Function CABA098G()
 
 
 	If TcSqlExec(cQuery) <> 0	
-		conout("Atenção","Erro na execuçao da geração da Prévia.")   
+		QOut("Atenção","Erro na execuçao da geração da Prévia.")   
 	Else                 
-		conout("Atenção","Execução de envio de boleto finalizada.") 
+		QOut("Atenção","Execução de envio de boleto finalizada.") 
 	EndIf  
 
 	//******************** Busca as previas geradas para exportar arquivo ****************************************************

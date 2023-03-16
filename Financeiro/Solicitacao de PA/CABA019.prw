@@ -302,24 +302,24 @@ If nOper == 4 //Aprovacao do documento
 	//³ Atualiza o saldo do aprovador. 	                ³
 	//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
 
-	conout( " :o) 1 " )
+	QOut( " :o) 1 " )
 	dbSelectArea("SAK")
 	dbSetOrder(2)
 	dbSeek(xFilial()+cAprov)
-	conout( " :o)  APROV-->" + cAprov )
+	QOut( " :o)  APROV-->" + cAprov )
 	
 	
-	conout( " :o)  gRUPO-->" + cGrupo )   
-	conout( " :o)  num sp-->" + SCR->CR_NUM )
+	QOut( " :o)  gRUPO-->" + cGrupo )   
+	QOut( " :o)  num sp-->" + SCR->CR_NUM )
 	
 	dbSelectArea("SAL")
 	dbSetOrder(3)
 	if 	dbSeek(xFilial()+cGrupo+SAK->AK_COD)
-			conout( " :o) 2 " )
+			QOut( " :o) 2 " )
 		cAuxNivel:= SAL->AL_NIVEL
 	
 	endIf
-	conout(cAuxNivel)
+	QOut(cAuxNivel)
 	//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
 	//³ Libera o pedido pelo aprovador.                     ³
 	//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
@@ -330,13 +330,13 @@ If nOper == 4 //Aprovacao do documento
 	
 	If !ValidNiv( SCR->CR_NUM, SCR->CR_NIVEL )  
 
-		conout( " EXISTEM NIVEIS INFERIORES QUE NAO FORAM APROVADOS-->" + SCR->CR_NIVEL )  
+		QOut( " EXISTEM NIVEIS INFERIORES QUE NAO FORAM APROVADOS-->" + SCR->CR_NIVEL )  
         l_Niv := .F.      
         lRetorno := .F.
 		
 	Else
 		
-	conout( " PASSOU AKI-->" + SCR->CR_NIVEL ) 
+	QOut( " PASSOU AKI-->" + SCR->CR_NIVEL ) 
 		Reclock("SCR",.F.)
 		CR_STATUS	:= "03"
 		CR_OBS		:= If(Len(aDocto)>10,aDocto[11],"")
@@ -350,26 +350,26 @@ If nOper == 4 //Aprovacao do documento
 		MsUnlock()
 			
 		nRec := SCR->(RecNo())
-			conout( " :o) loop dcr " )    
+			QOut( " :o) loop dcr " )    
 			dbSelectArea("SCR")
 			dbSetOrder(1)
 			dbSeek( xFilial("SCR")+ "PA" + cDocto )
 	 	While !Eof() .And. xFilial("SCR")+ "PA" + cDocto+cTipoDoc == CR_FILIAL+ "PA" + CR_NUM+CR_TIPO
-	 		conout( " :o) 1 " )
+	 		QOut( " :o) 1 " )
 			If cAuxNivel == CR_NIVEL .And. CR_STATUS != "16" .And. SAL->AL_TPLIBER$"U "
-				conout( " :o) 2 " )
+				QOut( " :o) 2 " )
 				Exit
 			EndIf
-		conout( " :o) 3 " )
+		QOut( " :o) 3 " )
 			if _lExcNivel .and. SAK->AK_USER == SCR->CR_USER .and. SCR->CR_STATUS $ "01#02" .and. CR_NIVEL >= cAuxNivel
-		conout( " :o) 4 " )
+		QOut( " :o) 4 " )
 				Reclock("SCR",.F.)
 				SCR->(dbdelete())
 				MsUnlock()
 			endif
-				conout( " :o) 5 " )
+				QOut( " :o) 5 " )
 				If __cUserId $ GetMv("MV_XAPROSB")  .AND. cAuxNivel > '01' 
-				conout( " :o) 6 " )
+				QOut( " :o) 6 " )
 					Reclock("SCR",.F.)
 	
 						CR_STATUS	:= "05"
@@ -385,9 +385,9 @@ If nOper == 4 //Aprovacao do documento
 				
 				EndIf
 			
-				conout( " :o) 7 " )
+				QOut( " :o) 7 " )
 			if ( cAuxNivel == SCR->CR_NIVEL .And. SCR->CR_STATUS != "03" .And. SAL->AL_TPLIBER$"NP" .and. Empty( SCR->CR_DATALIB ) )
-				conout( " :o) 8 " )
+				QOut( " :o) 8 " )
 				Reclock("SCR",.F.)
 				CR_STATUS	:= "05"
 				CR_DATALIB	:= dDataBase
@@ -396,28 +396,28 @@ If nOper == 4 //Aprovacao do documento
 				//CR_APROV	:= cAprov
 				MsUnlock()
 			EndIf
-		conout( " :o) 9" )
+		QOut( " :o) 9" )
 			If CR_NIVEL > cAuxNivel .And. CR_STATUS != "03" .And. !lAchou
-		conout( " :o) 10 " )
+		QOut( " :o) 10 " )
 				lAchou 	:= .T.
 				cNextNiv := CR_NIVEL
 			EndIf
 			
-			conout( " :o) *** " + iif(lAchou, ".t.", ".f." ) + "CR_NIVEL - " + CR_NIVEL + "; cNextNiv = " + cNextNiv + "; CR_STATUS - " + CR_STATUS )
+			QOut( " :o) *** " + iif(lAchou, ".t.", ".f." ) + "CR_NIVEL - " + CR_NIVEL + "; cNextNiv = " + cNextNiv + "; CR_STATUS - " + CR_STATUS )
 			
 			If lAchou .And. CR_NIVEL == cNextNiv .And. CR_STATUS != "03"
-				conout( " :o) 11 " )
+				QOut( " :o) 11 " )
 				Reclock("SCR",.F.)
 				CR_STATUS	:= "02"
 				IF (SAL->AL_TPLIBER=="P" .AND. !lTimeOut  .and. Empty( SAK->AK_USER ))
-					conout( " :o) 12 " )
+					QOut( " :o) 12 " )
 					CR_STATUS	:= "05"
 					CR_DATALIB	:= dDataBase
 					CR_USERLIB	:= SAK->AK_USER
 					CR_LIBAPRO	:= SAK->AK_COD
 					CR_OBS		:= "Aprovado por " + UsrRetName(SAK->AK_USER)
 				ENDIF               
-					conout( " :o) 13 " )
+					QOut( " :o) 13 " )
 				MsUnlock()
 			Endif
 			dbSkip()
@@ -425,7 +425,7 @@ If nOper == 4 //Aprovacao do documento
 		//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
 		//³ Reposiciona e verifica se ja esta totalmente liberado.       ³
 		//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ      
-			conout( " :o) fim loop scr " )
+			QOut( " :o) fim loop scr " )
 		
 		
 		dbSelectArea("SCR")
@@ -1052,7 +1052,7 @@ If dbSeek( xFilial("PA3") + __cUserId )
 				aadd(a_DadosSE2, {'E2_FORNECE'	, PA0->PA0_FORNECE	, NIL })
 				aadd(a_DadosSE2, {'E2_LOJA'   	, '01'    			, NIL })
 				
-				// CONOUT("Preparando exclusao"  + _cNUMSP)
+				// QOut("Preparando exclusao"  + _cNUMSP)
 				Begin Transaction
 		
 				dDataBase	:= SE2->E2_EMISSAO // Chamado GLPI 2751

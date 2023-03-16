@@ -110,14 +110,14 @@ User Function Nucleo2(cState,cCity,cplano,cBairro,cLimit,cOffset,nSum,aProviders
 	
 	
 	/*cHtmlPage := Httpget(cHost+cRotaBusca,cQryString,120,aHeader)
-  	conout("WebPage", OemtoAnsi(cHtmlPage))
+  	QOut("WebPage", OemtoAnsi(cHtmlPage))
 	*/
 	oRestClient:SetPath(cRotaBusca+"?"+cQryString)
-	conout(cHost+cRotaBusca+"?"+cQryString)
+	QOut(cHost+cRotaBusca+"?"+cQryString)
 	If !oRestClient:GET(aHeader)
-		Conout("GET "+ oRestClient:GetLastError())
+		QOut("GET "+ oRestClient:GetLastError())
 	Else
-		Conout(oRestClient:GetResult())
+		QOut(oRestClient:GetResult())
 		//Converte o retorno em objeto
 		if At("metadata",lower(oRestClient:cResult)) > 0
 			FWJsonDeserialize(DecodeUtf8(oRestClient:cResult), @oJson)

@@ -510,7 +510,7 @@ Static Function GeraArqCMB()
 
 	If TcSqlExec(cQuery) <> 0	
 		cErro := " - Erro na execucao da procedure " + CRLF + Space(3) + cQuery + CRLF + Space(3) + 'TcSqlError [ ' + TcSqlError() + ' ]'
-		ConOut(cErro) 
+		QOut(cErro) 
 		lOk := .F.      
 	Else 
 		//Arquivo 1

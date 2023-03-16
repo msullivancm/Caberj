@@ -64,7 +64,7 @@ If !( dbSeek(xFilial("SE2") + YTMP->E2_PREFIXO   + alltrim( YTMP->E2_NUM )+Ytmp-
  aadd(a_DadosSE2, {'E2_YANCPPA'  , '11'  ,NIL})
  
  BEGIN Transaction
-    //conout(iIf(PA0->PA0_TPTITU=="6","ADIANTAMENTO A CONVENIADO","ADIANTAMENTO A CREDENCIADO"))
+    //QOut(iIf(PA0->PA0_TPTITU=="6","ADIANTAMENTO A CONVENIADO","ADIANTAMENTO A CREDENCIADO"))
  _lRet  := .T.
  lMsErroAuto := .F.
  MSExecAuto({|x,y,z| Fina050(x,y,z)},a_DadosSE2,,3)
@@ -72,14 +72,14 @@ If !( dbSeek(xFilial("SE2") + YTMP->E2_PREFIXO   + alltrim( YTMP->E2_NUM )+Ytmp-
 // dDataBase := d_DataAnt
  
  IF lMsErroAuto
-  conout( "E R R O    N O    E X E C A U T O" )
+  QOut( "E R R O    N O    E X E C A U T O" )
 
   lMsHelpAuto := .T.
   DisarmTransaction()
   _cErro := MostraErro(NIL, "C:\erro_exec.GER") // Para gravar o erro
   memowrite("C:\erro_exec.GER", _cErro)
 
-  conout( _cErro )
+  QOut( _cErro )
 
   _lRet := .F.
  

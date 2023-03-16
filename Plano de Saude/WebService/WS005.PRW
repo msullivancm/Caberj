@@ -743,8 +743,8 @@ WSMETHOD detalhe_reembolso WSRECEIVE _cChvRb WSSEND _oRtDet WSSERVICE WS005
 			cChvTitE1 := (_cAlias1)->(E1_PREFIXO+E1_NUM+E1_PARCELA+E1_TIPO)
 			// validação Status
 
-			CONOUT(dtoc((_cAlias1)->DT_INC))
-			CONOUT(dtoc(dDatabase))
+			QOut(dtoc((_cAlias1)->DT_INC))
+			QOut(dtoc(dDatabase))
 			if (_cAlias1)->ZZQ_STATUS == '1' .and. dtoc((_cAlias1)->DT_INC) == dtoc(dDatabase)
 				nStatus := 1
 

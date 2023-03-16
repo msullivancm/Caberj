@@ -37,22 +37,22 @@ If lSchedule
 
 	cDtHoraArq := DtoS(Date()) + "_" + StrTran(Time(),":","")
 
-	ConOut('Preparando ambiente...')   
+	QOut('Preparando ambiente...')   
 
-	ConOut(&cDtHrReal + ' - Gerando HTML Caberj...')   	
+	QOut(&cDtHrReal + ' - Gerando HTML Caberj...')   	
 
 	aRet := GeraHTML('CABERJ')
 
-	ConOut(&cDtHrReal + ' - HTML Caberj gerado...') 
+	QOut(&cDtHrReal + ' - HTML Caberj gerado...') 
 
-	ConOut(&cDtHrReal + ' - Gerando HTML Integral...')
+	QOut(&cDtHrReal + ' - Gerando HTML Integral...')
     
 	If aRet[1]
 		GeraHTML('INTEGRAL')   	                          
 
-		ConOut(&cDtHrReal + ' - HTML Integral gerado...')
+		QOut(&cDtHrReal + ' - HTML Integral gerado...')
 
-		ConOut(&cDtHrReal + ' - Enviando e-mail de confirmação...')
+		QOut(&cDtHrReal + ' - Enviando e-mail de confirmação...')
 	EndIf
 
 Else                                                             
@@ -73,9 +73,9 @@ EndIf
 aMail := EnviaMail(aRet[1],aRet[2])
 
 If !aMail[1]
-	ConOut(&cDtHrReal + " - Erro ao enviar o e-mail de confirmação Atualização De/Para Procedimentos TUSS: " + aMail[2])
+	QOut(&cDtHrReal + " - Erro ao enviar o e-mail de confirmação Atualização De/Para Procedimentos TUSS: " + aMail[2])
 Else  
-	ConOut(&cDtHrReal + " - E-mail de confirmação Atualização De/Para Procedimentos TUSS enviado.")
+	QOut(&cDtHrReal + " - E-mail de confirmação Atualização De/Para Procedimentos TUSS enviado.")
 EndIf  
 
 If !lSchedule
@@ -194,7 +194,7 @@ If lRet
 			IncProc('Executando consulta ao banco... ' + c_Empresa)	
 		Next 
 	Else
-		ConOut(&cDtHrReal + ' - Executando consulta ao banco... ' + c_Empresa) 
+		QOut(&cDtHrReal + ' - Executando consulta ao banco... ' + c_Empresa) 
 	EndIf
 	       
 	FWrite(nHdl,cMsg,len(cMsg))
@@ -225,7 +225,7 @@ If lRet
 	If !lSchedule
 		ProcRegua(nAux)
 	Else
-		ConOut(&cDtHrReal + ' - ' + cTot + ' registros encontrados... ' + c_Empresa) 
+		QOut(&cDtHrReal + ' - ' + cTot + ' registros encontrados... ' + c_Empresa) 
 	EndIf              
 	
 	nAux := 0

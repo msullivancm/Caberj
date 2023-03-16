@@ -1,0 +1,11 @@
+{ 
+  "Id": 123456,
+  "Nome": "Joanilson Wesley",
+  "Alergias": [ "Aspirina","Paracetamol" ],
+  "Dependentes": false,
+  "Outros": {
+    "Sangue": "A+",
+    "Eleitor": true,
+    "Reservista": true
+  }
+}

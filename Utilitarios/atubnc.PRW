@@ -40,10 +40,10 @@ Static Function APATUBNC()
 	Local cAreaTMP := ""  
 	cAreaTMP := GetArea()
 	
-	ConOut(cNome+": " + DtoC(Date()) + " " + Time())
+	QOut(cNome+": " + DtoC(Date()) + " " + Time())
 
 		If File(cLog)
-			ConOut("Já executado: " + DtoC(Date()) + " " + Time())
+			QOut("Já executado: " + DtoC(Date()) + " " + Time())
 		Else
 		
 			// Como a SX2 já está aberta, somente pontera para o primeiro registro. 
@@ -60,9 +60,9 @@ Static Function APATUBNC()
 					EndIf
 					
 					if substr(ALLTRIM(SX2->X2_CHAVE), 1, 1) == 'S'
-						ConOut("ALIAS= " + PADR(ALLTRIM(SX2->X2_CHAVE), 6, ' ') + " TABELA= " + PADR(ALLTRIM(SX2->X2_ARQUIVO), 6, ' '))
+						QOut("ALIAS= " + PADR(ALLTRIM(SX2->X2_CHAVE), 6, ' ') + " TABELA= " + PADR(ALLTRIM(SX2->X2_ARQUIVO), 6, ' '))
 							X31UPDTABLE((SX2->X2_CHAVE))
-						CONOUT( "ALIAS= " + PADR(ALLTRIM(SX2->X2_CHAVE), 6, ' ') + " TABELA= " + PADR(ALLTRIM(SX2->X2_ARQUIVO), 6, ' ') )  
+						QOut( "ALIAS= " + PADR(ALLTRIM(SX2->X2_CHAVE), 6, ' ') + " TABELA= " + PADR(ALLTRIM(SX2->X2_ARQUIVO), 6, ' ') )  
 					endif 
 					
 				SX2->(DBSkip())
@@ -86,7 +86,7 @@ Static Function fLog(aLinha,cLog,cNome)
 	Default	cLog := cCaminho + cNome + cE + ".log"
 
 	If File(cLog)
-		ConOut("Já executado: " + DtoC(Date()) + " " + Time())
+		QOut("Já executado: " + DtoC(Date()) + " " + Time())
 		Return
 	Else
 		nArquivo := fcreate(cLog, FC_NORMAL)

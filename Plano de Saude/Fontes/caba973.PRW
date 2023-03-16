@@ -643,7 +643,7 @@ static Function ProcFile(cFileTISS,cDatHor,cFileHas,oProcess,cCodPeg,l974,lBg)
 				if !lOnline .AND. !lBg
 					msgstop("Não foi possível criar arquivo ( " + cNomArC + " ) na Caixa de Entrada da pasta TISS. O processo será interrompido.")  //"Não foi possível criar arquivo ( " -  " ) na Caixa de Entrada da pasta TISS. O processo será interrompido."
 				Else
-					conout("Não foi possível criar arquivo ( " + cNomArC + " ) na Caixa de Entrada da pasta TISS. O processo será interrompido.")	//"Não foi possível criar arquivo ( " -  " ) na Caixa de Entrada da pasta TISS. O processo será interrompido."
+					QOut("Não foi possível criar arquivo ( " + cNomArC + " ) na Caixa de Entrada da pasta TISS. O processo será interrompido.")	//"Não foi possível criar arquivo ( " -  " ) na Caixa de Entrada da pasta TISS. O processo será interrompido."
 				EndIf
 				Return nil
 			EndIf
@@ -656,7 +656,7 @@ static Function ProcFile(cFileTISS,cDatHor,cFileHas,oProcess,cCodPeg,l974,lBg)
 			msgstop("Arquivo (" + cNomArC + ") não existe na Caixa de Entrada da pasta TISS e Banco de Conhecimento." )  //"#Arquivo (" - ") não existe na Caixa de Entrada da pasta TISS e Banco de Conhecimento."
 			Return nil
 		Else
-			conout("Arquivo (" + cNomArC + ") não existe na Caixa de Entrada da pasta TISS e Banco de Conhecimento.")	//"#Arquivo (" - ") não existe na Caixa de Entrada da pasta TISS e Banco de Conhecimento."
+			QOut("Arquivo (" + cNomArC + ") não existe na Caixa de Entrada da pasta TISS e Banco de Conhecimento.")	//"#Arquivo (" - ") não existe na Caixa de Entrada da pasta TISS e Banco de Conhecimento."
 			Return nil
 		EndIf
 	EndIf
@@ -666,7 +666,7 @@ static Function ProcFile(cFileTISS,cDatHor,cFileHas,oProcess,cCodPeg,l974,lBg)
 		If !lOnline .AND. !lBg
 			msgstop(cErro)
 		Else
-			conout(cErro)
+			QOut(cErro)
 		Endif
 		return nil
 	Endif
@@ -674,7 +674,7 @@ static Function ProcFile(cFileTISS,cDatHor,cFileHas,oProcess,cCodPeg,l974,lBg)
 		If !lOnline .AND. !lBg
 			msgstop(cAviso)
 		Else
-			conout(cErro)
+			QOut(cErro)
 		Endif
 		return nil
 	Endif
@@ -766,20 +766,20 @@ static Function ProcFile(cFileTISS,cDatHor,cFileHas,oProcess,cCodPeg,l974,lBg)
 			
 					BA1->(dbSetOrder(2))
 					If !BA1->(DbSeek(xFilial("BA1")+cNumCarteira))
-						Conout("Matricula do usuario invalida  -> ( ")
+						QOut("Matricula do usuario invalida  -> ( ")
 						return({nil,EncodeUtf8("Matricula do usuario invalida")}) //"Matricula do usuario invalida"}) //"Matricula do usuario invalida  -> ( "
 					Endif
 			
 					BD5->(dbSetOrder(6))
 					If BD5->(DbSeek(xFilial("BD5")+cNumGuiaPrest))
-						Conout("Lote de guia XML já importado para esta RDA!")
+						QOut("Lote de guia XML já importado para esta RDA!")
 						return({nil,EncodeUtf8("Lote de guia XML já importado para esta RDA!")})	//"Lote de guia XML já ©mportado para esta RDA!"
 					Endif
 
 				
 					BE4->(dbSetOrder(6))
 					If BE4->(DbSeek(xFilial("BE4")+cNumGuiaPrest))
-						Conout("Lote de guia XML já importado para esta RDA!")
+						QOut("Lote de guia XML já importado para esta RDA!")
 						return({nil,EncodeUtf8("Lote de guia XML já importado para esta RDA!")})	//"Lote de guia XML já ©mportado para esta RDA!"
 					Endif
 				
@@ -788,7 +788,7 @@ static Function ProcFile(cFileTISS,cDatHor,cFileHas,oProcess,cCodPeg,l974,lBg)
 						SELECT BCI_ARQUIV FROM %table:BCI% BCI WHERE BCI.BCI_FILIAL = %exp:xFilial("BCI")%  AND BCI.BCI_ARQUIV in  (%exp:cFileTISS%)    AND BCI.%notDel%
 					Endsql
 					If (cAliasTrb)->(!Eof())
-						Conout("Lote de guia XML já importado para esta RDA!")
+						QOut("Lote de guia XML já importado para esta RDA!")
 						(cAliasTrb)->(DbCloseArea())
 						return({nil,EncodeUtf8("Lote de guia XML já importado para esta RDA!")}) //"Lote de guia XML já ©mportado para esta RDA!"
 					Else

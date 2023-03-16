@@ -437,7 +437,7 @@ Static Function CB670Grava(cFilCentra,lOnline,nModAux,lThread,cAliasQry)
 				nHndERP := AdvConnection()
 				
 				if TCQuit() // fecho todas as conexões com o dbaccess em curso na thread.
-					conout("Conexões encerradas ")
+					QOut("Conexões encerradas ")
 				endif 
 				
 				cDBOra   := "ORACLE/Desenv1" // alterar o alias/dsn para o banco/conexão que está utilizando

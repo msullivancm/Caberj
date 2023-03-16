@@ -932,7 +932,7 @@ While !(cAliastmp)->(EOF())
 
 //		If cResp = 'S'	
 //			lLiberou := MaAlcDoc({SCR->CR_NUM,SCR->CR_TIPO,nTotal,cCodApr,,cGrupo,,,,,cObs},dDataBase,If(cResp=='S',4,6))
-//			CONOUT("LIBEROU")
+//			QOut("LIBEROU")
 /*
 		    cObs:= 'Liberado pela Rotina Caba188'
 

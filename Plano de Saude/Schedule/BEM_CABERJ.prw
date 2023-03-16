@@ -56,14 +56,14 @@ User Function BEM_CBJ(_cParam)
 
 	EndIf
 
-	Conout("BEM_CBJ - INICIO - Geracao de arquivos da BEM")
-	Conout("BEM_CBJ - Parametro enviado: " + _cParam)
+	QOut("BEM_CBJ - INICIO - Geracao de arquivos da BEM")
+	QOut("BEM_CBJ - Parametro enviado: " + _cParam)
 
 	If !Empty(_cParam)
 
 		If _cParam == "2"
 
-			Conout("BEM_CBJ - Preparacao de ambiente")
+			QOut("BEM_CBJ - Preparacao de ambiente")
 
 			RpcSetType(3)
 
@@ -77,9 +77,9 @@ User Function BEM_CBJ(_cParam)
 
 			EndIf
 
-			CONOUT("BEM_CBJ - Empresa Logada: " + cEmpAnt)
+			QOut("BEM_CBJ - Empresa Logada: " + cEmpAnt)
 
-			CONOUT("BEM_CBJ - Filial Logada: " + cFilAnt)
+			QOut("BEM_CBJ - Filial Logada: " + cFilAnt)
 
 		EndIf
 
@@ -90,7 +90,7 @@ User Function BEM_CBJ(_cParam)
 	// ***********************************************
 	u_BEM_CBJA(_cParam)
 
-	Conout("BEM_CBJ - FIM - Geracao de arquivos da BEM")
+	QOut("BEM_CBJ - FIM - Geracao de arquivos da BEM")
 
 Return
 
@@ -184,7 +184,7 @@ User Function BEM_CBJA(_cParam)
 
 	Else
 
-		Conout("BEM_CBJ - Alimentando os parametros")
+		QOut("BEM_CBJ - Alimentando os parametros")
 
 		MV_PAR01 := CTOD("01/06/2016") //Data Inicial?
 		MV_PAR02 := dDataBase //Data Final?
@@ -255,7 +255,7 @@ Static Function OkGeraTxt(_cParam)
 	Private cEOL    	:= "CHR(13)+CHR(10)"
 	Private oProcess 	:= Nil
 
-	Conout("BEM_CBJ - Executando rotina OkGeraTxt")
+	QOut("BEM_CBJ - Executando rotina OkGeraTxt")
 
 	If Empty(cEOL)
 		cEOL := CHR(13)+CHR(10)
@@ -318,7 +318,7 @@ Static Function OkGeraTxt(_cParam)
 
 		Else
 
-			Conout("BEM_CBJ - O arquivo de nome "+cArquivo+" nao pode ser criado! Verifique os parametros.")
+			QOut("BEM_CBJ - O arquivo de nome "+cArquivo+" nao pode ser criado! Verifique os parametros.")
 
 		EndIf
 
@@ -387,7 +387,7 @@ Static Function ProcTXT(_cParam)
 
 	Else
 
-		Conout("BEM_CBJ - Executando a rotina PROCTXT - Execução da Query")
+		QOut("BEM_CBJ - Executando a rotina PROCTXT - Execução da Query")
 
 	EndIf
 
@@ -472,7 +472,7 @@ Static Function ProcTXT(_cParam)
 				//------------------------------------------------------
 				//Colocando de 1000 em 1000 para não poluir o console
 				//------------------------------------------------------
-				Conout("Processando usuario " + allTrim(Transform(nCont, "@E 999,999,999,999")) + ' de ' + cTot)
+				QOut("Processando usuario " + allTrim(Transform(nCont, "@E 999,999,999,999")) + ' de ' + cTot)
 				_nSch += 1000
 
 			EndIf
@@ -768,7 +768,7 @@ Static Function ProcTXT(_cParam)
 
 		Else
 
-			Conout("Atenção, não existe pagamento/relatório a ser gerado de acordo com os parâmetros informados. Verifique os parâmetros e execute novamente.","Não existe pagamento a ser gerado para os parâmetros informados!")
+			QOut("Atenção, não existe pagamento/relatório a ser gerado de acordo com os parâmetros informados. Verifique os parâmetros e execute novamente.","Não existe pagamento a ser gerado para os parâmetros informados!")
 
 		EndIf
 
@@ -811,7 +811,7 @@ Static Function ProcTXT(_cParam)
 
 			Else
 
-				Conout("Ocorreu um erro na gravacao do arquivo")
+				QOut("Ocorreu um erro na gravacao do arquivo")
 
 			EndIf
 

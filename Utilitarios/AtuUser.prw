@@ -97,7 +97,7 @@ For nX := 1 to len(aUser)
 			//			oOb:_FWUSERACCOUNTDATA:_DATAUSER:_DATASSIGNON:_STRUCT:_USR_SO_USERLOGIN:TEXT  	:= aUser[nX][1][2]
 			//			cPswDet := XMLSaveStr(oOb)
 			//		else
-			conout(nX)
+			QOut(nX)
 			/*if at('</USR_SO_USERLOGIN></struct><items><item',cPswDet) > 0 
 				oOb:_FWUSERACCOUNTDATA:_DATAUSER:_DATASSIGNON:_ITEMS:_ITEM:_USR_SO_DOMINIO:TEXT	  	:= "CABERJ"
 				oOb:_FWUSERACCOUNTDATA:_DATAUSER:_DATASSIGNON:_ITEMS:_ITEM:_USR_SO_USERLOGIN:TEXT  	:= aUser[nX][1][2]

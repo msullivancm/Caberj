@@ -39,14 +39,14 @@ User function CheDupNE()
 	If nTopOri < 0
 	    UserException("Erro ao conectar com "+cDbOri+" em "+cSrvOri)
 	Endif   
-	ConOut("Conectado em "+cDbOri+" em "+cSrvOri)  
+	QOut("Conectado em "+cDbOri+" em "+cSrvOri)  
 	TcSetConn(nTopOri)
 */	
-	ConOut("Início do CheDupNE: " + DtoC(Date()) + " " + Time())
+	QOut("Início do CheDupNE: " + DtoC(Date()) + " " + Time())
 	
 	For nY := 1 To Len(aEmpresa)
 		cE := aEmpresa[nY] // Para máscara EE.
-		ConOut("Empresa: " + cE + " " + DtoC(Date()) + " " + Time())
+		QOut("Empresa: " + cE + " " + DtoC(Date()) + " " + Time())
 //		Processa( {|| APCOMPSX() }, "Aguarde...", "Verifica se a tabela que está na SX2 tem campos na SX3",.F.)
 		Processa( {|| APCOMPUNI() }, "Aguarde...", "Verifica se a tabela está com X2_UNICO vazio",.F.)
 //		Processa( {|| APCC4Dro() }, "Aguarde...", "Dropando tabela CC4 (desnecessária mas um impeditivo para a migração)",.F.)
@@ -64,7 +64,7 @@ User function CheDupNE()
 ////	Processa( {|| APSX2Res() }, "Aguarde...", "Verificando e recuperando Tabelas excluídas",.F.) // Usar somente caso seja necessário restaurar a SX2.
 	Next nY                                  
 	
-	ConOut("Término do CheDupNE: " + DtoC(Date()) + " " + Time())
+	QOut("Término do CheDupNE: " + DtoC(Date()) + " " + Time())
 	MsgInfo("CheDupNE concluído.")
 	
 Return
@@ -78,33 +78,33 @@ Static Function APCC4Dro() // Função criada para dropar a tabela CC4, caso exist
 	Local cAreaTMP := ""  
 	cAreaTMP := GetArea()
 
-	ConOut("APCC4Dro: " + DtoC(Date()) + " " + Time())
+	QOut("APCC4Dro: " + DtoC(Date()) + " " + Time())
 
 	If TcCanOpen(cTabela) // Verifica se a tabela existe
 	
 			If File(cArq)
-				ConOut("Já executado" + DtoC(Date()) + " " + Time())
+				QOut("Já executado" + DtoC(Date()) + " " + Time())
 			Else
 				DbUseArea(.T., "TOPCONN", cTabela, "CC4AUX", .F., .T.) 
 				
-				ConOut("Início do Backup da CC4: " + DtoC(Date()) + " " + Time())
+				QOut("Início do Backup da CC4: " + DtoC(Date()) + " " + Time())
 				//Copy To &cArq Via cDriver // Backup
-		 		ConOut("Término do Backup da CC4: " + DtoC(Date()) + " " + Time())
+		 		QOut("Término do Backup da CC4: " + DtoC(Date()) + " " + Time())
 				
 				DbCloseArea("CC4AUX") // Antes de excluir a tabela, fecha a área que a está utilizando                                          
 				lOk := TcDelFile(cTabela) // Exclui, efetivamente, a tabela.
 	
 				If lOk
-					ConOut("Tabela CC4 dropada: " + DtoC(Date()) + " " + Time())
+					QOut("Tabela CC4 dropada: " + DtoC(Date()) + " " + Time())
 				Else
-					ConOut("Tabela CC4 não excluída: " + DtoC(Date()) + " " + Time())
+					QOut("Tabela CC4 não excluída: " + DtoC(Date()) + " " + Time())
 				EndIf
 		
 	    	EndIf
 		
 
 	Else 
-		ConOut("APCC4Dro: Tabela não existe - " + DtoC(Date()) + " " + Time())
+		QOut("APCC4Dro: Tabela não existe - " + DtoC(Date()) + " " + Time())
 	EndIf
 
 	RestArea(cAreaTMP)
@@ -120,34 +120,34 @@ Static Function APCCZDro() // Função criada para dropar a tabela CCZ, caso exist
 	Local cAreaTMP := ""  
 	cAreaTMP := GetArea()
 
-	ConOut("APCCZDro: " + DtoC(Date()) + " " + Time())
+	QOut("APCCZDro: " + DtoC(Date()) + " " + Time())
 
 	If TcCanOpen(cTabela) // Verifica se a tabela existe
 	
 			If File(cArq)
-				ConOut("Já executado" + DtoC(Date()) + " " + Time())
+				QOut("Já executado" + DtoC(Date()) + " " + Time())
 			Else
 			
 				DbUseArea(.T., "TOPCONN", cTabela, "CCZAUX", .F., .T.) 
 				
-				ConOut("Início do Backup da CCZ: " + DtoC(Date()) + " " + Time())
+				QOut("Início do Backup da CCZ: " + DtoC(Date()) + " " + Time())
 				//Copy To &cArq Via cDriver // Backup
-		 		ConOut("Término do Backup da CCZ: " + DtoC(Date()) + " " + Time())
+		 		QOut("Término do Backup da CCZ: " + DtoC(Date()) + " " + Time())
 				
 				DbCloseArea("CCZAUX") // Antes de excluir a tabela, fecha a área que a está utilizando                                          
 				lOk := TcDelFile(cTabela) // Exclui, efetivamente, a tabela.
 	
 				If lOk
-					ConOut("Tabela CCZ dropada: " + DtoC(Date()) + " " + Time())
+					QOut("Tabela CCZ dropada: " + DtoC(Date()) + " " + Time())
 				Else
-					ConOut("Tabela CCZ não excluída: " + DtoC(Date()) + " " + Time())
+					QOut("Tabela CCZ não excluída: " + DtoC(Date()) + " " + Time())
 				EndIf
 		
 	    	EndIf
 		
 
 	Else 
-		ConOut("APCCZDro: Tabela não existe - " + DtoC(Date()) + " " + Time())
+		QOut("APCCZDro: Tabela não existe - " + DtoC(Date()) + " " + Time())
 	EndIf
 
 	RestArea(cAreaTMP)
@@ -171,7 +171,7 @@ Static Function APTabDup(cAlias,cChave) // Como chamar APTabDup("SX7","X7_CAMPO 
 	Local cAreaTMP := ""  
 	cAreaTMP := GetArea()
 
-	ConOut(cNome+": " + DtoC(Date()) + " " + Time())
+	QOut(cNome+": " + DtoC(Date()) + " " + Time())
 
 	If File(cTabela) // Se a tabela existir continua.
 	
@@ -187,18 +187,18 @@ Static Function APTabDup(cAlias,cChave) // Como chamar APTabDup("SX7","X7_CAMPO 
 		DbSetIndex(cArquivo+OrdBagExt())
 	
 			If File(cArq)
-				ConOut("Já executado" + DtoC(Date()) + " " + Time())
+				QOut("Já executado" + DtoC(Date()) + " " + Time())
 			Else
-				ConOut("Início do Backup da "+cAlias+": " + DtoC(Date()) + " " + Time())
+				QOut("Início do Backup da "+cAlias+": " + DtoC(Date()) + " " + Time())
 				//Copy To &cArq Via cDriver // Backup
-		 		ConOut("Término do Backup da "+cAlias+": " + DtoC(Date()) + " " + Time())
+		 		QOut("Término do Backup da "+cAlias+": " + DtoC(Date()) + " " + Time())
 	
 				ProcRegua(1000000)
 				(cAAux)->(DbGoTop()) // Posiciona no primeiro registro filtrado.
 	
 				While !(cAAux)->(Eof())
 					IncProc("Excluindo registro duplicado: " + &(cChave))                      
-					ConOut("Excluindo registro duplicado: " + &(cChave) + " " + DtoC(Date()) + " " + Time())
+					QOut("Excluindo registro duplicado: " + &(cChave) + " " + DtoC(Date()) + " " + Time())
 		            
 					If cAnter == &(cChave)
 						If !(cAAux)->(DELETED()) // Se não estiver excluído
@@ -209,7 +209,7 @@ Static Function APTabDup(cAlias,cChave) // Como chamar APTabDup("SX7","X7_CAMPO 
 					cAnter := &(cChave)
 					(cAAux)->(DbSkip())
 				EndDo  
-				ConOut("Registros filtrados excluídos: " + DtoC(Date()) + " " + Time())
+				QOut("Registros filtrados excluídos: " + DtoC(Date()) + " " + Time())
 		
 	    	EndIf
 
@@ -219,7 +219,7 @@ Static Function APTabDup(cAlias,cChave) // Como chamar APTabDup("SX7","X7_CAMPO 
 		(cAAux)->(DbCloseArea())	
 		
 	Else
-		ConOut("Tabela : " + cTabela + " não existe " + DtoC(Date()) + " " + Time())		
+		QOut("Tabela : " + cTabela + " não existe " + DtoC(Date()) + " " + Time())		
 	EndIf
 		
 	RestArea(cAreaTMP)
@@ -239,7 +239,7 @@ Static Function APCamPad(cCampos) // Função criada para verificar e corrigir os 
 	Local cAreaTMP := ""  
 	cAreaTMP := GetArea()
 
-	ConOut("APCamPad: " + DtoC(Date()) + " " + Time())
+	QOut("APCamPad: " + DtoC(Date()) + " " + Time())
 
 	If File(cTabela)
 	
@@ -256,17 +256,17 @@ Static Function APCamPad(cCampos) // Função criada para verificar e corrigir os 
 		SX3AUX->(DbGoTop())
 	
 		If File(cArq)
-			ConOut("Já executado." + DtoC(Date()) + " " + Time())
+			QOut("Já executado." + DtoC(Date()) + " " + Time())
 		Else
-			ConOut("Início do Backup da SX3: " + DtoC(Date()) + " " + Time())
+			QOut("Início do Backup da SX3: " + DtoC(Date()) + " " + Time())
 			//Copy To &cArq Via cDriver // Backup
-	 		ConOut("Término do Backup da SX3: " + DtoC(Date()) + " " + Time())
+	 		QOut("Término do Backup da SX3: " + DtoC(Date()) + " " + Time())
 	
 			ProcRegua(Len(aCampo))
 			For nI := 1 To Len(aCampo)
 				IncProc("Processando campo " + AllTrim(aCampo[nI]) )                      
 				If SX3AUX->(DbSeek(aCampo[nI]))
-					ConOut("Processando campo: " + AllTrim(aCampo[nI]) + " em " + DtoC(Date()) + " " + Time())
+					QOut("Processando campo: " + AllTrim(aCampo[nI]) + " em " + DtoC(Date()) + " " + Time())
 					SX3AUX->X3_PROPRI := "S" // Passa a ser campo de sistema e não mais de usuário
 				EndIf
 			Next nI
@@ -275,7 +275,7 @@ Static Function APCamPad(cCampos) // Função criada para verificar e corrigir os 
 	
 		SX3AUX->(DbCloseArea())	
 	Else
-		ConOut("Tabela : " + cTabela + " não existe " + DtoC(Date()) + " " + Time())		
+		QOut("Tabela : " + cTabela + " não existe " + DtoC(Date()) + " " + Time())		
 	EndIf
 	
 	FErase(cArquivo+OrdBagExt())
@@ -311,12 +311,12 @@ Static Function APCampNE(cCampNE) // Função criada para criar campos que existem
 	Local cAreaTMP := ""  
 	cAreaTMP := GetArea()
 
-	ConOut("APCampNE: " + DtoC(Date()) + " " + Time())
+	QOut("APCampNE: " + DtoC(Date()) + " " + Time())
 	
 	aCampo := LeCamp(cCampNE)
 	
 	For nI := 1 To Len(aCampo)
-		ConOut("Processando tabela : " + aCampo[nI] + " em " + DtoC(Date()) + " " + Time())
+		QOut("Processando tabela : " + aCampo[nI] + " em " + DtoC(Date()) + " " + Time())
 		ChkFile(aCampo[nI])
 	Next nI
 
@@ -329,18 +329,18 @@ Static Function APCDTop(cTabDup) // Função criada para verificar e eliminar iten
 	Local cAreaTMP := ""  
 	cAreaTMP := GetArea()
 
-	ConOut("APCDTop: " + DtoC(Date()) + " " + Time())
+	QOut("APCDTop: " + DtoC(Date()) + " " + Time())
 	
 	aTabelas := LeCamp(cTabDup)
 	
 	For nI := 1 To Len(aTabelas)
-		ConOut("Processando tabela : " + aTabelas[nI] + " em " + DtoC(Date()) + " " + Time())
+		QOut("Processando tabela : " + aTabelas[nI] + " em " + DtoC(Date()) + " " + Time())
 		DupTOP(AllTrim(aTabelas[nI]))
 	Next nI
 
 	RestArea(cAreaTMP)
 
-	ConOut("APCDTop: Concluído. " + DtoC(Date()) + " " + Time())
+	QOut("APCDTop: Concluído. " + DtoC(Date()) + " " + Time())
 
 Return
 
@@ -348,7 +348,7 @@ Static Function fLog(aLinha,cLog,cNome)
 	Default	cLog := cCaminho + cNome + cE + ".log"
 
 	If File(cLog)
-		ConOut("Já executado: " + DtoC(Date()) + " " + Time())
+		QOut("Já executado: " + DtoC(Date()) + " " + Time())
 		Return
 	Else
 		nArquivo := fcreate(cLog, FC_NORMAL)
@@ -392,13 +392,13 @@ Static Function APCORSXG(cAlias,cCampo) // Corrige grupo da tabela de perguntas.
 	
 	cAreaTMP := GetArea()
 	
-	ConOut(cNome+": " + DtoC(Date()) + " " + Time())
+	QOut(cNome+": " + DtoC(Date()) + " " + Time())
 
 	If File(cTabela) .AND. File(cTSXG)
 	
 		If File(cLog)
 	
-			ConOut("Já executado: " + DtoC(Date()) + " " + Time())
+			QOut("Já executado: " + DtoC(Date()) + " " + Time())
 		
 		Else
 		
@@ -413,11 +413,11 @@ Static Function APCORSXG(cAlias,cCampo) // Corrige grupo da tabela de perguntas.
 			TABAUX->(dbGoTop())      
 
 			If File(cArq)
-				ConOut("Backup já executado " + DtoC(Date()) + " " + Time())
+				QOut("Backup já executado " + DtoC(Date()) + " " + Time())
 			Else
-				ConOut("Início do Backup da "+cAlias+": " + DtoC(Date()) + " " + Time())
+				QOut("Início do Backup da "+cAlias+": " + DtoC(Date()) + " " + Time())
 				//Copy To &cArq Via cDriver // Backup
-		 		ConOut("Término do Backup da "+cAlias+": " + DtoC(Date()) + " " + Time())
+		 		QOut("Término do Backup da "+cAlias+": " + DtoC(Date()) + " " + Time())
 		 	EndIf
 			
 			// Abre SXG
@@ -437,7 +437,7 @@ Static Function APCORSXG(cAlias,cCampo) // Corrige grupo da tabela de perguntas.
 					IncProc("Processando " + &("TABAUX->"+cSuf+cCampo) )
 					If SXGAUX->(dbSeek(&("TABAUX->"+cSuf+"GRPSXG")))
 						//If (&("TABAUX->"+cSuf+"TAMANHO") <> SXGAUX->XG_SIZE) // Se o tamanho do grupo de campo for menor que o tamanho da pergunta poderá truncar, logo 
-							ConOut("Processando " + AllTrim(&("TABAUX->"+cSuf+cCampo)) + " em " + DtoC(Date()) + " " + Time())
+							QOut("Processando " + AllTrim(&("TABAUX->"+cSuf+cCampo)) + " em " + DtoC(Date()) + " " + Time())
 							aadd(aLinha, AllTrim(&("TABAUX->"+cSuf+cCampo)) + "," + iIf( AllTrim(&("TABAUX->"+cSuf+"ORDEM"))==""," ",AllTrim(&("TABAUX->"+cSuf+"ORDEM")) ) + "," + AllTrim(&("TABAUX->"+cSuf+"GRPSXG")) ) // Salva em log o valor antido para voltar depois da migração
 																					// Se não houver valor na sequencia, preencher com um espaço para que o arquivo de log possa ser restaurado pelo VolSX3
 							&("TABAUX->"+cSuf+"GRPSXG") := " "
@@ -450,7 +450,7 @@ Static Function APCORSXG(cAlias,cCampo) // Corrige grupo da tabela de perguntas.
 				IncProc("Processando " + &("TABAUX->"+cSuf+cCampo) )
 					If SXGAUX->(dbSeek(&("TABAUX->"+cSuf+"GRPSXG")))
 						If (&("TABAUX->"+cSuf+"TAMANHO") <> SXGAUX->XG_SIZE) // Se o tamanho do grupo de campo for menor que o tamanho da pergunta poderá truncar, logo 
-							ConOut("Processando " + AllTrim(&("TABAUX->"+cSuf+cCampo)) + " em " + DtoC(Date()) + " " + Time())
+							QOut("Processando " + AllTrim(&("TABAUX->"+cSuf+cCampo)) + " em " + DtoC(Date()) + " " + Time())
 							aadd(aLinha, AllTrim(&("TABAUX->"+cSuf+cCampo)) + "," + iIf( AllTrim(&("TABAUX->"+cSuf+"ORDEM"))==""," ",AllTrim(&("TABAUX->"+cSuf+"ORDEM")) ) + "," + AllTrim(&("TABAUX->"+cSuf+"GRPSXG")) ) // Salva em log o valor antido para voltar depois da migração
 																					// Se não houver valor na sequencia, preencher com um espaço para que o arquivo de log possa ser restaurado pelo VolSX3
 							&("TABAUX->"+cSuf+"GRPSXG") := " "
@@ -468,7 +468,7 @@ Static Function APCORSXG(cAlias,cCampo) // Corrige grupo da tabela de perguntas.
 	
 		EndIf    
 	Else
-		ConOut("Tabela : " + cTabela + " ou " + cTSXG + " não existe " + DtoC(Date()) + " " + Time())		
+		QOut("Tabela : " + cTabela + " ou " + cTSXG + " não existe " + DtoC(Date()) + " " + Time())		
 	EndIf         
 
 //	FErase(cArquivo+OrdBagExt()) // Exclui índice
@@ -558,13 +558,13 @@ Static Function APTBPack(cAlias) // Pack na tabela especificada
 	Local cAreaTMP := ""  
 	cAreaTMP := GetArea()
 
-	ConOut(cNome + ": " + DtoC(Date()) + " " + Time())
+	QOut(cNome + ": " + DtoC(Date()) + " " + Time())
 
 	If File(cTabela)
 	
 		If File(cLog)
 	
-			ConOut("Já executado: " + DtoC(Date()) + " " + Time())
+			QOut("Já executado: " + DtoC(Date()) + " " + Time())
 		
 		Else
 	
@@ -574,7 +574,7 @@ Static Function APTBPack(cAlias) // Pack na tabela especificada
 	
 			DBUseArea( .T.,cDriver,cTabela, cAAux, .F.) // Abre tabela em modo exclusivo.
 			Pack
-			ConOut("Pack realizado na tabela: " + cTabela + " " + DtoC(Date()) + " " + Time())
+			QOut("Pack realizado na tabela: " + cTabela + " " + DtoC(Date()) + " " + Time())
 	
 			(cAAux)->(DbCloseArea())	
 	
@@ -583,7 +583,7 @@ Static Function APTBPack(cAlias) // Pack na tabela especificada
 		EndIf
 
 	Else
-		ConOut("Tabela : " + cTabela + " não existe " + DtoC(Date()) + " " + Time())		
+		QOut("Tabela : " + cTabela + " não existe " + DtoC(Date()) + " " + Time())		
 	EndIf
 	
 	RestArea(cAreaTMP)
@@ -611,12 +611,12 @@ Static Function APCOMPSX() // Verifica se a tabela que está na SX2 tem campos na
 	Local cAreaTMP := ""  
 	cAreaTMP := GetArea()
 	
-	ConOut(cNome+": " + DtoC(Date()) + " " + Time())
+	QOut(cNome+": " + DtoC(Date()) + " " + Time())
 
 	If File(cTSX3) .AND. File(cTSX3)
 		If File(cLog)
 	
-			ConOut("Já executado: " + DtoC(Date()) + " " + Time())
+			QOut("Já executado: " + DtoC(Date()) + " " + Time())
 		
 		Else
 		
@@ -656,7 +656,7 @@ Static Function APCOMPSX() // Verifica se a tabela que está na SX2 tem campos na
 	
 		EndIf    
 	Else
-		ConOut("Tabela : " + cTSX2 + " ou " + cTSX3 + " não existe " + DtoC(Date()) + " " + Time())		
+		QOut("Tabela : " + cTSX2 + " ou " + cTSX3 + " não existe " + DtoC(Date()) + " " + Time())		
 	EndIf         
 
 //	FErase(cArquivo+OrdBagExt()) // Exclui índice
@@ -688,7 +688,7 @@ Static Function DupTOP(cTabela) // Como chamar DupTOP("SA1010")
 	Local cAreaTMP := ""  
 	cAreaTMP := GetArea()
 
-	ConOut(cNome+": " + DtoC(Date()) + " " + Time())
+	QOut(cNome+": " + DtoC(Date()) + " " + Time())
 
 	// Abre SX2
 	DBUseArea( .T.,cDriver,cTSX2, "SX2AUX", .F.)  
@@ -712,7 +712,7 @@ Static Function DupTOP(cTabela) // Como chamar DupTOP("SA1010")
 
 		While !(cAAux)->(Eof())
 			IncProc("Excluindo registro duplicado: " + (cAAux)->(&(SX2AUX->X2_UNICO)) )                      
-			ConOut("Excluindo registro duplicado: " + (cAAux)->(&(SX2AUX->X2_UNICO)) + " " + DtoC(Date()) + " " + Time())
+			QOut("Excluindo registro duplicado: " + (cAAux)->(&(SX2AUX->X2_UNICO)) + " " + DtoC(Date()) + " " + Time())
             
 			If cAnter == (cAAux)->(&(SX2AUX->X2_UNICO))
 				If !(cAAux)->(DELETED()) // Se não estiver excluído
@@ -723,7 +723,7 @@ Static Function DupTOP(cTabela) // Como chamar DupTOP("SA1010")
 			cAnter := (cAAux)->(&(SX2AUX->X2_UNICO))
 			(cAAux)->(DbSkip())
 		EndDo  
-		ConOut("Registros filtrados excluídos: " + DtoC(Date()) + " " + Time())
+		QOut("Registros filtrados excluídos: " + DtoC(Date()) + " " + Time())
 
 		fLog(aLinha,cLog,cNome)					
 		FErase(cArquivo+OrdBagExt())
@@ -732,7 +732,7 @@ Static Function DupTOP(cTabela) // Como chamar DupTOP("SA1010")
 		SX2AUX->(DBCloseArea())   
 	
 	Else
-		ConOut("Tabela " + cTabela + " não encontrada do SX2"+ DtoC(Date()) + " " + Time())
+		QOut("Tabela " + cTabela + " não encontrada do SX2"+ DtoC(Date()) + " " + Time())
 	EndIf
 		
 	RestArea(cAreaTMP)
@@ -799,7 +799,7 @@ Static Function ApCompUni()
 	Local cAreaTMP := ""  
 	cAreaTMP := GetArea()
 
-	ConOut(cNome+": " + DtoC(Date()) + " " + Time())
+	QOut(cNome+": " + DtoC(Date()) + " " + Time())
 
 	// Abre SX2
 	DBUseArea( .T.,cDriver,cTSX2, cAAux, .F.)  
@@ -815,7 +815,7 @@ Static Function ApCompUni()
 
 		While !(cAAux)->(Eof())
 			                      
-			ConOut("Listando tabela com X2_UNICO em branco: " + (cAAux)->X2_CHAVE + " " + DtoC(Date()) + " " + Time())
+			QOut("Listando tabela com X2_UNICO em branco: " + (cAAux)->X2_CHAVE + " " + DtoC(Date()) + " " + Time())
             
 			If Empty((cAAux)->X2_UNICO)
 					aadd(aLinha, "X2_UNICO em branco: " + (cAAux)->X2_CHAVE + " " + DtoC(Date()) + " " + Time() ) // Salva em log o valor antigo para voltar depois da migração
@@ -824,7 +824,7 @@ Static Function ApCompUni()
 			
 			(cAAux)->(DbSkip())
 		EndDo  
-		ConOut("Registros filtrados listados: " + DtoC(Date()) + " " + Time())
+		QOut("Registros filtrados listados: " + DtoC(Date()) + " " + Time())
 
 		fLog(aLinha,cLog,cNome)					
 		FErase(cArqSX2+OrdBagExt())

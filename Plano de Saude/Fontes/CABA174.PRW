@@ -65,14 +65,14 @@ User Function CABA174(_cParam)
 		
 	EndIf
 	
-	Conout("CABA174 - INICIO - Geracao de arquivos da BEM")
-	Conout("CABA174 - Parametro enviado: " + _cParam)
+	QOut("CABA174 - INICIO - Geracao de arquivos da BEM")
+	QOut("CABA174 - Parametro enviado: " + _cParam)
 	
 	If !Empty(_cParam)
 		
 		If _cParam == "2"
 			
-			Conout("CABA174 - Preparacao de ambiente")
+			QOut("CABA174 - Preparacao de ambiente")
 			
 			RpcSetType(3)
 			
@@ -86,9 +86,9 @@ User Function CABA174(_cParam)
 				
 			EndIf
 			
-			CONOUT("CABA174 - Empresa Logada: " + cEmpAnt)
+			QOut("CABA174 - Empresa Logada: " + cEmpAnt)
 			
-			CONOUT("CABA174 - Filial Logada: " + cFilAnt)
+			QOut("CABA174 - Filial Logada: " + cFilAnt)
 			
 		EndIf
 		
@@ -99,7 +99,7 @@ User Function CABA174(_cParam)
 	// ***********************************************
 	u_CABA174A(_cParam)
 	
-	CONOUT("CABA174 - FIM - Geracao de arquivos da BEM")
+	QOut("CABA174 - FIM - Geracao de arquivos da BEM")
 	
 Return
 
@@ -222,7 +222,7 @@ If _cParam != "2" //Angelo Henrique - Data:20/04/2016
 	
 Else
 	
-	Conout("CABA174 - Alimentando os parametros")
+	QOut("CABA174 - Alimentando os parametros")
 	
 	MV_PAR01 := CTOD("01/06/2016") //Data Inicial?
 	MV_PAR02 := dDataBase //Data Final?
@@ -369,7 +369,7 @@ Static Function OkGeraTxt(_cParam)
 			
 		Else
 			
-			Conout("CABA174 - O arquivo de nome "+cArquivo+" nao pode ser criado! Verifique os parametros.")
+			QOut("CABA174 - O arquivo de nome "+cArquivo+" nao pode ser criado! Verifique os parametros.")
 			
 		EndIf
 		
@@ -528,7 +528,7 @@ Static Function ProcTXT(_cParam)
 				//------------------------------------------------------
 				//Colocando de 1000 em 1000 para não poluir o console
 				//------------------------------------------------------
-				Conout("Processando usuario " + allTrim(Transform(nCont, "@E 999,999,999,999")) + ' de ' + cTot)
+				QOut("Processando usuario " + allTrim(Transform(nCont, "@E 999,999,999,999")) + ' de ' + cTot)
 				_nSch += 1000
 				
 			EndIf
@@ -997,7 +997,7 @@ Static Function ProcTXT(_cParam)
 			
 		Else
 			
-			Conout("Atenção, não existe pagamento/relatório a ser gerado de acordo com os parâmetros informados. Verifique os parâmetros e execute novamente.","Não existe pagamento a ser gerado para os parâmetros informados!")
+			QOut("Atenção, não existe pagamento/relatório a ser gerado de acordo com os parâmetros informados. Verifique os parâmetros e execute novamente.","Não existe pagamento a ser gerado para os parâmetros informados!")
 			_lEnv 		:= .F.
 			_cMsgMail 	:= "Não existe pagamento/relatório a ser gerado de acordo com os parâmetros informados. Verifique os parâmetros e execute novamente."
 			
@@ -1044,7 +1044,7 @@ Static Function ProcTXT(_cParam)
 				
 			Else
 				
-				Conout("Ocorreu um erro na gravacao do arquivo.")
+				QOut("Ocorreu um erro na gravacao do arquivo.")
 				_lEnv 		:= .F.
 				_cMsgMail 	:= "Problema no momento da gravação do arquivo, favor analisar."
 				

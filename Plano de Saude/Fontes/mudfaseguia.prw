@@ -137,7 +137,7 @@ While ! Trb->(Eof())
 				If !lJob
 					MsProcTXT("Processando Guia "+BD5->BD5_CODLDP+" - "+BD5->BD5_CODPEG+" - "+BD5->BD5_NUMERO+" ...")
 				Else
-					ConOut("Processando Guia "+BD5->BD5_CODLDP+" - "+BD5->BD5_CODPEG+" - "+BD5->BD5_NUMERO+" ...")
+					QOut("Processando Guia "+BD5->BD5_CODLDP+" - "+BD5->BD5_CODPEG+" - "+BD5->BD5_NUMERO+" ...")
 				EndIf
 				
 				If BD5->BD5_SITUAC == "1" // Ativa

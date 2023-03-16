@@ -58,10 +58,10 @@ User Function EXPOGM20(aEmp)
 			cHoraIni	:= time()
 			
 			if alltrim(cEmpAnt) == "01"
-				ConOut("Job EXPOGM20-Inicio: "+cHoraIni+" CABERJ")
+				QOut("Job EXPOGM20-Inicio: "+cHoraIni+" CABERJ")
 				mv_par07 :=  "/MobileSaude/Caberj/"
 			else 
-				ConOut("Job EXPOGM20-Inicio: "+cHoraIni+" INTEGRAL")
+				QOut("Job EXPOGM20-Inicio: "+cHoraIni+" INTEGRAL")
 				mv_par07 := "/MobileSaude/Integral/"
 			endif 
 			
@@ -85,9 +85,9 @@ User Function EXPOGM20(aEmp)
 			cTempoTot := elapTime(cHoraIni,time())
 			
 			if cEmpAnt == "01"
-				ConOut("Job EXPOGM20-FIM CABERJ")
+				QOut("Job EXPOGM20-FIM CABERJ")
 			else 
-				ConOut("Job EXPOGM20-FIM INTEGRAL")
+				QOut("Job EXPOGM20-FIM INTEGRAL")
 			endif 
 			
 			RpcClearEnv()
@@ -1913,7 +1913,7 @@ Static Function GERAEXPGM()
 		FCLOSE ( nHdl )
 	Else
 		If lSched
-			ConOut("Atencao! Não foi possível criar o arquivo de exportação de detalhes - Especialidade! Verifique!!!")
+			QOut("Atencao! Não foi possível criar o arquivo de exportação de detalhes - Especialidade! Verifique!!!")
 		Else
 			MsgAlert("Atencao! Não foi possível criar o arquivo de exportação de detalhes - Especialidade! Verifique!!!")
 		Endif
@@ -1961,7 +1961,7 @@ Static Function GERAEXPGM()
 		FCLOSE ( nHdl )
 	Else
 		If lSched
-			ConOut("Atencao! Não foi possível criar o arquivo de exportação de detalhes - Planos! Verifique!!!")
+			QOut("Atencao! Não foi possível criar o arquivo de exportação de detalhes - Planos! Verifique!!!")
 		Else
 			MsgAlert("Atencao! Não foi possível criar o arquivo de exportação de detalhes - Planos! Verifique!!!")
 		Endif
@@ -1997,7 +1997,7 @@ Static Function GERAEXPGM()
 		FCLOSE ( nHdl )
 	Else
 		If lSched
-			ConOut("Atencao! Não foi possível criar o arquivo de exportação de detalhes - Classes de RDA! Verifique!!!")
+			QOut("Atencao! Não foi possível criar o arquivo de exportação de detalhes - Classes de RDA! Verifique!!!")
 		Else
 			MsgAlert("Atencao! Não foi possível criar o arquivo de exportação de detalhes - Classes de RDA! Verifique!!!")
 		Endif
@@ -2038,7 +2038,7 @@ Static Function GERAEXPGM()
 		FCLOSE ( nHdl )
 	Else
 		If lSched
-			ConOut("Atencao! Não foi possível criar o arquivo de exportação de detalhes - Corpo Clinico! Verifique!!!")
+			QOut("Atencao! Não foi possível criar o arquivo de exportação de detalhes - Corpo Clinico! Verifique!!!")
 		Else
 			MsgAlert("Atencao! Não foi possível criar o arquivo de exportação de detalhes - Corpo Clinico! Verifique!!!")
 		Endif
@@ -2081,7 +2081,7 @@ Static Function GERAEXPGM()
 		FERASE(cNmArqCC)
 		FERASE(cNmArqPr)
 		If lSched
-			ConOut("Nenhum registro foi exportado.")
+			QOut("Nenhum registro foi exportado.")
 		Else
 			MsgAlert("Nenhum registro foi exportado.")
 		Endif
@@ -2110,7 +2110,7 @@ Static Function GERAEXPGM()
 		
 		If nRetWin > 0
 			If lSched
-				ConOut("Um ou mais arquivos nao puderam ser compactados. Verifique!")
+				QOut("Um ou mais arquivos nao puderam ser compactados. Verifique!")
 			Else
 				MsgAlert("Um ou mais arquivos nao puderam ser compactados. Verifique!")
 			Endif

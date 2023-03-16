@@ -103,7 +103,7 @@ Static Function BaixaTitulo(cTit,nVlrBaixa)
 			SE1->(MsUnlock())*/
 			
 		Else
-			Conout("Titulo Previ Baixado: "+cTit)
+			QOut("Titulo Previ Baixado: "+cTit)
 			/*
 			SE1->(Reclock("SE1",.F.))
 			SE1->E1_YTPEXP	:= "E" // RETORNO RIO PREVIDENCIA - OK - TABELA K1
@@ -262,7 +262,7 @@ Static function IncTitulo(pTitulo,pValor,pCliente)
 			Return .F.
 		Else
 			
-			Conout("Titulo Previ Incluido: "+pTitulo)
+			QOut("Titulo Previ Incluido: "+pTitulo)
 			
 		EndIf
 	Endif

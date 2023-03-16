@@ -2431,7 +2431,7 @@ Static Function DownloadFTP(cEmpresa)
 
 	nRet := oFTPHandle:FTPConnect(cServidor,nPorta,cLogin,cSenha) //,cLogin)
 	sRet := oFTPHandle:GetLastResponse()
-	Conout( sRet )
+	QOut( sRet )
 
 	// comentado 15/01/2018 - substituída pela classe acima
 	//FTPDISCONNECT()
@@ -2452,7 +2452,7 @@ Static Function DownloadFTP(cEmpresa)
 
 			nRet := oFTPHandle:FTPConnect(cServidor,nPorta,cLogin,cSenha)
 			sRet := oFTPHandle:GetLastResponse()
-			Conout( sRet )
+			QOut( sRet )
 			/*FTPDISCONNECT()
 			lConnect := FTPCONNECT(cServidor,nPorta,cLogin,cSenha)*/
 
@@ -2484,7 +2484,7 @@ Static Function DownloadFTP(cEmpresa)
 				nRet := oFTPHandle:ChDir(cPastaBus)
 				sRet := oFTPHandle:GetLastResponse()
 				//oFTPHandle:bFireWallMode := .T. // Indica o tipo de conexão com o servidor
-				conout(sRet)
+				QOut(sRet)
 				If (nRet != 0)
 					lRet 	:= .F.
 					cLog 	:= 'Não foi possível mudar para o diretorio [ ' + cNovoCam + ' ] - Diretorio atual [ ' + "FtpGetCurDir()" + ' ] - Diretório destino [ ' + cPastaBus + ' ] [ ' + cEmpresa + ' ]'
@@ -2520,19 +2520,19 @@ Static Function DownloadFTP(cEmpresa)
 								' ] [ ' + cValToChar(NoRound(aInfoFTP[nI][2]/1024,1)) + ' KB ]')
 							//if ascan(aDiretorio,{|x|  alltrim(upper(SUBSTR(x,9,LEN(aInfoFTP[nI][1])))) $ aInfoFTP[nI][1]   }) == 0
 							if ascan(aDiretorio,{|x|  aInfoFTP[nI][1]  $ x  }) == 0
-							    conout(aInfoFTP[nI][1])
+							    QOut(aInfoFTP[nI][1])
 								nRet := oFTPHandle:ReceiveFile(aInfoFTP[nI][1], cPastaDes+aInfoFTP[nI][1])
 								varinfo("Receive ret",nRet)
 								sRet := oFTPHandle:GetLastResponse()
-								Conout(sRet)
+								QOut(sRet)
 
 								If nRet # 0
 
-									Conout(sRet)
+									QOut(sRet)
 									nRet := oFTPHandle:ReceiveFile(substr(aInfoFTP[nI][1],1,len(aInfoFTP[nI][1])-3)+"zip", cPastaDes+aInfoFTP[nI][1])
 									varinfo("Receive ret",nRet)
 									sRet := oFTPHandle:GetLastResponse()
-									Conout(sRet)
+									QOut(sRet)
 
 									If nRet # 0
 
@@ -4601,7 +4601,7 @@ Default aVetFtp := {}
 Default aVetDir := {}
 
 		For nX := 1 to len(aVetFtp)
-			conout(nX)
+			QOut(nX)
 			if ascan(aVetDir,{|x|  alltrim(upper(SUBSTR(x,9,LEN(aVetFtp[nX][1])))) == aVetFtp[nX][1]   }) > 0
 				aDel(aVetFtp,nX)
 				nCont++

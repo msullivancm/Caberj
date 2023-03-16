@@ -11,17 +11,17 @@ User Function restValidation()
     oRestClient:setPath("/apirestdesenv/crud/query")
     ;oRestClient:setPath("/apirestdesenv/sample?startIndex=2&count=10")
     If oRestClient:Get(aHeader)
-        ConOut("GET", oRestClient:GetResult())
+        u_zQOut("GET", oRestClient:GetResult())
     Else
-        ConOut("GET", oRestClient:GetLastError())
+        u_zQOut("GET", oRestClient:GetLastError())
     EndIf
 
     // chamada da classe exemplo de REST para operações CRUD
     oRestClient:setPath("/apirestdesenv/sample/1")
     If oRestClient:Get(aHeader)
-        ConOut("GET", oRestClient:GetResult())
+        u_zQOut("GET", oRestClient:GetResult())
     Else
-        ConOut("GET", oRestClient:GetLastError())
+        u_zQOut("GET", oRestClient:GetLastError())
     EndIf
 
 
@@ -29,22 +29,22 @@ User Function restValidation()
     oRestClient:SetPostParams("body")
 
     If oRestClient:Post(aHeader)
-        ConOut("POST", oRestClient:GetResult())
+        u_zQOut("POST", oRestClient:GetResult())
     Else
-        ConOut("POST", oRestClient:GetLastError())
+        u_zQOut("POST", oRestClient:GetLastError())
     EndIf
 
 
     // para os métodos PUT e DELETE o conteúdo body é enviado por parametro
     If oRestClient:Put(aHeader, "body")
-        ConOut("PUT", oRestClient:GetResult())
+        u_zQOut("PUT", oRestClient:GetResult())
     Else
-        ConOut("PUT", oRestClient:GetLastError())
+        u_zQOut("PUT", oRestClient:GetLastError())
     EndIf
 
     If oRestClient:Delete(aHeader, "body")
-        ConOut("DELETE", oRestClient:GetResult())
+        u_zQOut("DELETE", oRestClient:GetResult())
     Else
-        ConOut("DELETE", oRestClient:GetLastError())
+        u_zQOut("DELETE", oRestClient:GetLastError())
     EndIf
 Return 

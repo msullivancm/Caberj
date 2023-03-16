@@ -43,14 +43,14 @@ User Function CABA004(_cParam)
 		
 	EndIf
 	
-	Conout("CABA004 - INICIO - Envio do Relatorio de PA")
-	Conout("CABA004 - Parametro enviado: " + _cParam)
+	QOut("CABA004 - INICIO - Envio do Relatorio de PA")
+	QOut("CABA004 - Parametro enviado: " + _cParam)
 	
 	If !Empty(_cParam)
 		
 		If _cParam == "2"
 			
-			Conout("CABA004 - Preparacao de ambiente")
+			QOut("CABA004 - Preparacao de ambiente")
 			
 			RpcSetType(3)
 			
@@ -64,9 +64,9 @@ User Function CABA004(_cParam)
 				
 			EndIf
 			
-			CONOUT("CABA004 - Empresa Logada: " + cEmpAnt)
+			QOut("CABA004 - Empresa Logada: " + cEmpAnt)
 			
-			CONOUT("CABA004 - Filial Logada: " + cFilAnt)
+			QOut("CABA004 - Filial Logada: " + cFilAnt)
 			
 		EndIf
 		
@@ -77,7 +77,7 @@ User Function CABA004(_cParam)
 	// ***********************************************
 	u_CABA004A()
 	
-	Conout("CABA004 - FIM - Envio dos Protocolos de Atendimento")
+	QOut("CABA004 - FIM - Envio dos Protocolos de Atendimento")
 	
 	
 	
@@ -193,7 +193,7 @@ User Function CABA004A()
 				If Env_1(a_HtmTot, c_ToTot, c_CCTot, c_AssTot, a_MsgTot )
 					
 					//Aviso("Atenção", "Protocolo enviado com sucesso!",{"OK"})
-					Conout("CABA004 - Protocolo totalizador encaminhado com sucesso para o e-mail: " + c_ToTot)
+					QOut("CABA004 - Protocolo totalizador encaminhado com sucesso para o e-mail: " + c_ToTot)
 					
 				EndIf
 				
@@ -456,8 +456,8 @@ User Function CABA004A()
 					If Env_1(a_HtmTot, c_ToTot, c_CCTot, c_AssTot, a_MsgTot )
 						
 						//Aviso("Atenção", "Protocolo enviado com sucesso para a area: " + (cAliQry)->AREA ,{"OK"})
-						Conout("CABA004 - protocolo enviado com sucesso para a area: " + (cAliQry)->AREA)
-						Conout("CABA004 - Com o seguinte email: " + (cAliQry)->EMAIL)
+						QOut("CABA004 - protocolo enviado com sucesso para a area: " + (cAliQry)->AREA)
+						QOut("CABA004 - Com o seguinte email: " + (cAliQry)->EMAIL)
 						
 					EndIf
 					

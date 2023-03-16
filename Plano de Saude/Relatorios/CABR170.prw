@@ -69,7 +69,7 @@ cQuery += "END; "
 
 If TcSqlExec(cQuery) <> 0	
 	cErro := " - Erro na execução da procedure " + CRLF + Space(3) + cQuery + CRLF + Space(3) + 'TcSqlError [ ' + TcSqlError() + ' ]'
-	ConOut(cErro) 
+	QOut(cErro) 
 	lOk := .F.      
 Else                 
     If !MoveFile(cArq,cArqExp,.F.)

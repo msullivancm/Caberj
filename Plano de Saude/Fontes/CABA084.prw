@@ -24,7 +24,7 @@ User Function CABA084()
 	
 	Local _ni := 0
 	
-	Conout("CABA084 - Iniciando geração de RDA tabela de Preço x Especialidade da RDA")
+	QOut("CABA084 - Iniciando geração de RDA tabela de Preço x Especialidade da RDA")
 	
 	For _ni := 1 To 2
 		
@@ -45,7 +45,7 @@ User Function CABA084()
 			//----------------------------------------------------------------------------
 			//Após logar na CABERJ, irá executar a rotina de geração de protocolo
 			//----------------------------------------------------------------------------
-			Conout("CABA084 - Executando CABA084A pela CABERJ")
+			QOut("CABA084 - Executando CABA084A pela CABERJ")
 			
 			U_CABA084A()
 			
@@ -66,7 +66,7 @@ User Function CABA084()
 			//----------------------------------------------------------------------------
 			//Após logar na INTEGRAL, irá executar a rotina de geração de protocolo
 			//----------------------------------------------------------------------------
-			Conout("CABA084 - Executando CABA084A pela INTEGRAL")
+			QOut("CABA084 - Executando CABA084A pela INTEGRAL")
 			U_CABA084A()
 			
 		EndIf
@@ -75,7 +75,7 @@ User Function CABA084()
 	
 	U_CABA084A()
 	
-	CONOUT("CABA084 - FIM Processo de geração de RDA tabela de Preço x Especialidade da RDA")
+	QOut("CABA084 - FIM Processo de geração de RDA tabela de Preço x Especialidade da RDA")
 	
 	
 Return
@@ -238,7 +238,7 @@ User Function CABA084A()
 				
 				BC0->(MsUnLock())
 				
-				conout("CABA084 - GRAVOU BC0")
+				QOut("CABA084 - GRAVOU BC0")
 				
 			EndIf
 			
@@ -263,7 +263,7 @@ User Function CABA084A()
 						
 			If TcSqlExec(_cQuery ) < 0
 				
-				conout("CABA084 - Erro na atualizacao do item da BC6")
+				QOut("CABA084 - Erro na atualizacao do item da BC6")
 				
 			EndIf
 			

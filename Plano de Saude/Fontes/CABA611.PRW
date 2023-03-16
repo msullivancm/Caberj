@@ -30,7 +30,7 @@ User Function CABA611(lSchedule)
 
 	Default lSchedule 	:= .T.
 
-	conout("INÍCIO PROCESSAMENTO - SCHEDULE CABA611 - "+Time())
+	QOut("INÍCIO PROCESSAMENTO - SCHEDULE CABA611 - "+Time())
 	/*
 	******************************************
 	*'Executa a busca pelos anexos das guias'*
@@ -41,7 +41,7 @@ User Function CABA611(lSchedule)
 	//Next Nx
 	******************************************
 
-	conout("FIM PROCESSAMENTO - SCHEDULE CABA611 - "+Time())
+	QOut("FIM PROCESSAMENTO - SCHEDULE CABA611 - "+Time())
 
 Return
 
@@ -75,10 +75,10 @@ Static Function execAnexo(lSchedule)
 	// Query buscar as informações dos arquivo
 	if cEmpAnt == '01'
 		cRegAns := '324361'
-		conout("INÍCIO PROCESSAMENTO - SCHEDULE CABA611 - CABERJ - "+Time())
+		QOut("INÍCIO PROCESSAMENTO - SCHEDULE CABA611 - CABERJ - "+Time())
 	else
 		cRegAns :=  '415774'
-		conout("INÍCIO PROCESSAMENTO - SCHEDULE CABA611 - INTEGRAL - "+Time())
+		QOut("INÍCIO PROCESSAMENTO - SCHEDULE CABA611 - INTEGRAL - "+Time())
 	endif
 
 	cAlias1 := GetNextAlias()
@@ -159,7 +159,7 @@ Static Function execAnexo(lSchedule)
 		if (cAlias2)->(Eof())
 			//If TcSqlExec(cQuery) <> 0
 			cErro := " - Erro na execucao da procedure " + CRLF + Space(3) + cQuery + CRLF + Space(3) + 'TcSqlError [ ' + TcSqlError() + ' ]'
-			ConOut(cErro)
+			QOut(cErro)
 			lOk := .F.
 		Else
 			//\\10.19.1.10\Totvs_Desenv\P11\Protheus_Data\dirdoc\co01\shared
@@ -178,7 +178,7 @@ Static Function execAnexo(lSchedule)
 				Alert("Erro na copia do arquivo de Log !! ")
 			Else
 				//Alert("Arquivo Log Criado em " + cDirLog + " ! ")
-				CONOUT("MOVEU O ARQUIVO")
+				QOut("MOVEU O ARQUIVO")
 
 				// Neste momento sempre será "001" - de acordo com a pré-definição da área de negócio
 				nX :=  Soma1(STRZERO(0,3))

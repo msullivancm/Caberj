@@ -1192,9 +1192,9 @@ aVetor:= {{"B1_COD" ,'PA01           ' ,NIL},;
 MSExecAuto({|x,y| Mata010(x,y)},aVetor,3)
 
 If !lMsErroAuto 
- ConOut("Produto incluído na empresa 99") 
+ QOut("Produto incluído na empresa 99") 
 Else 
- ConOut("Erro na inclusao!") 
+ QOut("Erro na inclusao!") 
  MostraErro()
 EndIf
 
@@ -1212,9 +1212,9 @@ PREPARE ENVIRONMENT EMPRESA "02" FILIAL '0201'
 MSExecAuto({|x,y| Mata010(x,y)},aVetor,3)
 
 If !lMsErroAuto 
- ConOut("Produto incluído na empresa 02 ") 
+ QOut("Produto incluído na empresa 02 ") 
 Else 
- ConOut("Erro na inclusao!") 
+ QOut("Erro na inclusao!") 
  MostraErro()
 EndIf
 

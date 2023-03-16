@@ -94,13 +94,13 @@ EndIf
    MSExecAuto({|x,y| fina070(x,y)}, a_DadosSE1,3) //Inclusao
  
  If lMsErroAuto
-    conout( "E R R O    N O    E X E C A U T O" )
+    QOut( "E R R O    N O    E X E C A U T O" )
     lMsHelpAuto := .T.
     DisarmTransaction()
     _cErro := MostraErro(NIL, "C:\erro_exec.GER") // Para gravar o erro
     memowrite("C:\erro_exec.GER", _cErro)
 
-    conout( _cErro )
+    QOut( _cErro )
 
    _lRet := .F.                                
                     

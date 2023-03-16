@@ -17,9 +17,9 @@ Private oLeTxt
 Private cString := "SZ2"
 Private diretM:="\\srvap02\Protheus8\Protheus_Data\system\ARQIMP\" 
 
-conout("ImportDep")
-conout(cFilAnt)
-conout(cEmpAnt)
+QOut("ImportDep")
+QOut(cFilAnt)
+QOut(cEmpAnt)
 
 dbSelectArea(cString)
 dbSetOrder(1)
@@ -225,6 +225,6 @@ Static Function fEnvMail
 
    DISCONNECT SMTP SERVER
    
-   Conout(cErrorMsg)
+   QOut(cErrorMsg)
 
 Return

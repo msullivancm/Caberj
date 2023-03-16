@@ -125,7 +125,7 @@ WSMETHOD WS007A WSRECEIVE _cEmp,_cFil, _CNES, _CNPJ WSSEND tRet WSSERVICE WS007
 	Local aDados 		:= {}
 	Local _cAlias		:= GetNextAlias()
 	
-	conout("Entrada: "+time())
+	QOut("Entrada: "+time())
 	//------------------
 	//Nao consome licenças
 	//------------------
@@ -241,7 +241,7 @@ WSMETHOD WS007B WSRECEIVE _cEmp,_cFil, _CPF,_MAE,_NOMECOMP WSSEND tRetCNS WSSERV
 	Local aDados 		:= {}
 	Local _cAlias		:= GetNextAlias()
 	
-	conout("Entrada: "+time())
+	QOut("Entrada: "+time())
 	//------------------
 	//Nao consome licenças
 	//------------------

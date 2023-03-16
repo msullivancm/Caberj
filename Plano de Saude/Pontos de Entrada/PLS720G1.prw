@@ -683,7 +683,7 @@ User Function UpdBDXOri(nRecBD6,lMarca)
 		cUpd += "  AND D_E_L_E_T_ = ' '" 																			+ CRLF
 		
 		If TcSqlExec(cUpd) < 0
-			ConOut("Falha na atualização do BDX_ORIMOV [ " + TcSqlError() + " ]")
+			QOut("Falha na atualização do BDX_ORIMOV [ " + TcSqlError() + " ]")
 		EndIf
 		
 		//BDX->(DbCommit())

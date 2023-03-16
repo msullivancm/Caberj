@@ -2194,14 +2194,14 @@ EndIf
 If !ExistDir(cDirMod+cDate)
 	If !ExistDir(cDirMod)
 		If MakeDir( cDirMod ) <> 0
-			cONout("Impossivel criar diretorio ["+cDirMod+"]")
+			QOut("Impossivel criar diretorio ["+cDirMod+"]")
 			cDirMod := ""
 		EndIf
 	EndIf
 	If !Empty(cDirMod)
 		cDirMod := PLSMUDSIS( cDirMod+cDate )
 		If MakeDir( cDirMod ) <> 0
-			cONout("Impossivel criar diretorio ["+cDirMod+"]")
+			QOut("Impossivel criar diretorio ["+cDirMod+"]")
 			cDirMod := ""
 		EndIf
 	EndIf
@@ -2252,12 +2252,12 @@ if !lBuffer
 
 		      if !file(cArqLog)
 			       if (nHdlLog := fCreate(cArqlog,0)) == -1
-					   cONout("Impossivel criar arquivo ["+cArqlog+"]")
+					   QOut("Impossivel criar arquivo ["+cArqlog+"]")
 					   return
 				   endIf
 			   else
 				   if (nHdlLog := fOpen(cArqlog,2)) == -1
-					   cONout("Impossivel abrir arquivo ["+cArqlog+"]")
+					   QOut("Impossivel abrir arquivo ["+cArqlog+"]")
 					   return
 				   endIf
 			   endIf
@@ -2279,12 +2279,12 @@ if !lBuffer
 
    if !File(cArqLog)
        if (nHdlLog := fCreate(cArqlog,0)) == -1
-		   cONout("Impossivel criar arquivo ["+cArqlog+"]")
+		   QOut("Impossivel criar arquivo ["+cArqlog+"]")
 		   return
 	   endIf
    else
 	   if (nHdlLog := fOpen(cArqlog,2)) == -1
-		   cONout("Impossivel abrir arquivo ["+cArqlog+"]")
+		   QOut("Impossivel abrir arquivo ["+cArqlog+"]")
 		   return
 	   endIf
    endIf

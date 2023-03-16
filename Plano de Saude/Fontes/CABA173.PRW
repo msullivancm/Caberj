@@ -65,14 +65,14 @@ User Function CABA173(_cParam)
 	
 	EndIf
 	
-	Conout("CABA173 - INICIO - Geracao de arquivos da BEM")
-	Conout("CABA173 - Parametro enviado: " + _cParam)	
+	QOut("CABA173 - INICIO - Geracao de arquivos da BEM")
+	QOut("CABA173 - Parametro enviado: " + _cParam)	
 	
 	If !Empty(_cParam)
 		
 		If _cParam == "2"
 			
-			Conout("CABA173 - Preparacao de ambiente")
+			QOut("CABA173 - Preparacao de ambiente")
 			
 			RpcSetType(3)
 			
@@ -86,9 +86,9 @@ User Function CABA173(_cParam)
 				
 			EndIf
 			
-			CONOUT("CABA173 - Empresa Logada: " + cEmpAnt)
+			QOut("CABA173 - Empresa Logada: " + cEmpAnt)
 			
-			CONOUT("CABA173 - Filial Logada: " + cFilAnt)
+			QOut("CABA173 - Filial Logada: " + cFilAnt)
 			
 		EndIf
 		
@@ -99,7 +99,7 @@ User Function CABA173(_cParam)
 	// ***********************************************
 	u_CABA173A(_cParam)
 	
-	Conout("CABA173 - FIM - Geracao de arquivos da BEM")
+	QOut("CABA173 - FIM - Geracao de arquivos da BEM")
 	
 Return
 
@@ -223,7 +223,7 @@ If _cParam != "2" //Angelo Henrique - Data:20/04/2016
 	
 Else
 	
-	Conout("CABA173 - Alimentando os parametros")
+	QOut("CABA173 - Alimentando os parametros")
 	
 	MV_PAR01 := CTOD("01/06/2016") //Data Inicial?
 	MV_PAR02 := dDataBase //Data Final?
@@ -302,7 +302,7 @@ Static Function OkGeraTxt(_cParam)
 	Private cEOL    	:= "CHR(13)+CHR(10)"
 	Private oProcess 	:= Nil
 	
-	Conout("CABA173 - Executando rotina OkGeraTxt")
+	QOut("CABA173 - Executando rotina OkGeraTxt")
 	
 	If Empty(cEOL)
 		cEOL := CHR(13)+CHR(10)
@@ -375,7 +375,7 @@ Static Function OkGeraTxt(_cParam)
 			
 		Else
 			
-			Conout("CABA173 - O arquivo de nome "+cArquivo+" nao pode ser criado! Verifique os parametros.")
+			QOut("CABA173 - O arquivo de nome "+cArquivo+" nao pode ser criado! Verifique os parametros.")
 			
 		EndIf
 		
@@ -450,7 +450,7 @@ Static Function ProcTXT(_cParam)
 	
 	Else
 	
-		Conout("CABA173 - Executando a rotina PROCTXT - Execução da Query")
+		QOut("CABA173 - Executando a rotina PROCTXT - Execução da Query")
 		
 	EndIf
 	//MsgRun("Selecionando Registros...",,{|| ,CLR_HBLUE})
@@ -542,7 +542,7 @@ Static Function ProcTXT(_cParam)
 				//------------------------------------------------------
 				//Colocando de 1000 em 1000 para não poluir o console
 				//------------------------------------------------------
-				Conout("Processando usuario " + allTrim(Transform(nCont, "@E 999,999,999,999")) + ' de ' + cTot)
+				QOut("Processando usuario " + allTrim(Transform(nCont, "@E 999,999,999,999")) + ' de ' + cTot)
 				_nSch += 1000
 				
 			EndIf
@@ -1027,7 +1027,7 @@ Static Function ProcTXT(_cParam)
 			
 		Else
 			
-			Conout("Atenção, não existe pagamento/relatório a ser gerado de acordo com os parâmetros informados. Verifique os parâmetros e execute novamente.","Não existe pagamento a ser gerado para os parâmetros informados!")
+			QOut("Atenção, não existe pagamento/relatório a ser gerado de acordo com os parâmetros informados. Verifique os parâmetros e execute novamente.","Não existe pagamento a ser gerado para os parâmetros informados!")
 			
 		EndIf
 		
@@ -1072,7 +1072,7 @@ Static Function ProcTXT(_cParam)
 				
 			Else
 				
-				Conout("Ocorreu um erro na gravacao do arquivo")
+				QOut("Ocorreu um erro na gravacao do arquivo")
 				
 			EndIf
 			

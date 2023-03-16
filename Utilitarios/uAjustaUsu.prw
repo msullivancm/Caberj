@@ -116,7 +116,7 @@ Static Function AppuUsu1()
 							If 'USR_ENVIMP' $ cPswDet
 								oOb:_FWUSERACCOUNTDATA:_DATAUSER:_PROTHEUSDATA:_PROTHEUSPRINTER:_USR_ENVIMP:_VALUE:TEXT		:= "2" // 1 - Servidor / 2 - Cliente
 						    Else
-						    	conout("Erro - Nao foi Encontrado Ambiente de Impressao (1-Servidor/2-Cliente). Usuario: --> " + aUser[nX][2])
+						    	QOut("Erro - Nao foi Encontrado Ambiente de Impressao (1-Servidor/2-Cliente). Usuario: --> " + aUser[nX][2])
 	                        	cListaErro += "Erro - Nao foi Encontrado Ambiente de Impressao (1-Servidor/2-Cliente). Usuario: --> " + aUser[nX][2] + CRLF
 	                        	FWrite(nHandle, cListaErro)   //Gravacao do Arquivo
 	                        Endif
@@ -124,7 +124,7 @@ Static Function AppuUsu1()
 							If 'USR_FORMATOIMP' $ cPswDet
 								oOb:_FWUSERACCOUNTDATA:_DATAUSER:_PROTHEUSDATA:_PROTHEUSPRINTER:_USR_FORMATOIMP:_VALUE:TEXT	:= "1"
 					 		Else
-					 	    	conout("Erro - Nao foi Encontrado Formato Padrao de Impressao (1-Retrato/2-Paisagem). Usuario: --> " + aUser[nX][2])
+					 	    	QOut("Erro - Nao foi Encontrado Formato Padrao de Impressao (1-Retrato/2-Paisagem). Usuario: --> " + aUser[nX][2])
 					 	    	cListaErro += "Erro - Nao foi Encontrado Formato Padrao de Impressao (1-Retrato/2-Paisagem). Usuario: --> " + aUser[nX][2] + CRLF
 					 			FWrite(nHandle, cListaErro)   //Gravacao do Arquivo
 					 		Endif
@@ -132,14 +132,14 @@ Static Function AppuUsu1()
 							If 'USR_TIPOIMP' $ cPswDet
 								oOb:_FWUSERACCOUNTDATA:_DATAUSER:_PROTHEUSDATA:_PROTHEUSPRINTER:_USR_TIPOIMP:_VALUE:TEXT	:= "1" 
 							Else
-						    	conout("Erro - Nao foi Encontrado Tipo de Impressao (1-Disco/2-Windows/3-Porta). Usuario: --> " + aUser[nX][2])
+						    	QOut("Erro - Nao foi Encontrado Tipo de Impressao (1-Disco/2-Windows/3-Porta). Usuario: --> " + aUser[nX][2])
 						    	cListaErro += "Erro - Nao foi Encontrado Tipo de Impressao (1-Disco/2-Windows/3-Porta). Usuario: --> " + aUser[nX][2] + CRLF
 								FWrite(nHandle, cListaErro)   //Gravacao do Arquivo
 							Endif
 							
 							// FIM IMPRESSAO 
 						Else
-					  		conout("Erro - Nao foi Encontrado Caminho de Impressora. Usuario: --> " + aUser[nX][2]) 
+					  		QOut("Erro - Nao foi Encontrado Caminho de Impressora. Usuario: --> " + aUser[nX][2]) 
 					  		cListaErro += "Erro - Nao foi Encontrado Caminho de Impressora. Usuario: --> " + aUser[nX][2] + CRLF
 							FWrite(nHandle, cListaErro)   //Gravacao do Arquivo
 							loop
@@ -149,7 +149,7 @@ Static Function AppuUsu1()
 							oOb:_FWUSERACCOUNTDATA:_DATAUSER:_USR_ANO:_VALUE:TEXT	:=	'4'
 						Endif				
 					Else
-						Conout("Erro - Estrutura de Perfil de Impressao Precisa de Atenção - REVISAR. Usuario: --> " + aUser[nX][2])
+						QOut("Erro - Estrutura de Perfil de Impressao Precisa de Atenção - REVISAR. Usuario: --> " + aUser[nX][2])
 						cListaErro += "Erro - Estrutura de Perfil de Impressao Precisa de Atenção - REVISAR. Usuario: --> " + aUser[nX][2] + CRLF
 						FWrite(nHandle, cListaErro)   //Gravacao do Arquivo
 						loop
@@ -178,10 +178,10 @@ Static Function AppuUsu1()
 					PswLock(.T.)
 					
 					If !spf_Update( cPswFile, @nPswRec,  cPswId , cPswName , cPswPwd , cPswDet )
-						conout("Erro")
+						QOut("Erro")
 						lRet := .T.
 					ELSE
-						Conout("Sucesso")
+						QOut("Sucesso")
 					EndIf
 					//Libera a SPF
 					PswLock(.F.)

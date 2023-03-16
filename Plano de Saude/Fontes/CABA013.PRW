@@ -266,7 +266,7 @@ lRetorna := .F.
 If !lJob
 MsProcTXT("Processando Guia "+BD5->BD5_CODLDP+" - "+BD5->BD5_CODPEG+" - "+BD5->BD5_NUMERO+" ...")
 Else
-ConOut("Processando Guia "+BD5->BD5_CODLDP+" - "+BD5->BD5_CODPEG+" - "+BD5->BD5_NUMERO+" ...")
+QOut("Processando Guia "+BD5->BD5_CODLDP+" - "+BD5->BD5_CODPEG+" - "+BD5->BD5_NUMERO+" ...")
 EndIf
 If !Empty(cEmpExc) .AND. (BD5->BD5_CODEMP $ cEmpExc)
 lRetorna := .T.
@@ -412,7 +412,7 @@ lRetorna := .F.
 If !lJob
 MsProcTXT("Processando Guia "+BE4->BE4_CODLDP+" - "+BE4->BE4_CODPEG+" - "+BE4->BE4_NUMERO+" ...")
 Else
-ConOut("Processando Guia "+BE4->BE4_CODLDP+" - "+BE4->BE4_CODPEG+" - "+BE4->BE4_NUMERO+" ...")
+QOut("Processando Guia "+BE4->BE4_CODLDP+" - "+BE4->BE4_CODPEG+" - "+BE4->BE4_NUMERO+" ...")
 EndIf
 
 If !Empty(cEmpExc) .AND. (BE4->BE4_CODEMP $ cEmpExc)
@@ -568,7 +568,7 @@ While ! Trb->(Eof())
 	If !lJob
 		MsProcTXT("Processando Guia "+BD5->BD5_CODLDP+" - "+BD5->BD5_CODPEG+" - "+BD5->BD5_NUMERO+" ...")
 	Else
-		ConOut("Processando Guia "+BD5->BD5_CODLDP+" - "+BD5->BD5_CODPEG+" - "+BD5->BD5_NUMERO+" ...")
+		QOut("Processando Guia "+BD5->BD5_CODLDP+" - "+BD5->BD5_CODPEG+" - "+BD5->BD5_NUMERO+" ...")
 	EndIf
 	
 	lBloqueia := .F.
@@ -727,7 +727,7 @@ While ! Trb->(Eof())
 	If !lJob
 		MsProcTXT("Processando Guia "+BE4->BE4_CODLDP+" - "+BE4->BE4_CODPEG+" - "+BE4->BE4_NUMERO+" ...")
 	Else
-		ConOut("Processando Guia "+BE4->BE4_CODLDP+" - "+BE4->BE4_CODPEG+" - "+BE4->BE4_NUMERO+" ...")
+		QOut("Processando Guia "+BE4->BE4_CODLDP+" - "+BE4->BE4_CODPEG+" - "+BE4->BE4_NUMERO+" ...")
 	EndIf
 	
 	lBloqueia := .F.

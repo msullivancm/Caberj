@@ -113,14 +113,14 @@ Local lPossui710  := .F.
 
 //Fabio Bianchini - 28/12/2018 - FIM
 
-	conout("CABA616 - INÍCIO PROCESSAMENTO - "+Time())
+	QOut("CABA616 - INÍCIO PROCESSAMENTO - "+Time())
 
 	aArea := getArea()
 
 	//nHndERP := AdvConnection()
 
 	//if TCQuit() // fecho todas as conexões com o dbaccess em curso na thread.
-	//	conout("CABA616 - CONEXÕES ENCERRADAS - "+Time())
+	//	QOut("CABA616 - CONEXÕES ENCERRADAS - "+Time())
 	//endif 
 	
 	//CONECTANDO P11
@@ -236,7 +236,7 @@ Local lPossui710  := .F.
 	
 		(cAlias)->(DbCloseArea())
 		
-		conout("CABA616 - CARREGOU MOVIMENTOS DE PAGAMENTOS EM ARRAY - "+Time())
+		QOut("CABA616 - CARREGOU MOVIMENTOS DE PAGAMENTOS EM ARRAY - "+Time())
 	//Endif
 	
 	//TCUnlink( nHwnd )
@@ -457,7 +457,7 @@ Local lPossui710  := .F.
 		Alert('PROCESSO FINALIZADO !')
 	//EndIf
 	
-	conout("FIM PROCESSAMENTO - CABA616 - "+Time())	
+	QOut("FIM PROCESSAMENTO - CABA616 - "+Time())	
 Return
 
 Static Function Limpar(nGet1,cGet2,cGet3,cGet4,cGet5,oGet1)

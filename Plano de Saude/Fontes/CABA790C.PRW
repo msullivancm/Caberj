@@ -2293,7 +2293,7 @@ Static Function DelAcbAc9(lExcAC9)
 			//³ Deleta arquivo movido para pasta do banco de conhecimento
 			//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
 				If FErase(MsDocPath()+"\"+ACB->ACB_OBJETO) == -1
-					CoNout("Impossivel deletar arquivo gerado no banco de conhecimento ["+MsDocPath()+"\"+ACB->ACB_OBJETO+"]") //"Impossivel deletar arquivo gerado no banco de conhecimento ["
+					QOut("Impossivel deletar arquivo gerado no banco de conhecimento ["+MsDocPath()+"\"+ACB->ACB_OBJETO+"]") //"Impossivel deletar arquivo gerado no banco de conhecimento ["
 				EndIf
 			//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
 			//³ Delete o lixo que foi gravado na acb
@@ -2310,7 +2310,7 @@ Static Function DelAcbAc9(lExcAC9)
 	//³ Deleta arquivo movido para pasta do banco de conhecimento
 	//ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
 		If FErase(MsDocPath()+"\"+ACB->ACB_OBJETO) == -1
-			CoNout("Impossivel deletar arquivo gerado no banco de conhecimento ["+MsDocPath()+"\"+ACB->ACB_OBJETO+"]") //"Impossivel deletar arquivo gerado no banco de conhecimento ["
+			QOut("Impossivel deletar arquivo gerado no banco de conhecimento ["+MsDocPath()+"\"+ACB->ACB_OBJETO+"]") //"Impossivel deletar arquivo gerado no banco de conhecimento ["
 		EndIf
 	//ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
 	//³ Delete o lixo que foi gravado na acb

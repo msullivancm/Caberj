@@ -72,7 +72,7 @@ WSMETHOD WS008A WSRECEIVE _cEmp,_cFil, _CRM, _UF, _SIG WSSEND tRet WSSERVICE WS0
 	Local _cAlias		:= GetNextAlias()
 	Local cCpf 			:= ""
 	
-	conout("Entrada: "+time())
+	QOut("Entrada: "+time())
 	//------------------
 	//Nao consome licenças
 	//------------------
@@ -251,7 +251,7 @@ WSMETHOD WS008B WSRECEIVE _cEmp,_cFil, _CRM, _UF, _SIG  WSSEND tRet WSSERVICE WS
 	Local _cAlias		:= GetNextAlias()
 	Local cCpf 			:= ""
 	
-	conout("Entrada: "+time())
+	QOut("Entrada: "+time())
 	//------------------
 	//Nao consome licenças
 	//------------------

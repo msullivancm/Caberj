@@ -43,14 +43,14 @@ user function CRMWSDL(nCRM,cUF,cSig)
 	// ----------------------------------------------
 	// Executa o método Consultar CRM
 	//-----------------------------------------------
-	conout("Entrada Consulta: "+time())
+	QOut("Entrada Consulta: "+time())
 	oWsdl:WS008A()
 	
 	// -------------------------------------------------------------
 	// Variavel oRetorno recebe os dados retornados pelo serviço
 	// caso não ocorra erro
 	// -------------------------------------------------------------
-	conout("Retorno Consulta: "+time())
+	QOut("Retorno Consulta: "+time())
 	oRetorno := oWSdl:oWSWS008ARESULT
 	
 	RestArea(a_Area)

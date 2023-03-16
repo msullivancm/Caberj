@@ -31,7 +31,7 @@ User Function CABA352(aSched)
 	Private lEnd    := .F.
 	Default aSched 	:= .F.
 	
-	conout("INÍCIO PROCESSAMENTO - SCHEDULE CABA352 - ATUALIZAÇÃO CNS - "+Time())
+	QOut("INÍCIO PROCESSAMENTO - SCHEDULE CABA352 - ATUALIZAÇÃO CNS - "+Time())
 	
 	*********************************************************
 	*'Executa a busca pelos Beneficiários sem CNS das guias'*
@@ -44,7 +44,7 @@ User Function CABA352(aSched)
 	endif
 	*********************************************************
 	
-	conout("FIM PROCESSAMENTO - SCHEDULE CABA611 - "+Time())
+	QOut("FIM PROCESSAMENTO - SCHEDULE CABA611 - "+Time())
 	
 Return
 

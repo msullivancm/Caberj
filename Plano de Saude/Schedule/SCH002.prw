@@ -35,7 +35,7 @@ User function SCH002(aParSched)
 	RpcSetType(3)
 	RpcSetEnv(aParSched[1], aParSched[2],,,'PLS',,)
 
-	Conout("Processo Mudança Tipo Bloqueio - SCH002 - Iniciado" )
+	QOut("Processo Mudança Tipo Bloqueio - SCH002 - Iniciado" )
 
 	nH := PLSAbreSem("SCH002" + aParSched[1] + ".SMF", .F.)
 
@@ -47,11 +47,11 @@ User function SCH002(aParSched)
 
 	Else
 
-		Conout("Processo Mudança Tipo Bloqueio - SCH002 - Problema ao abrir semaforo" )
+		QOut("Processo Mudança Tipo Bloqueio - SCH002 - Problema ao abrir semaforo" )
 
 	endif
 
-	Conout("Processo Mudança Tipo Bloqueio - SCH002 - Finalizado" )
+	QOut("Processo Mudança Tipo Bloqueio - SCH002 - Finalizado" )
 
 	RpcClearEnv()
     */
@@ -90,7 +90,7 @@ Static Function SCH002A()
 
 	If (cAliasTRB)->(Eof())
 
-		Conout("Processo Mudança Tipo Bloqueio - SCH002 - Nao foram encontrados dados para efetuar o processo" )
+		QOut("Processo Mudança Tipo Bloqueio - SCH002 - Nao foram encontrados dados para efetuar o processo" )
 
 	Else
 
@@ -341,7 +341,7 @@ Static Function SCH002C(_cParam)
 	//-----------------------------------------------------
 	If Env_1(a_HtmTot, c_ToTot, c_CCTot, c_AssTot, a_MsgTot )
 
-		Conout("Processo Mudança Tipo Bloqueio - SCH002 - Disparo de Email efetuado" )
+		QOut("Processo Mudança Tipo Bloqueio - SCH002 - Disparo de Email efetuado" )
 
 	EndIf
 

@@ -71,14 +71,14 @@ user function Conspf(nCRM,cUF)
     // Faz o parse de uma URL
     // ----------------------------------------------------------------------------------------
     //If !oWsdl:ParseURL( cEnd )// == .F.
-	conout("Parse Entrada "+Time())
+	QOut("Parse Entrada "+Time())
     
 	if !oWsdl:ParseFile( "\datasus\crm.wsdl" )
 		MsgAlert( "Erro ao realizar ParseXml Endereço: "+cEnd+" - "+oWsdl:cError,Funname() )
 		Return {aRet,cFalha}
 	EndIf
     
-	conout("Parse Saída"+Time())
+	QOut("Parse Saída"+Time())
     
   	IncProc("Conectando ao Nucleo... Aguarde...")
     //--------------------------------------------------------

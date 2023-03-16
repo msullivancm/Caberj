@@ -12307,7 +12307,7 @@ cRet := cVlrTiss
 
 If !FWAliasInDic("BTP", .F.)
 	If lPortal == .T.
-		Conout(STR0422)
+		QOut(STR0422)
 	Return(cRet)
 	Else
 		MsgAlert(STR0422) //"Para esta funcionalidade ?necessário executar os procedimentos referente ao chamado: THQGIW"

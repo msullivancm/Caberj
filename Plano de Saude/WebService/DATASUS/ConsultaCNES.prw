@@ -92,7 +92,7 @@ Static function GerWsdl(_cCNES,_cCGC)
     // Faz o parse de uma URL
     // ----------------------------------------------------------------------------------------
     
-    conout("CNES Entrada PARSE: "+Time())
+    QOut("CNES Entrada PARSE: "+Time())
     //if !oWsdl:ParseURL( cEnd )
     
     if !oWsdl:ParseFile( "\datasus\cnes.wsdl" )
@@ -101,7 +101,7 @@ Static function GerWsdl(_cCNES,_cCGC)
         MsgAlert( "Erro ao realizar ParseXml Endereço: "+cEnd+" - "+oWsdl:cError,Funname() )
         Return _cTmp
     EndIf
-    conout("CNES FIM PARSE: "+Time())
+    QOut("CNES FIM PARSE: "+Time())
     //--------------------------------------------------------
     // lista os serviços que tem no wsdl
     //--------------------------------------------------------

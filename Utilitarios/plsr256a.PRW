@@ -531,7 +531,7 @@ While ! TRBBA3->(Eof())
 	EndIf
 	
 	If  Type('aValor') <> "A"
-		CONOUT("[SIGAPLS] Retorno da funcao PLSVLRFAM invalida matricula "+BA3->(BA3_CODINT+BA3_CODEMP+BA3_MATRIC))
+		QOut("[SIGAPLS] Retorno da funcao PLSVLRFAM invalida matricula "+BA3->(BA3_CODINT+BA3_CODEMP+BA3_MATRIC))
 		cMatricFam := BA3->(BA3_CODINT+BA3_CODEMP+BA3_MATRIC)
 		cChave	   := BA3->(BA3_CODINT+BA3_CODEMP+BA3_CONEMP+BA3_VERCON+BA3_SUBCON+BA3_VERSUB)
 		lPF := (BA3->BA3_TIPOUS == "1")

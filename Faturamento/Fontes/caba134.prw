@@ -595,10 +595,10 @@ USer Function caba134E()
 		MATA920(aCabec,aItens,5)
 		If !lMsErroAuto
 			
-			ConOut("Exclusao com sucesso! " + SD2->D2_DOC)
+			QOut("Exclusao com sucesso! " + SD2->D2_DOC)
 		Else
 			MostraErro()
-			ConOut("Erro na exclusao!")
+			QOut("Erro na exclusao!")
 		EndIf
 		
 		

@@ -1684,7 +1684,7 @@ Static Function zUPDSLA()
 				nStatus := TCSqlExec(cUpd)
 
 				If (nStatus < 0)
-					conout("TCSQLError() " + TCSQLError())
+					QOut("TCSQLError() " + TCSQLError())
 				EndIf
 
 			Else
@@ -1718,7 +1718,7 @@ Static Function zUPDSLA()
 				nStatus := TCSqlExec(cUpd)
 
 				If (nStatus < 0)
-					conout("TCSQLError() " + TCSQLError())
+					QOut("TCSQLError() " + TCSQLError())
 				EndIf
 
 			Else

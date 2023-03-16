@@ -34,7 +34,7 @@ User Function CCPAINEL()
     
     // Cria componente
     PRIVATE oWebEngine := TWebEngine():New(oDlg, 0,0,aSize[3],aSize[5]/3.0,, nPort)
-    oWebEngine:bLoadFinished := {|self,url| conout("Termino da carga do pagina: " + url) }
+    oWebEngine:bLoadFinished := {|self,url| QOut("Termino da carga do pagina: " + url) }
     oWebEngine:navigate("http://relatorios.caberj.com.br/Cac/InternacoesLib.asp")
     oWebEngine:Align := CONTROL_ALIGN_ALLCLIENT
 
@@ -60,7 +60,7 @@ User Function CCPABENAV()
     
     // Cria componente
     PRIVATE oWebEngine := TWebEngine():New(oDlg, 0,0,aSize[3],aSize[5]/3.0,, nPort)
-    oWebEngine:bLoadFinished := {|self,url| conout("Termino da carga do pagina: " + url) }
+    oWebEngine:bLoadFinished := {|self,url| QOut("Termino da carga do pagina: " + url) }
     oWebEngine:navigate("http://relatorios.caberj.com.br/Cac/InternacoesLib_Est.asp")
     oWebEngine:Align := CONTROL_ALIGN_ALLCLIENT
 
@@ -87,7 +87,7 @@ User Function CCPAIOPM()
     
     // Cria componente
     PRIVATE oWebEngine := TWebEngine():New(oDlg, 0,0,aSize[3],aSize[5]/3.0,, nPort)
-    oWebEngine:bLoadFinished := {|self,url| conout("Termino da carga do pagina: " + url) }
+    oWebEngine:bLoadFinished := {|self,url| QOut("Termino da carga do pagina: " + url) }
     oWebEngine:navigate("http://relatorios.caberj.com.br/Cac/Internacoesopme.asp")
     oWebEngine:Align := CONTROL_ALIGN_ALLCLIENT
 
@@ -114,7 +114,7 @@ User Function CCPAIREE()
     
     // Cria componente
     PRIVATE oWebEngine := TWebEngine():New(oDlg, 0,0,aSize[3],aSize[5]/3.0,, nPort)
-    oWebEngine:bLoadFinished := {|self,url| conout("Termino da carga do pagina: " + url) }
+    oWebEngine:bLoadFinished := {|self,url| QOut("Termino da carga do pagina: " + url) }
     oWebEngine:navigate("http://relatorios.caberj.com.br/Cac/Reembolso.asp")
     oWebEngine:Align := CONTROL_ALIGN_ALLCLIENT
 
@@ -141,7 +141,7 @@ User Function CCPAIBO()
     
     // Cria componente
     PRIVATE oWebEngine := TWebEngine():New(oDlg, aSize[7]/2,0, aSize[6],aSize[5]/4.5,, nPort)
-    oWebEngine:bLoadFinished := {|self,url| conout("Termino da carga do pagina: " + url) }
+    oWebEngine:bLoadFinished := {|self,url| QOut("Termino da carga do pagina: " + url) }
     oWebEngine:navigate("http://relatorios.caberj.com.br/Cac/BO.asp")
     oWebEngine:Align := CONTROL_ALIGN_ALLCLIENT
 
@@ -168,7 +168,7 @@ User Function CPAIUNAT(pMatricula)
     
     // Cria componente
     PRIVATE oWebEngine := TWebEngine():New(oDlg, aSize[7]/2,0, aSize[6],aSize[5]/4.5,, nPort)
-    oWebEngine:bLoadFinished := {|self,url| conout("Termino da carga do pagina: " + url) }
+    oWebEngine:bLoadFinished := {|self,url| QOut("Termino da carga do pagina: " + url) }
     oWebEngine:navigate("http://relatorios.caberj.com.br/Cac/FolhaRosto.asp?vMatric="+pMatricula)
     oWebEngine:Align := CONTROL_ALIGN_ALLCLIENT
 
@@ -195,7 +195,7 @@ User Function CPAIINAD()
     
     // Cria componente
     PRIVATE oWebEngine := TWebEngine():New(oDlg, aSize[7]/2,0, aSize[6],aSize[5]/4.5,, nPort)
-    oWebEngine:bLoadFinished := {|self,url| conout("Termino da carga do pagina: " + url) }
+    oWebEngine:bLoadFinished := {|self,url| QOut("Termino da carga do pagina: " + url) }
     oWebEngine:navigate("http://relatorios.caberj.com.br/Cac/Inadimplencia.asp")
     oWebEngine:Align := CONTROL_ALIGN_ALLCLIENT
 
@@ -223,7 +223,7 @@ User Function CPAIPGRDA()
     
     // Cria componente
     PRIVATE oWebEngine := TWebEngine():New(oDlg, aSize[7]/2,0, aSize[6],aSize[5]/4.5,, nPort)
-    oWebEngine:bLoadFinished := {|self,url| conout("Termino da carga do pagina: " + url) }
+    oWebEngine:bLoadFinished := {|self,url| QOut("Termino da carga do pagina: " + url) }
     oWebEngine:navigate("http://relatorios.caberj.com.br/Cac/PAGAMENTOSFORNECEDORES.asp")
     oWebEngine:Align := CONTROL_ALIGN_ALLCLIENT
 
@@ -250,7 +250,7 @@ User Function CPAIPGCOM()
     
     // Cria componente
     PRIVATE oWebEngine := TWebEngine():New(oDlg, aSize[7]/2,0, aSize[6],aSize[5]/4.5,, nPort)
-    oWebEngine:bLoadFinished := {|self,url| conout("Termino da carga do pagina: " + url) }
+    oWebEngine:bLoadFinished := {|self,url| QOut("Termino da carga do pagina: " + url) }
     oWebEngine:navigate("http://relatorios.caberj.com.br/Cac/PAGAMENTOSCOMISSAO.asp")
     oWebEngine:Align := CONTROL_ALIGN_ALLCLIENT
 
@@ -277,7 +277,7 @@ User Function CPAIPA()
     
     // Cria componente
     PRIVATE oWebEngine := TWebEngine():New(oDlg, aSize[7]/2,0, aSize[6],aSize[5]/4.5,, nPort)
-    oWebEngine:bLoadFinished := {|self,url| conout("Termino da carga do pagina: " + url) }
+    oWebEngine:bLoadFinished := {|self,url| QOut("Termino da carga do pagina: " + url) }
     oWebEngine:navigate("http://relatorios.caberj.com.br/Cac/ProtocoloAtend.asp")
     oWebEngine:Align := CONTROL_ALIGN_ALLCLIENT
 
@@ -304,7 +304,7 @@ User Function CPOPME()
     
     // Cria componente
     PRIVATE oWebEngine := TWebEngine():New(oDlg, aSize[7]/2,0, aSize[6],aSize[5]/4.5,, nPort)
-    oWebEngine:bLoadFinished := {|self,url| conout("Termino da carga do pagina: " + url) }
+    oWebEngine:bLoadFinished := {|self,url| QOut("Termino da carga do pagina: " + url) }
     oWebEngine:navigate("http://relatorios.caberj.com.br/Cac/internacoesopmew.asp")
     oWebEngine:Align := CONTROL_ALIGN_ALLCLIENT
 
@@ -332,7 +332,7 @@ User Function CPCALEND()
     
     // Cria componente
     PRIVATE oWebEngine := TWebEngine():New(oDlg, aSize[7]/2,0, aSize[6],aSize[5]/4.5,, nPort)
-    oWebEngine:bLoadFinished := {|self,url| conout("Termino da carga do pagina: " + url) }
+    oWebEngine:bLoadFinished := {|self,url| QOut("Termino da carga do pagina: " + url) }
     oWebEngine:navigate("http://relatorios.caberj.com.br/Cac/InternacoesAgendadasw.asp")
     oWebEngine:Align := CONTROL_ALIGN_ALLCLIENT
 

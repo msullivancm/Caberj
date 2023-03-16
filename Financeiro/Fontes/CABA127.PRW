@@ -659,7 +659,7 @@ PRIVATE lMsErroAuto := .F.
 
 
  BEGIN Transaction
-    //conout(iIf(PA0->PA0_TPTITU=="6","ADIANTAMENTO A CONVENIADO","ADIANTAMENTO A CREDENCIADO"))
+    //QOut(iIf(PA0->PA0_TPTITU=="6","ADIANTAMENTO A CONVENIADO","ADIANTAMENTO A CREDENCIADO"))
  _lRet  := .T.
  
  lMsErroAuto := .F.
@@ -668,7 +668,7 @@ PRIVATE lMsErroAuto := .F.
  
  If lMsErroAuto
  
-    conout( "E R R O    N O    E X E C A U T O" )
+    QOut( "E R R O    N O    E X E C A U T O" )
 
     lMsHelpAuto := .T.
 
@@ -680,7 +680,7 @@ PRIVATE lMsErroAuto := .F.
 
     memowrite("C:\erro_exec.GER", _cErro)
 
-    conout( _cErro )
+    QOut( _cErro )
 
     _lRet := .F.
      

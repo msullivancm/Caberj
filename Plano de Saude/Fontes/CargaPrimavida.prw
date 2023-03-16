@@ -170,7 +170,7 @@ If lRet
 
 	If nFTP == 1 
 	        
-		ConOut('Caberj - Diretorio atual [ ' + FtpGetCurDir() + ' ] ')
+		QOut('Caberj - Diretorio atual [ ' + FtpGetCurDir() + ' ] ')
 			
 		aPasta 		:= Separa(cPastaDes,'\',.F.) 
 		cNovoCam	:= ''
@@ -192,19 +192,19 @@ If lRet
 			aInfoFTP 	:= FTPDirectory("*.csv")
         
 			If len(aInfoFTP) == 0
-				ConOut('Operativa - Nenhum arquivo a ser deletado no FTP [ ' + cServidor + ' ] - Diretorio atual [ ' + FtpGetCurDir() + ' ] ')		
+				QOut('Operativa - Nenhum arquivo a ser deletado no FTP [ ' + cServidor + ' ] - Diretorio atual [ ' + FtpGetCurDir() + ' ] ')		
 			Else
 				//Operativa - Deleto todos os arquivos
 				For nI := 1 to len(aInfoFTP)
 					FTPERASE(cPastaDes + aInfoFTP[nI][1])
-					ConOut('Operativa - Arquivo deletado: ' + aInfoFTP[nI][1] + ' [ ' + cServidor + ' ]')
+					QOut('Operativa - Arquivo deletado: ' + aInfoFTP[nI][1] + ' [ ' + cServidor + ' ]')
 			  	Next
 			EndIf
 		EndIf
 	
 	ElseIf nFTP == 2
 	        
-		ConOut('Primavida - Diretorio atual [ ' + FtpGetCurDir() + ' ] ')
+		QOut('Primavida - Diretorio atual [ ' + FtpGetCurDir() + ' ] ')
 			
 		aPasta 		:= Separa(cPastaDes,'\',.F.) 
 		cNovoCam	:= ''

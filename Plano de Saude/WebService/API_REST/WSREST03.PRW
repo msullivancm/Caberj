@@ -17,7 +17,7 @@ WSMETHOD GET WSSERVICE PROTOCOLORESTSERVICE
     Local cSeq := ''
     local lRetorno :=  .T.
 
-    ConOut("WSREST GET SEQUENCIAL DE PROTOCOLO DE ATENDIMENTO "+ DTOC(DATE()) +" "+ TIME())
+    QOut("WSREST GET SEQUENCIAL DE PROTOCOLO DE ATENDIMENTO "+ DTOC(DATE()) +" "+ TIME())
 
 
     TRYEXCEPTION USING bError
@@ -51,7 +51,7 @@ Return(lRetorno)
 
 Static Function RetTratEr(oError)
 
-	ConOut("Erro na macroexecução: " + oError:Description + Chr(13))
+	QOut("Erro na macroexecução: " + oError:Description + Chr(13))
 	BREAK
 	
 Return (NIL)

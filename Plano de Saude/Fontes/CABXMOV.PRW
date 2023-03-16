@@ -2146,7 +2146,7 @@ User Function CABXAUTP(aDados,aItens)
 							Next
 						Endif
 					Else
-						Conout("PLSXMOV -> Erro controlado PLSXMOV - Campos BE2_CODPAD e BE2_CODPRO. Campos devem estar em uso no SX3.")
+						QOut("PLSXMOV -> Erro controlado PLSXMOV - Campos BE2_CODPAD e BE2_CODPRO. Campos devem estar em uso no SX3.")
 					Endif
 					
 					//Ajusta o status do cabecalho, se não ajustou lá em cima
@@ -3435,7 +3435,7 @@ Retorna os movimentos do usuario com base em parametros
 								If BFM->(DbSeek(xFilial("BFM")+cOpeMov+cAno+cMes))
 									nUSMensal := BFM->BFM_VALRDA
 								Else
-									Conout(STR0032+cOpeMov+STR0033+cAno+STR0034+cMes+STR0035) //"SIGAPLS - U.S mensal para a Operadora "###" Ano "###" Mes "###" nao encontrado."
+									QOut(STR0032+cOpeMov+STR0033+cAno+STR0034+cMes+STR0035) //"SIGAPLS - U.S mensal para a Operadora "###" Ano "###" Mes "###" nao encontrado."
 								Endif
 
 								If Empty(cProRel)
@@ -3461,7 +3461,7 @@ Retorna os movimentos do usuario com base em parametros
 													cCodTab := aCompo[nFor2,15]
 												Else
 													cCodTab := ""
-													Conout("SIGAPLS - Solicitar atualizacao do fonte PLSVLRPRO.PRW")
+													QOut("SIGAPLS - Solicitar atualizacao do fonte PLSVLRPRO.PRW")
 												Endif
 											Endif
 			
@@ -3621,7 +3621,7 @@ Log Caixa Preta
 											Enddo
 										Endif
 									Else
-										Conout('Falha na identificacao da guia na funcao U_CBGRVAUN')
+										QOut('Falha na identificacao da guia na funcao U_CBGRVAUN')
 										Return
 									Endif
 								Endif
@@ -7341,7 +7341,7 @@ Inclui cabecalho da guia
 									If Empty(cNumero)
 										cNumero  := PLSA500NUM("BD5",cCodOpe,cCodLdp,cCodPeg)
 										PLSLOGFIL("Atenção: chamada U_CBICAB invalida. Contate o suporte. Código 'U_CBICAB'","PLSISCAB.LOG")
-										CONOUT("Atenção: chamada U_CBICAB invalida. Contate o suporte. Código 'U_CBICAB'")
+										QOut("Atenção: chamada U_CBICAB invalida. Contate o suporte. Código 'U_CBICAB'")
 									Endif
 	
 									BA3->( DbSetOrder(1) )
@@ -7745,7 +7745,7 @@ Inclui cabecalho da guia
 									If Empty(cNumero)
 										cNumero  := PLSA500NUM("BE4",cCodOpe,cCodLdp,cCodPeg)
 										PLSLOGFIL("Atenção: chamada U_CBICAB invalida. Contate o suporte. Código 'U_CBICAB'","PLSISCAB.LOG")
-										CONOUT("Atenção: chamada U_CBICAB invalida. Contate o suporte. Código 'U_CBICAB'")
+										QOut("Atenção: chamada U_CBICAB invalida. Contate o suporte. Código 'U_CBICAB'")
 									Endif
 	
 									cCC      := PLSUSRCC(BA1->(BA1_CODINT+BA1_CODEMP+BA1_MATRIC+BA1_TIPREG+BA1_DIGITO))

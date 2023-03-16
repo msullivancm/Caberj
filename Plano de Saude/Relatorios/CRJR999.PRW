@@ -532,7 +532,7 @@ Static Function RImp256()
 			aValor := aClone(aVlrFam[2])
 			
 			If  Type('aValor') <> "A"
-				CONOUT("[SIGAPLS] Retorno da funcao PLSVLRFAM invalida matricula "+BA3->(BA3_CODINT+BA3_CODEMP+BA3_MATRIC))
+				QOut("[SIGAPLS] Retorno da funcao PLSVLRFAM invalida matricula "+BA3->(BA3_CODINT+BA3_CODEMP+BA3_MATRIC))
 				// Motta Fev/09 Loop do _nCont := 1 to nQtdMeses // TRBBA3->(DbSkip())
 				Loop
 			Endif

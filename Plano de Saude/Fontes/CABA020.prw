@@ -25,7 +25,7 @@ User Function CABA020()
 	
 	Local _ni := 0
 	
-	Conout("CABA020 - Iniciando geração de protocolos")
+	QOut("CABA020 - Iniciando geração de protocolos")
 	
 	For _ni := 1 To 2
 		
@@ -46,7 +46,7 @@ User Function CABA020()
 			//----------------------------------------------------------------------------
 			//Após logar na CABERJ, irá executar a rotina de geração de protocolo
 			//----------------------------------------------------------------------------
-			Conout("CABA020 - Executando CABA020A pela CABERJ")
+			QOut("CABA020 - Executando CABA020A pela CABERJ")
 			
 			U_CABA020A()
 						
@@ -67,14 +67,14 @@ User Function CABA020()
 			//----------------------------------------------------------------------------
 			//Após logar na INTEGRAL, irá executar a rotina de geração de protocolo
 			//----------------------------------------------------------------------------
-			Conout("CABA020 - Executando CABA020A pela INTEGRAL")
+			QOut("CABA020 - Executando CABA020A pela INTEGRAL")
 			U_CABA020A()
 			
 		EndIf
 		
 	Next _ni
 	
-	CONOUT("CABA020 - Processo de Geração de Protocolos da Operativa Fiunalizado")
+	QOut("CABA020 - Processo de Geração de Protocolos da Operativa Fiunalizado")
 	
 Return
 

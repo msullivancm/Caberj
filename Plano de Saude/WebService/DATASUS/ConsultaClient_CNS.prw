@@ -48,7 +48,7 @@ user function CNSWSDL(cCpf,cNome,cMae,cCampo)
 	// ----------------------------------------------
 	// Executa o método Consultar CRM
 	//-----------------------------------------------
-	conout("Entrada Consulta: "+time())
+	QOut("Entrada Consulta: "+time())
 	if !oWsdl:WS007B()
 		
 		if alltrim(cCampo) == "BTS_CPFUSR"
@@ -80,7 +80,7 @@ user function CNSWSDL(cCpf,cNome,cMae,cCampo)
 	WSDATA   cUF                       AS string
 */
 		
-		conout("Retorno Consulta: "+time())
+		QOut("Retorno Consulta: "+time())
 		oRetorno := oWSdl:oWSWS007BRESULT
 		
 		aRet := ClassDataArr( oWSdl:oWSWS007BRESULT )

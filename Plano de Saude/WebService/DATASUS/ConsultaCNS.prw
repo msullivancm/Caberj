@@ -85,14 +85,14 @@ User function ConsCNS(_cCpf,_cNome,_cMae)
     // Faz o parse de uma URL
     // ----------------------------------------------------------------------------------------
     //If !oWsdl:ParseURL( cEnd )// == .F.
-	conout("Parse Entrada "+Time())
+	QOut("Parse Entrada "+Time())
     
 	if !oWsdl:ParseFile( "\datasus\cns.wsdl" )
 		MsgAlert( "Erro ao realizar ParseXml Endereço: "+cEnd+" - "+oWsdl:cError,Funname() )
 		Return {aRet,cFalha}
 	EndIf
     
-	conout("Parse Saída"+Time())
+	QOut("Parse Saída"+Time())
     
     /*oWsdl:SetAuthentication("CADSUS.CNS.PDQ.PUBLICO","kUXNmiiii#RDdlOELdoe00966" )
     oWsdl:SetCredentials("CADSUS.CNS.PDQ.PUBLICO","kUXNmiiii#RDdlOELdoe00966" )

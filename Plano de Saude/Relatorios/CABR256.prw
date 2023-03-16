@@ -282,7 +282,7 @@ local nTotMedC:= 0
 local lField  := BR8->(fieldPos("BR8_PARTNC"))>0
 
 if !lField
-	coNout('Campo [BR8_PARTNC] não existe no dicionario de dados!')
+	QOut('Campo [BR8_PARTNC] não existe no dicionario de dados!')
 	return aDados
 endIf
 

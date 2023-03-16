@@ -256,7 +256,7 @@ Private _cTpSv			:= "1019"							// Reembolso
 Private _cObs			:= ""
 Private _cTpDm			:= "T"								// Solicitação
 
-ConOut("Inclusão Reembolso " + time())
+QOut("Inclusão Reembolso " + time())
 
 if Empty(AllTrim(_cEmpInc)) .or. ( AllTrim(_cEmpInc) <> "01" .and. AllTrim(_cEmpInc) <> "02")
 	SetSoapFault( "", "Não foi possivel realizar login no sistema de reembolso." )
@@ -645,7 +645,7 @@ else
 
 endif
 
-ConOut("Saída Reembolso: " + Time())
+QOut("Saída Reembolso: " + Time())
 
 Return lRet
 
@@ -1061,7 +1061,7 @@ Local nX			:= 0
 Local _cNumAnx		:= ""						// Angelo Henrique - Data:04/04/2018
 Local _lAchou		:= .T.
 
-ConOut("Entrada Gravação de documentos: " + time())
+QOut("Entrada Gravação de documentos: " + time())
 
 if Empty(AllTrim(_cEmpLog)) .or. ( AllTrim(_cEmpLog) <> "01" .and. AllTrim(_cEmpLog) <> "02")
 
@@ -1199,7 +1199,7 @@ else
 	
 endif
 
-conout("Saída Gravação de documentos: " + time())
+QOut("Saída Gravação de documentos: " + time())
 
 return lRet
 

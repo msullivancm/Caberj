@@ -3723,12 +3723,12 @@ user function CBINALUP(cUsrName,cCodRda,lOnline,lInc,cDirArqIn,aReturn)
 		Endif
 		If "ERROR" $ upper(alltrim(cUpldPath))
 
-			conout("----------INICIO: LOG DE ERRO NO UPLOAD PATH----------")
-			conout(GetEnvHost())
-			conout("UPLOADPATH")
-			conout(GetADV97())
-			conout(Upper( GetPvProfString( GetEnvHost(), "UPLOADPATH", "ERROR", GetADV97() ) ))
-			conout("----------FIM: LOG DE ERRO NO UPLOAD PATH----------")
+			QOut("----------INICIO: LOG DE ERRO NO UPLOAD PATH----------")
+			QOut(GetEnvHost())
+			QOut("UPLOADPATH")
+			QOut(GetADV97())
+			QOut(Upper( GetPvProfString( GetEnvHost(), "UPLOADPATH", "ERROR", GetADV97() ) ))
+			QOut("----------FIM: LOG DE ERRO NO UPLOAD PATH----------")
 
 			cRet := "Diretorio de upload nao informado no .INI do SERVER."
 			return cRet
@@ -3834,7 +3834,7 @@ user function CBINALUP(cUsrName,cCodRda,lOnline,lInc,cDirArqIn,aReturn)
 				EndIf
 
 				cRet += "acatado - Numero protocolo [ " + AllTrim(BXX->BXX_CODPEG) + "] "
-				conout(cRet)
+				QOut(cRet)
 				// Online
 				If lOnline
 					cRet += "|"
@@ -3856,7 +3856,7 @@ user function CBINALUP(cUsrName,cCodRda,lOnline,lInc,cDirArqIn,aReturn)
 				EndIf
 
 				cRet += "Arquivo nao acatado devido a inconsistências detectadas."
-				conout(cRet)
+				QOut(cRet)
 				If lOnline
 					cRet += "|"
 				EndIf
@@ -3872,7 +3872,7 @@ user function CBINALUP(cUsrName,cCodRda,lOnline,lInc,cDirArqIn,aReturn)
 				BXX->( MsUnLock() )
 			EndIf
 		Else
-			conout('nao achou a bxx ['+cCodInt + cCodRda + cNomeArq+"]")
+			QOut('nao achou a bxx ['+cCodInt + cCodRda + cNomeArq+"]")
 		Endif
 	EndIf
 	//Fim da funcao
@@ -3898,7 +3898,7 @@ user function CBXMLPRO(cCodRda,cArqIn,lOnline)
 		BXX->( MsUnLock() )
 		// Renomeia o arquivo
 		If FRename(cDirLog + cArqLog + cArqExt , cDirLog + cArqLog + BXX->(BXX_CODINT+BXX_CODPEG) + cArqExt ) == -1
-			CoNout("Impossivel renomear arquivo de LOG ( XMLLOG.TXT )")
+			QOut("Impossivel renomear arquivo de LOG ( XMLLOG.TXT )")
 		EndIf
 	EndIf
 
@@ -6648,8 +6648,8 @@ User Function CTrCBOSUB(cCodGlo,cCboExe,cCboSol,cCodEsp,cEspExe,cEspSol,aDadUser
 
 		//Caso nao encontrou nenhuma das informacoes acima, nao ha necessidade de validar a critica
 		If !lGo
-			Iif(Len(aDadUser) > 0,nil,ConOut("Erro ao validar critica X55 - Inconsistência nos dados do Beneficiário - " + cArqXML))
-			Iif(Len(aDadPres) > 0,nil,ConOut("Erro ao validar critica X55 - Inconsistência nos dados do Prestador - " + cArqXML))
+			Iif(Len(aDadUser) > 0,nil,QOut("Erro ao validar critica X55 - Inconsistência nos dados do Beneficiário - " + cArqXML))
+			Iif(Len(aDadPres) > 0,nil,QOut("Erro ao validar critica X55 - Inconsistência nos dados do Prestador - " + cArqXML))
 			lRet := .T.
 		EndIf
 
@@ -6944,7 +6944,7 @@ user function CXMLRetMat(cMatrPad,cNomUsr)
 		if ValType(cRetPe) == "C"
 			cRet := cRetPe
 		else
-			ConOut("Erro no retorno do P.E. PLSXMLMAT. A matricula padrao foi assumida")
+			QOut("Erro no retorno do P.E. PLSXMLMAT. A matricula padrao foi assumida")
 		endif
 
 	endif

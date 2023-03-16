@@ -47,7 +47,7 @@ cArq		:= cPath + cNomeArq
 //cArqExp		:= "\\10.19.1.8\Protheus_Data\interface\exporta\ExtIntegral\" + cNomeArq
 cArqExp		:= "\\"+AllTrim(GetMv("MV_XSRVTOP"))+"\Protheus_Data\interface\exporta\ExtIntegral\" + cNomeArq
 
-ConOut(' - Iniciando carga')   
+QOut(' - Iniciando carga')   
           
 cQuery := "BEGIN "				
 cQuery += "GERAR_EXTRATO_INTEGRAL("    
@@ -63,11 +63,11 @@ cQuery += " TO_DATE('" + dToS(mv_par09) + "','YYYYMMDD')"
 cQuery += " );"
 cQuery += "END; "					
 
-ConOut(' - Executando procedure...') 
+QOut(' - Executando procedure...') 
 
 If TcSqlExec(cQuery) <> 0	
 	cErro := " - Erro na execução da procedure " + CRLF + Space(3) + cQuery + CRLF + Space(3) + 'TcSqlError [ ' + TcSqlError() + ' ]'
-	ConOut(cErro) 
+	QOut(cErro) 
 	lOk := .F.      
 Else                 
     If !MoveFile(cArq,cArqExp,.F.)
@@ -77,7 +77,7 @@ Else
 	EndIf	
 EndIf
 
-ConOut(' - Fim procedure...')
+QOut(' - Fim procedure...')
 
 Return
 

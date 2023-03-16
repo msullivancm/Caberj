@@ -50,7 +50,7 @@ user function ConWsMet(cState,cCity,cplano,cBairro,cLimit,cOffset,cName,cEspec)
 	// ----------------------------------------------
 	// Executa o método Consultar CRM
 	//-----------------------------------------------
-	conout("Entrada Consulta: "+time())
+	QOut("Entrada Consulta: "+time())
 	if !oWsdl:WS009A()
 		oRetorno := nil			
 	else
