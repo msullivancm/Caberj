@@ -1,0 +1,54 @@
+#include "tlpp-core.th"
+#include "tlpp-rest.th"
+
+/* webservice para login pelo mobile Saude Mosia 
+url: 
+    https://www.caberj.com.br/apirestdesenv/login
+Body:
+{
+  "login": "<login>",
+  "senha": "<senha>"
+}
+Retorno: 
+"usuarioLogado": {
+    "permissoes": [Array-objetos],
+    "login": "string",
+    "chaveUnica": "string",
+    "contato": {objeto},
+    "esquemaCor": "String",
+    "integracao": {objeto}
+  },
+  "beneficiarios": [
+    {
+      "chaveUnica": "string",
+      "integracao": {objeto},
+      "dadosPessoais": {objeto},
+      "dadosDoContrato": {objeto},
+      "dadosDoPlano": {objeto},
+      "cartao": {objeto},
+      "bloqueio": {objeto},
+      "custom": {objeto}
+    }
+  ]
+*/
+@post("login")
+user function restLogin()
+    local cUser := ''
+    local cPass := ''
+    local jBody := ''
+    Local oRestClient := FWRest():New("https://www.caberj.com.br/apirestdesenv")
+    Local aHeader := {"tenantId: 01,01"}
+
+    jBody := JsonObject():new()
+    jBody:fromJson( oRest:GetBodyRequest() )
+
+    if ( jBody <> Nil )
+        cUser := jBody:GetJsonText("login")
+        cPass := jBody:GetJsonText("senha")
+    endif
+    
+    // inclui o campo Authorization no formato <usuario>:<senha> na base64
+    Aadd(aHeader, "Authorization: Basic " + Encode64(cUser+':'+cPass))
+
+    oRest:setResponse(cEmpAnt)
+return     
