@@ -212,9 +212,12 @@ Retorno:
 user function restLogin()
   Local oRestClient := FWRest():New("https://10.19.1.10:9725/apirestdesenv/")
   Local aHeader := {"tenantId: 01,01"}
-  // inclui o campo Authorization no formato <usuario>:<senha> na base64
-  //Aadd(aHeader, "Authorization: Basic " + Encode64("restuser:P@ssw0rd2023"))
+  Local oJson as json
+  Local cErr, cToken, cChave, cExpiracao, cJson as CHARACTER
+  Local oJsonRet as json
+
   oRestClient:setPath("api/oauth2/v1/token?grant_type=password&password=P@ssw0rd2023&username=restuser")
+
   // chamada da classe exemplo de REST com retorno de lista
   If oRestClient:Post(aHeader)
     QQOUT("GET - " + oRestClient:GetResult())
@@ -222,38 +225,37 @@ user function restLogin()
   Else
     QQOUT("GET - " + oRestClient:GetLastError())
   EndIf
-    
-  // chamada da classe exemplo de REST para operações CRUD
-  /* oRestClient:setPath("/rest/sample/1")
-  If oRestClient:Get(aHeader)
-    ConOut("GET", oRestClient:GetResult())
-  Else
-    ConOut("GET", oRestClient:GetLastError())
-  EndIf
+
+  // Cria o objeto JSON e popula ele a partir do retorno
+  oJson := JSonObject():New()
+  cErr  := oJSon:fromJson(oRestClient:GetResult())
+  If !empty(cErr)
+    MsgStop(cErr,"JSON PARSE ERROR")
+    QQOUT(cErr,"JSON PARSE ERROR")
+    Return
+  Endif
+
+  // Agora vamos ler as propriedades com GetJSonObject()
+  cToken := oJson:GetJSonObject('access_token')
+  cChave := oJson:GetJSonObject('token_type')
+  cExpiracao := oJson:GetJSonObject('expires_in')
+
+  cJson := '{ '
+  cJson += '  "auth": [{"chave":"'+cChave+'","token":"'+cToken+'","expiracao":'+str(cExpiracao)+'}] '
+  cJson += ' }' 
   
-    
-  // define o conteúdo do body
-  oRestClient:SetPostParams("body")
-    
-  If oRestClient:Post(aHeader)
-    ConOut("POST", oRestClient:GetResult())
-  Else
-    ConOut("POST", oRestClient:GetLastError())
-  EndIf
-  
-    
-  // para os métodos PUT e DELETE o conteúdo body é enviado por parametro
-  If oRestClient:Put(aHeader, "body")
-    ConOut("PUT", oRestClient:GetResult())
-  Else
-    ConOut("PUT", oRestClient:GetLastError())
-  EndIf
-  
-  If oRestClient:Delete(aHeader, "body")
-    ConOut("DELETE", oRestClient:GetResult())
-  Else
-    ConOut("DELETE", oRestClient:GetLastError())
-  EndIf */
+  // Cria o objeto JSON e popula ele a partir do retorno
+  oJsonRet := JSonObject():New()
+  cErr  := oJSonRet:fromJson(cJson)
+  If !empty(cErr)
+    MsgStop(cErr,"JSON PARSE ERROR")
+    QQOUT(cErr,"JSON PARSE ERROR")
+    Return
+  Endif
+  // retorna o objeto JSON
+  oRest:setResponse(oJsonRet) 
+  QQOUT( "Resultado do Json", oJSonRet:toJson())
+
 Return     
 
 static function getBenefi(cUser, cPass)
