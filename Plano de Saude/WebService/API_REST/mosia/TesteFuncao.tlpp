@@ -14,7 +14,6 @@ return oRest:setResponse(cResponse) */
 User Function restExecute()
     Local oRestClient := FWRest():New("https://www.caberj.com.br/apirestdesenv")
     Local aHeader := {"tenantId: 01,01"}
-
     // inclui o campo Authorization no formato <usuario>:<senha> na base64
     Aadd(aHeader, "Authorization: Basic " + Encode64("restuser:P@ssw0rd2023"))
 

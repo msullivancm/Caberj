@@ -7,9 +7,18 @@
 			"name": "Depuração do idioma TOTVS",
 			"program": "${command:AskForProgramName}",
 			"cwb": "${workspaceFolder}",
-			"smartclientBin": "../totvs/bin/smartclient/smartclient.exe",
+			"smartclientBin": "C:\\Users\\Sullivan\\Downloads\\caberj\\23-03-01-P12-SMARTCLIENT_BUILD 20.3.1.3_WINDOWS_X64\\smartclient.exe",
 			"isMultiSession": true,
 			"enableTableSync": true
 		}
-	]
+	],
+	"lastPrograms": [
+		{
+			"label": "u_restLogin"
+		},
+		{
+			"label": "u_restValidation"
+		}
+	],
+	"lastProgramExecuted": "u_restLogin"
 }
