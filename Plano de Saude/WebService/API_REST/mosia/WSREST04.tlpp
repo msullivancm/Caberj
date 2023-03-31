@@ -176,3 +176,106 @@ static function processGetUser( cUser )
 
   oRest:setResponse( cReturn )
 return
+
+/* webservice para login pelo mobile Saude Mosia 
+url: 
+    https://www.caberj.com.br/apirestdesenv/login
+Body:
+{
+  "login": "<login>",
+  "senha": "<senha>"
+}
+Retorno: 
+"usuarioLogado": {
+    "permissoes": [Array-objetos],
+    "login": "string",
+    "chaveUnica": "string",
+    "contato": {objeto},
+    "esquemaCor": "String",
+    "integracao": {objeto}
+  },
+  "beneficiarios": [
+    {
+      "chaveUnica": "string",
+      "integracao": {objeto},
+      "dadosPessoais": {objeto},
+      "dadosDoContrato": {objeto},
+      "dadosDoPlano": {objeto},
+      "cartao": {objeto},
+      "bloqueio": {objeto},
+      "custom": {objeto}
+    }
+  ]
+*/
+//Esta URI está configurada com o Public no appserver.ini do webservice rest para não exigir autenticação
+@post("/login")
+user function restLogin()
+  Local oRestClient := FWRest():New("https://10.19.1.10:9725/apirestdesenv/")
+  Local aHeader := {"tenantId: 01,01"}
+  // inclui o campo Authorization no formato <usuario>:<senha> na base64
+  //Aadd(aHeader, "Authorization: Basic " + Encode64("restuser:P@ssw0rd2023"))
+  oRestClient:setPath("api/oauth2/v1/token?grant_type=password&password=P@ssw0rd2023&username=restuser")
+  // chamada da classe exemplo de REST com retorno de lista
+  If oRestClient:Post(aHeader)
+    QQOUT("GET - " + oRestClient:GetResult())
+    //oRest:setResponse("GET - " + oRestClient:GetResult())
+  Else
+    QQOUT("GET - " + oRestClient:GetLastError())
+  EndIf
+    
+  // chamada da classe exemplo de REST para operações CRUD
+  /* oRestClient:setPath("/rest/sample/1")
+  If oRestClient:Get(aHeader)
+    ConOut("GET", oRestClient:GetResult())
+  Else
+    ConOut("GET", oRestClient:GetLastError())
+  EndIf
+  
+    
+  // define o conteúdo do body
+  oRestClient:SetPostParams("body")
+    
+  If oRestClient:Post(aHeader)
+    ConOut("POST", oRestClient:GetResult())
+  Else
+    ConOut("POST", oRestClient:GetLastError())
+  EndIf
+  
+    
+  // para os métodos PUT e DELETE o conteúdo body é enviado por parametro
+  If oRestClient:Put(aHeader, "body")
+    ConOut("PUT", oRestClient:GetResult())
+  Else
+    ConOut("PUT", oRestClient:GetLastError())
+  EndIf
+  
+  If oRestClient:Delete(aHeader, "body")
+    ConOut("DELETE", oRestClient:GetResult())
+  Else
+    ConOut("DELETE", oRestClient:GetLastError())
+  EndIf */
+Return     
+
+static function getBenefi(cUser, cPass)
+  Local cRet as CHARACTER
+
+  BeginSql Alias "tbUsuarios"
+    SELECT BSW_CODUSR, BSW_NOMUSR, BSW_EMAIL, BSW_CODACE FROM %table:BSW% BSW
+      WHERE 1 = 1
+      AND BSW_FILIAL  = %xFilial:BSW%
+      AND BSW_YCPF =  (%Exp:cUser%) 
+      AND BSW_SENHA =  (%Exp:cPass%)
+      AND D_E_L_E_T_ = ' '
+  EndSql
+  
+  While ! tbUsuarios->(EoF())
+      nRegs++
+        
+      tbUsuarios->(DbSkip())
+  EndDo
+  tbUsuarios->(DbCloseArea())
+    
+  MsgInfo("Foram processados "+cValToChar(nRegs)+" produtos.", "Atenção")
+    
+  RestArea(aArea)
+return nRegs
