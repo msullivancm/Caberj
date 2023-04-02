@@ -1,6 +1,74 @@
 #include "tlpp-core.th"
 #include "tlpp-rest.th"
 
+//Função para gerar json
+//-------------------------------------------------------------------
+/*/{Protheus.doc} Json
+Converte o arquivo para JSON
+ 
+@Param String com Nome da Tabela
+@Param Array com o nome dos campos
+@Param Array com os itens do Array
+ 
+@Return String
+@author David Moraes
+@since 22/08/2012
+@version 1.0
+/*/
+//-------------------------------------------------------------------
+Static function geraJson(aGeraJson,lArray)
+  Local cJSON  := ""                   
+  Local cTable := aGeraJson[1]                    
+  Local aCab   := aGeraJson[2]  
+  Local aLin   := aGeraJson[3]  
+  Local L,C    := 0
+  
+  if lArray 
+    cJSON += '{"'+cTable+'": [' 
+  else
+    cJSON += '{"'+cTable+'":'
+  endif
+  
+  FOR L:= 1 TO LEN( aLin )
+  
+      cJSON += '{'
+  
+      for C:= 1 to Len( aCab ) 
+      
+          IF VALTYPE(aLin[L][C]) = "C"  
+            cConteudo := '"'+aLin[L][C]+'" '
+          ELSEIF VALTYPE(aLin[L][C]) = "N"
+              cConteudo := ALLTRIM(STR(aLin[L][C]))
+          ELSEIF VALTYPE(aLin[L][C]) = "D"
+              cConteudo := '"'+DTOC(aLin[L][C])+'"'
+          ELSEIF VALTYPE(aLin[L][C]) = "L"
+              cConteudo := IF(aLin[L][C], '"true"' , '"false"') 
+          ELSE
+              cConteudo := '"'+aLin[L][C]+'"'
+          ENDIF               
+  
+          cJSON += '"'+aCab[C]+'":' + cConteudo
+  
+          IF C < LEN(aCab)
+            cJSON += ','
+          ENDIF
+  
+      Next
+      cJSON += '}'
+      IF L < LEN(aLin)
+        cJSON += ','
+      ENDIF
+          
+  Next
+  
+  if lArray 
+    cJSON += ']}'
+  else
+    cJSON += '}'
+  endif
+ 
+Return cJSON
+
 //Retorna rede credenciada em json
 @get("mobile/redecredenciada")
 User function getRedeCredenciada()
@@ -213,8 +281,12 @@ user function restLogin()
   Local oRestClient := FWRest():New("https://10.19.1.10:9725/apirestdesenv/")
   Local aHeader := {"tenantId: 01,01"}
   Local oJson as json
-  Local cErr, cToken, cChave, cExpiracao, cJson as CHARACTER
   Local oJsonRet as json
+  Local cErr, cToken, cChave, cExpiracao, cJson as CHARACTER
+  Local cRet as CHARACTER
+  Local aCab as array
+  Local aLin as array
+
 
   oRestClient:setPath("api/oauth2/v1/token?grant_type=password&password=P@ssw0rd2023&username=restuser")
 
@@ -240,22 +312,16 @@ user function restLogin()
   cChave := oJson:GetJSonObject('token_type')
   cExpiracao := oJson:GetJSonObject('expires_in')
 
-  cJson := '{ '
-  cJson += '  "auth": [{"chave":"'+cChave+'","token":"'+cToken+'","expiracao":'+str(cExpiracao)+'}] , '
-  cJson += '  "usuarioLogado": [{"chave":"'+cChave+'","token":"'+cToken+'","expiracao":'+str(cExpiracao)+'}] , '
-  cJson += '  "beneficiarios": [{"chave":"'+cChave+'","token":"'+cToken+'","expiracao":'+str(cExpiracao)+'}] , '
-  cJson += '  "profissionaisSaude": [{"chave":"'+cChave+'","token":"'+cToken+'","expiracao":'+str(cExpiracao)+'}] , '
-  cJson += '  "contratos": [{"chave":"'+cChave+'","token":"'+cToken+'","expiracao":'+str(cExpiracao)+'}] '
-  cJson += ' }' 
+  //Titulos
+  aCab := {"chave", "token", "expiracao"}
+  //Itens
+  aLin := {{cChave, cToken, cExpiracao}}
+  //Chama função para gerar o json
+  cRet := geraJson({"auth", aCab, aLin}, .T.)
 
-  /*
-  O que falta implementar:
-  {"usuarioLogado":[{"login":["A propriedade 'login' não é uma String","A propriedade 'login' não foi encontrada. Consulte a documentação."],"chaveUnica":["A propriedade 'chaveUnica' não é uma String","A propriedade 'chaveUnica' não foi encontrada. Consulte a documentação."],"integracao":["A propriedade 'integracao' não é um Object","A propriedade 'integracao' não foi encontrada. Consulte a documentação.","O tipo do atributo deve ser obrigatoriamente um Objeto."]}],"beneficiarios":[{"chaveUnica":["A propriedade 'chaveUnica' não é uma String","A propriedade 'chaveUnica' não foi encontrada. Consulte a documentação."],"integracao":["A propriedade 'integracao' não é um Object","A propriedade 'integracao' não foi encontrada. Consulte a documentação.","O tipo do atributo deve ser obrigatoriamente um Objeto."],"dadosPessoais":["A propriedade 'dadosPessoais' não foi encontrada. Consulte a documentação."],"dadosDoContrato":["A propriedade 'dadosDoContrato' não foi encontrada. Consulte a documentação."],"dadosDoPlano":["A propriedade 'dadosDoPlano' não foi encontrada. Consulte a documentação."],"cartao":["A propriedade 'cartao' não foi encontrada. Consulte a documentação."]}],"profissionaisSaude":[{"nome":["A propriedade 'nome' não é uma String","A propriedade 'nome' não foi encontrada. Consulte a documentação."],"chaveProfissionalSaude":["A propriedade 'chaveProfissionalSaude' não é uma String","A propriedade 'chaveProfissionalSaude' não foi encontrada. Consulte a documentação."],"conselhoRegional":["A propriedade 'conselhoRegional' não é uma String","A propriedade 'conselhoRegional' não foi encontrada. Consulte a documentação."],"siglaConselhoRegional":["A propriedade 'siglaConselhoRegional' não é uma String"],"estadoConselhoRegional":["A propriedade 'estadoConselhoRegional' não é uma String"],"titulo":["A propriedade 'titulo' não é uma String","A propriedade 'titulo' não foi encontrada. Consulte a documentação."],"sexo":["A propriedade 'sexo' não foi encontrada. Consulte a documentação."],"dataNascimento":["A propriedade 'dataNascimento' não é uma String","A propriedade 'dataNascimento' não foi encontrada. Consulte a documentação."],"cpf":["A propriedade 'cpf' não é uma String","A propriedade 'cpf' não foi encontrada. Consulte a documentação."],"celular":["A propriedade 'celular' não foi encontrada. Consulte a documentação."],"especialidades":["A propriedade 'especialidades' não foi encontrada. Consulte a documentação."],"codigoContrato":["A propriedade 'codigoContrato' não é uma String","A propriedade 'codigoContrato' não foi encontrada. Consulte a documentação."],"email":["A propriedade 'email' não é uma String","A propriedade 'email' não foi encontrada. Consulte a documentação."]}],"contratos":[{"numeroContrato":["A propriedade 'numeroContrato' não é uma String","A propriedade 'numeroContrato' não foi encontrada. Consulte a documentação."],"tipoPessoa":["A propriedade 'tipoPessoa' não foi encontrada. Consulte a documentação."],"dataInicioVigenciaContrato":["A propriedade 'dataInicioVigenciaContrato' não foi encontrada. Consulte a documentação."],"tipoRelacionamento":["A propriedade 'tipoRelacionamento' não foi encontrada. Consulte a documentação."],"tipoContratante":["O preenchimento da propriedade 'tipoContratante' é obrigatória","A propriedade 'tipoContratante' não foi encontrada. Consulte a documentação."]}]}
-  */
-
-  // Cria o objeto JSON e popula ele a partir do retorno
   oJsonRet := JSonObject():New()
-  cErr  := oJSonRet:fromJson(cJson)
+  cErr  := oJSonRet:fromJson(cRet)
+  
   If !empty(cErr)
     MsgStop(cErr,"JSON PARSE ERROR")
     QQOUT(cErr,"JSON PARSE ERROR")
